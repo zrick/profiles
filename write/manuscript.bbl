@@ -1,0 +1,154 @@
+\begin{thebibliography}{22}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ansorge(2019)]{Ansorge:2019di}
+Cedrick Ansorge.
+\newblock {Scale Dependence of Atmosphere{\textendash}Surface Coupling Through
+  Similarity Theory}.
+\newblock \emph{Boundary-Layer Meteorol}, 170\penalty0 (1):\penalty0 1--27,
+  2019.
+
+\bibitem[Ansorge and Mellado(2014)]{Ansorge:2014hf}
+Cedrick Ansorge and Juan-Pedro Mellado.
+\newblock {Global Intermittency and Collapsing Turbulence in the Stratified
+  Planetary Boundary Layer}.
+\newblock \emph{Boundary-Layer Meteorol}, 153\penalty0 (1):\penalty0 89--116,
+  July 2014.
+
+\bibitem[Blackadar and Tennekes(1968)]{Blackadar:1968ew}
+A~K Blackadar and Hendrik Tennekes.
+\newblock {Asymptotic Similarity in Neutral Barotropic Planetary Boundary
+  Layers.}
+\newblock \emph{J Atmos Sci}, 25:\penalty0 1015--1020, November 1968.
+
+\bibitem[Ekman(1905)]{Ekman:1905tl}
+Vagn~Walfrid Ekman.
+\newblock {On the influence of the earth's rotation on ocean currents}.
+\newblock \emph{Ark. Mat. Astron. Fys., Vol. 2 (1905), pp. 1-53}, 2:\penalty0
+  1--53, 1905.
+
+\bibitem[Emeis(2018)]{Emeis:2018vq}
+Stefan Emeis.
+\newblock \emph{{Wind Energy Meteorology}}.
+\newblock Atmospheric Physics for Wind Power Generation. Springer, Heidelberg,
+  2 edition, March 2018.
+
+\bibitem[Emeis et~al.(2007)Emeis, Baumann-Stanzer, Piringer, Kallistratova,
+  Kouznetsov, and Yushkov]{Emeis:2007cy}
+Stefan Emeis, Kathrin Baumann-Stanzer, Martin Piringer, Margarita
+  Kallistratova, Rostislav Kouznetsov, and Vladislav Yushkov.
+\newblock {Wind and turbulence in the urban boundary layer analysis from
+  acoustic remote sensing data and fit to analytical relations}.
+\newblock \emph{Met Zet}, 16\penalty0 (4):\penalty0 393--406, 2007.
+
+\bibitem[Etling(2002)]{Etling:2002kx}
+Dieter Etling.
+\newblock \emph{{Theoretische Meteorologie}}.
+\newblock Eine Einf{\"u}hrung. Springer-Verlag, Berlin, Heidelberg, 2nd
+  edition, 2002.
+
+\bibitem[Foken(2002)]{Foken:2002gv}
+Thomas Foken.
+\newblock {Some aspects of the viscous sublayer}.
+\newblock \emph{Met Zet}, 11\penalty0 (4):\penalty0 267--272, 2002.
+
+\bibitem[Foken et~al.(1978)Foken, Kitajgorodskij, and Kuznecov]{Foken:1978bc}
+Thomas Foken, S~A Kitajgorodskij, and O~A Kuznecov.
+\newblock {On the dynamics of the molecular temperature boundary layer above
+  the sea}.
+\newblock \emph{Boundary-Layer Meteorol}, 15\penalty0 (3):\penalty0 289--300,
+  November 1978.
+
+\bibitem[Gryning et~al.(2007)Gryning, Batchvarova, Br{\"u}mmer, J{\o}rgensen,
+  and Larsen]{Gryning:2007dy}
+Sven-Erik Gryning, Ekaterina Batchvarova, Burghard Br{\"u}mmer, Hans
+  J{\o}rgensen, and S{\o}ren Larsen.
+\newblock {On the extension of the wind profile over homogeneous terrain beyond
+  the surface boundary layer}.
+\newblock \emph{Boundary-Layer Meteorol}, 124\penalty0 (2):\penalty0 251--268,
+  2007.
+
+\bibitem[H{\"o}gstr{\"o}m(1988)]{Hogstrom:1988wg}
+Ulf H{\"o}gstr{\"o}m.
+\newblock {Non-dimensional wind and temperature profiles in the atmospheric
+  surface layer: A re-evaluation}.
+\newblock \emph{Boundary-Layer Meteorol}, 42:\penalty0 55--78, 1988.
+
+\bibitem[H{\"o}gstr{\"o}m(1996)]{Hgstrm:1996kt}
+Ulf H{\"o}gstr{\"o}m.
+\newblock {Review of some basic characteristics of the atmospheric surface
+  layer}.
+\newblock \emph{Boundary-Layer Meteorol}, 78\penalty0 (3-4):\penalty0 215--246,
+  March 1996.
+
+\bibitem[Kelly and Gryning(2010)]{Kelly:2010ev}
+Mark Kelly and Sven-Erik Gryning.
+\newblock {Long-Term Mean Wind Profiles Based on Similarity Theory}.
+\newblock \emph{Boundary-Layer Meteorol}, 136\penalty0 (3):\penalty0 377--390,
+  September 2010.
+
+\bibitem[Kelly and Troen(2016)]{Kelly:2016bs}
+Mark Kelly and Ib~Troen.
+\newblock {Probabilistic stability and {\textquoteleft}tall{\textquoteright}
+  wind profiles: theory and method for use in wind resource assessment}.
+\newblock \emph{Wind Energy}, 19\penalty0 (2):\penalty0 227--241, February
+  2016.
+
+\bibitem[Marusic et~al.(2013)Marusic, Monty, Hultmark, and
+  Smits]{Marusic:2013hf}
+Ivan Marusic, Jason~P Monty, Marcus Hultmark, and Alexander~J Smits.
+\newblock {On the logarithmic region in wall turbulence}.
+\newblock \emph{J Fluid Mech}, 716, February 2013.
+
+\bibitem[Mellado et~al.(2016)Mellado, van Heerwaarden, and
+  Garcia]{Mellado:2016hv}
+Juan-Pedro Mellado, Chiel~C van Heerwaarden, and Jade~Rachele Garcia.
+\newblock {Near-Surface Effects of Free Atmosphere Stratification in Free
+  Convection}.
+\newblock \emph{Boundary-Layer Meteorol}, 159\penalty0 (1):\penalty0 69--95,
+  2016.
+
+\bibitem[Ng et~al.(2011)Ng, Monty, Hutchins, Chong, and Marusic]{Ng:2011bk}
+H~C~H Ng, Jason~P Monty, N~Hutchins, M~S Chong, and Ivan Marusic.
+\newblock {Comparison of turbulent channel and pipe flows with varying Reynolds
+  number}.
+\newblock \emph{Exp Fluids}, 51\penalty0 (5):\penalty0 1261--1281, June 2011.
+
+\bibitem[Rossby and Montgomery(1935)]{Rossby:1935wa}
+Carl-Gustaf Rossby and Raymond~B Montgomery.
+\newblock {The layer of frictional influence in wind and ocean currents}.
+\newblock \emph{Papers in Physical Oceanography and Meteorology}, III\penalty0
+  (3):\penalty0 1--101, 1935.
+
+\bibitem[Spalart(1989)]{Spalart:1989p2436}
+Philippe~R Spalart.
+\newblock {Theoretical and numerical studies of a three-dimensional turbulent
+  boundary layer}.
+\newblock \emph{J Fluid Mech}, 205:\penalty0 319--340, 1989.
+
+\bibitem[Spalart et~al.(2008)Spalart, Coleman, and
+  Johnstone]{Spalart:2008p2432}
+Philippe~R Spalart, Gary~Neil Coleman, and Roderick Johnstone.
+\newblock {Direct numerical simulation of the Ekman layer: A step in Reynolds
+  number, and cautious support for a log law with a shifted origin (Retracted
+  article. See vol. 21, art. no. 109901, 2009)}.
+\newblock \emph{Phys Fluids}, 20\penalty0 (10):\penalty0 101507, 2008.
+
+\bibitem[Spalart et~al.(2009)Spalart, Coleman, and
+  Johnstone]{Spalart:2009p2466}
+Philippe~R Spalart, Gary~Neil Coleman, and Roderick Johnstone.
+\newblock {Retraction: {\textquotedblleft}Direct numerical simulation of the
+  Ekman layer: A step in Reynolds number, and cautious support for a log law
+  with a shifted origin{\textquotedblright} [Phys. Fluids 20, 101507 (2008)]}.
+\newblock \emph{Phys Fluids}, 21\penalty0 (10):\penalty0 109901, 2009.
+
+\bibitem[Tennekes(1973)]{Tennekes:1973jh}
+Hendrik Tennekes.
+\newblock {The Logarithmic Wind Profile.}
+\newblock \emph{J Atmos Sci}, 30:\penalty0 234--238, March 1973.
+
+\end{thebibliography}
