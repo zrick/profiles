@@ -179,7 +179,7 @@ class EkmanUniversalClass:
                 break;
             i=i+1
 
-        p=p-2*C5/(re**2) * (z**2)
+        p=p-1.20*C5/(re**2) * (z**2)
             
         return(1./z,p) 
 
@@ -227,19 +227,25 @@ class EkmanUniversalClass:
 
 
         # outer-layer deficit [in outer units] 
-        scale_trans=1.20*1 #0.0495/us_loc #(0.0497)**(0.0)
-        ctr=0.321* 1#$ 0.0495/us_loc #(0.0495)**(0.0)
+        scale_trans=2#1.20*1 #0.0495/us_loc #(0.0497)**(0.0)
+        ctr= 0.24 - (70./re)
         arg=np.zeros(len(ym))
         arg[1:]=np.log(ym[1:]/ctr)
-        delta_log=z * np.cos(al_loc) 
-        us_ref,al_ref=self.ustar_alpha(1600) 
+        delta_log=z * np.cos(al_loc)
 
+        argz=1.4*np.pi*(ym+0.13)
+        damp=0.53
+        outer_u= (1-damp*np.cos(argz)*np.exp(-argz))/us_loc
+        outer_w=  damp*np.sin(argz)*np.exp(-argz)/us_loc
+        [ous,ows]=mp.rotate(outer_u,outer_w,al_loc)
+        
         wgt=(sp.special.erf(scale_trans*arg)+1)/2
 
-        fit2= ( wgt*(log_law-delta_log) ) # + 0*fit1 * (0.0497/us_loc)**2 ) 
+        fit2= ( wgt*(log_law-delta_log) ) # + 0*fit1 * (0.0497/us_loc)**2 )
+        fit2= ( wgt*(log_law-ous) ) 
         u[1:]-= fit2[1:] #* diff_u/dev_u
-        u-= 0.25*np.exp( -5.* ( (yp/dp_loc-0.85)**2) )
-
+        #u-= 0.25*np.exp( -5.* ( (yp/dp_loc-0.85)**2) )
+        #u[1:]=ous[1:]
         ################################################################################
         # OLD part for shear-spanwise velocity
         ################################################################################

@@ -15,14 +15,14 @@ from EkmanProfileClass import Complex, EkmanUniversalClass, build_grid
 
 D2R = np.pi / 180. 
 
-use_data=True   # if true -- the netcdf files from DNS are needed 
-plot_ustar_alpha=False
-plot_summary=False
+use_data=False   # if true -- the netcdf files from DNS are needed 
+plot_ustar_alpha=True
+plot_summary=True
 plot_visc=True
-print_table=False
-plot_outer_log=False
-plot_total_rot=False
-plot_convergence_1000=True
+print_table=True
+plot_outer_log=True
+plot_total_rot=True
+plot_convergence_1000=False
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -38,7 +38,8 @@ colors = {400 : 'gray',
 
 base='/Users/zrick/WORK/research_projects/SIM_NEUTRAL/netcdf/' 
 
-files = { 500: base+'avg_flw_ri0.0_re500.0_co0.0_512x192x1024.nc',
+files = { 400: base+'avg_flw_ri0.0_re400.0_1024x384x1024.nc',
+          500: base+'avg_flw_ri0.0_re500.0_2048x192x2048.nc',
           750: base+'avg_flw_ri0.0_re750.0_3072x384x3072.nc',
           1000:base+'avg_flw_ri0.0_re1000.0_co0.0_1536x512x3072.nc',
           1300:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120.nc',
@@ -87,7 +88,7 @@ if plot_visc:
     ax=fig.add_axes([0.1,0.1,0.87,0.8])
 
     fig2=plt.figure(figsize=(5,4))
-    ax2=fig2.add_axes([0.11,0.1,0.87,0.8]) 
+    ax2=fig2.add_axes([0.13,0.1,0.85,0.87]) 
     
     for re in [1600,1300,1000,750,500]:
         c=colors[re]
@@ -141,22 +142,21 @@ if plot_visc:
     fig.savefig('visc_layer.pdf',format='pdf' )
     plt.close('all')
 
-    # add high-re curve to outer_layer.pdf
-    re=3e5
-    nu=2./(re*re)
-    us,al=sc.ustar_alpha(re)
-    deltap=us*us/nu 
-    ny,yp2,ym2=build_grid(deltap,10)
-    up2,wp2 = sc.profile_plus(yp2,re) 
+    us,al=sc.ustar_alpha(1000)
+    argz=1.4*np.pi*(ym+0.14)
+    damp=np.sin(al)*1.7
+    outer_u = (1-damp*np.cos(argz)*np.exp(-argz))/us
+    outer_w =  damp*np.sin(argz)*np.exp(-argz)/us
+    [ous,ows]=mp.rotate(outer_u,outer_w,al) 
 
-    ax2.plot(ym2,up2-up2[-1],c='gray',lw=2) 
-
-    ax2.plot(ym,ulog-15,ls=':',c='black',lw=1,label='log-scaling') 
-    ax2.plot([0,2],[0,0],ls='-',lw=0.5,c='black') 
-    ax2.set_xlim(0,2.5)
-    ax2.set_ylim(-1,1.5)
+    ax2.plot(ym,ous-ous[-1],c='black',ls=':',lw=0.5)
+    ax2.plot(ym,ows-ows[-1],c='black',ls='-',lw=0.5)
+    ax2.plot(ym,0*ym,ls='-',lw=0.5,c='black')
+    
+    ax2.set_xlim(0,1.5)
+    ax2.set_ylim(-0.5,1.2)
     ax2.set_xlabel(r'$z^-$')
-    ax2.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$') 
+    ax2.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$')
     lg2=ax2.legend(loc='best')
     lg2.get_frame().set_linewidth(0.0) 
     fig2.savefig('outer_layer.pdf',format='pdf')
@@ -402,8 +402,12 @@ if plot_summary :
 
 if plot_ustar_alpha: 
     re_sim = np.array([   400,    500,    750,   1000,   1300,   1600])
-    us_sim = np.array([0.0647, 0.0618, 0.0561, 0.0520, 0.0502, 0.0489])
+    #   OLD VALUES
+    us_sim = np.array([0.0647, 0.0618, 0.0561, 0.0520, 0.0502, 0.0479])
     al_sim = np.array([ 29.97,  25.47,  21.00,  18.64,  17.93,  17.48])
+    #   NEW VALUES
+    us_sim = np.array([0.0647, 0.0618, 0.0561, 0.0530, 0.0502, 0.0480])
+    al_sim = np.array([ 28.21,  25.47,  21.00,  18.94,  17.93,  17.49])
     re_arr=10**np.arange(2.5,7,0.25)
     us_arr=np.zeros(len(re_arr))
     al_arr=np.zeros(len(re_arr))
@@ -412,13 +416,28 @@ if plot_ustar_alpha:
     for i in range(len(re_arr)):
         us_arr[i],al_arr[i]=sc.ustar_alpha(re_arr[i])
 
+    for i in range(len(re_sim)):
+        i_loc=i
+        nc = Dataset(files[re_sim[i_loc]],'r')
+        al_mean=np.mean(nc['FrictionAngle'][:])
+        us_mean=np.mean(nc['FrictionVelocity'][:]) 
+        u_top=nc['rU'][:,-1]
+        w_top=nc['rW'][:,-1]
+        w_1=nc['rW'][:,1]
+        u_1=nc['rU'][:,1] 
+        dir_top=np.arctan(w_top/u_top)/D2R
+        dir_sfc=np.arctan(w_1/u_1)/D2R
+        veer=np.mean(dir_top-al_mean)
+        times=nc['t'][:]
+        t_skip=10
+        print(re_sim[i_loc], veer,us_mean,np.mean(nc['FrictionAngle'][:]),np.mean(dir_sfc),np.mean(dir_top) )
 
+        
     for i in range(len(re_sim)):
         u,a=sc.ustar_alpha(re_sim[i])
         err_us += (u-us_sim[i])**2
         err_al += (a/D2R-al_sim[i])**2
-    #print(a/D2R-al_sim[i],a/D2R,al_sim[i]) 
-    
+
     print('TOTAL ERROR (us,alpha): {},{}'.format(err_us,err_al))
     fig=plt.figure(figsize=(10,5))
     ax=fig.add_axes([0.1,0.1,0.85,0.85])
@@ -433,8 +452,8 @@ if plot_ustar_alpha:
     ax.set_ylabel(r'$(G/u_{\star}), \alpha$') 
     lg=plt.legend(loc='lower left')
     lg.get_frame().set_linewidth(0.0)
-    plt.xlim(3e2,1e5)
-    plt.ylim(10,40)  
+    plt.xlim(3e2,1e4)
+    plt.ylim(10,30)  
     plt.savefig('ustar_alpha.pdf',format='pdf')
 
 # Mean wind speed profile according to Emeis et al. (2007) MetZet vol 16, p. 393-406

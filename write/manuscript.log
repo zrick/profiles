@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/MacPorts 2020.54632_3) (preloaded format=pdflatex 2020.11.27)  8 DEC 2020 11:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/MacPorts 2020.54632_3) (preloaded format=pdflatex 2020.11.27)  8 DEC 2020 15:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**manuscript.tex
+**manuscript
 (./manuscript.tex
 LaTeX2e <2020-02-02> patch level 5
 L3 programming layer <2020-03-06>
@@ -262,16 +262,16 @@ LaTeX Warning: No \author given.
 [1
 
 {/opt/local/var/db/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<ustar_alpha.pdf, id=14, 722.7pt x 361.35pt>
-File: ustar_alpha.pdf Graphic file (type pdf)
-<use ustar_alpha.pdf>
-Package pdftex.def Info: ustar_alpha.pdf  used on input line 81.
+<../plot/ustar_alpha.pdf, id=14, 722.7pt x 361.35pt>
+File: ../plot/ustar_alpha.pdf Graphic file (type pdf)
+<use ../plot/ustar_alpha.pdf>
+Package pdftex.def Info: ../plot/ustar_alpha.pdf  used on input line 81.
 (pdftex.def)             Requested size: 318.66948pt x 159.33633pt.
- [2 <./ustar_alpha.pdf>]
-<u_profile.pdf, id=54, 867.24pt x 361.35pt>
-File: u_profile.pdf Graphic file (type pdf)
-<use u_profile.pdf>
-Package pdftex.def Info: u_profile.pdf  used on input line 124.
+ [2 <../plot/ustar_alpha.pdf>]
+<../plot/u_profile.pdf, id=54, 867.24pt x 361.35pt>
+File: ../plot/u_profile.pdf Graphic file (type pdf)
+<use ../plot/u_profile.pdf>
+Package pdftex.def Info: ../plot/u_profile.pdf  used on input line 124.
 (pdftex.def)             Requested size: 455.24411pt x 189.68402pt.
 
 Overfull \hbox (1.45972pt too wide) in paragraph at lines 135--139
@@ -279,7 +279,7 @@ Overfull \hbox (1.45972pt too wide) in paragraph at lines 135--139
 id-er-a-tions by Townsend (cite to attached-
  []
 
-[3 <./u_profile.pdf>] [4]
+[3 <../plot/u_profile.pdf>] [4]
 ! Missing delimiter (. inserted).
 <to be read again> 
                    ,
@@ -303,31 +303,32 @@ l.312 with $\Delta V &=&
                          V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\t...
 
 ? 
-<w_profile.pdf, id=103, 867.24pt x 361.35pt>
-File: w_profile.pdf Graphic file (type pdf)
-<use w_profile.pdf>
-Package pdftex.def Info: w_profile.pdf  used on input line 322.
+<../plot/w_profile.pdf, id=103, 867.24pt x 361.35pt>
+File: ../plot/w_profile.pdf Graphic file (type pdf)
+<use ../plot/w_profile.pdf>
+Package pdftex.def Info: ../plot/w_profile.pdf  used on input line 322.
 (pdftex.def)             Requested size: 455.24411pt x 189.68402pt.
 
-LaTeX Warning: File `ekman_profiles_data.pdf' not found on input line 333.
+LaTeX Warning: File `../plot/ekman_profiles_data.pdf' not found on input line 3
+33.
 
 
-! Package pdftex.def Error: File `ekman_profiles_data.pdf' not found: using dra
-ft setting.
+! Package pdftex.def Error: File `../plot/ekman_profiles_data.pdf' not found: u
+sing draft setting.
 
 See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.333 ...idth=\textwidth]{ekman_profiles_data.pdf}
+l.333 ...xtwidth]{../plot/ekman_profiles_data.pdf}
                                                   
 ? 
-<mag_dir.pdf, id=104, 722.7pt x 361.35pt>
-File: mag_dir.pdf Graphic file (type pdf)
-<use mag_dir.pdf>
-Package pdftex.def Info: mag_dir.pdf  used on input line 349.
+<../plot/mag_dir.pdf, id=104, 722.7pt x 361.35pt>
+File: ../plot/mag_dir.pdf Graphic file (type pdf)
+<use ../plot/mag_dir.pdf>
+Package pdftex.def Info: ../plot/mag_dir.pdf  used on input line 349.
 (pdftex.def)             Requested size: 455.24411pt x 227.62413pt.
-[6 <./w_profile.pdf>] [7] (./manuscript.bbl [8 <./mag_dir.pdf>])
+[6 <../plot/w_profile.pdf>] [7] (./manuscript.bbl [8 <../plot/mag_dir.pdf>])
 
 ! LaTeX Error: \begin{itemize} on input line 357 ended by \end{document}.
 
@@ -344,13 +345,13 @@ l.363 \end{document}
 ### semi simple group (level 1) entered at line 357 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4374 strings out of 482556
- 63508 string characters out of 5952074
+ 4376 strings out of 482556
+ 63819 string characters out of 5952074
  307293 words of memory out of 5000000
  19972 multiletter control sequences out of 15000+600000
  541213 words of font info for 57 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 41i,16n,42p,365b,315s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,16n,42p,361b,315s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/opt/local/share/texmf-texlive/fonts/enc/dvips/cm-super/cm-sup
 er-ts1.enc}</opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx1
 0.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb
@@ -368,7 +369,7 @@ s/cm/cmti10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
 cmtt10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/
 msam10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/cm-super/sfrm1095
 .pfb>
-Output written on manuscript.pdf (9 pages, 310712 bytes).
+Output written on manuscript.pdf (9 pages, 310840 bytes).
 PDF statistics:
  244 PDF objects out of 1000 (max. 8388607)
  111 compressed objects within 2 object streams
