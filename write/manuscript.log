@@ -1,12 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/MacPorts 2020.54632_3) (preloaded format=pdflatex 2020.11.27)  8 DEC 2020 15:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/MacPorts 2020.54632_3) (preloaded format=pdflatex 2020.11.27)  22 DEC 2020 11:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**manuscript
-(./manuscript.tex
-LaTeX2e <2020-02-02> patch level 5
-L3 programming layer <2020-03-06>
-(/opt/local/share/texmf-texlive/tex/latex/base/article.cls
+**\nonstopmode\input manuscript.tex
+(./manuscript.tex (/opt/local/share/texmf-texlive/tex/latex/base/article.cls
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
 (/opt/local/share/texmf-texlive/tex/latex/base/size11.clo
 File: size11.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
@@ -171,20 +168,20 @@ File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 (./manuscript.aux)
 \openout1 = `manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -244,13 +241,13 @@ e
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 15.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 18.
 
 
 (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 15.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 18.
 
 
 (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
@@ -265,16 +262,16 @@ LaTeX Warning: No \author given.
 <../plot/ustar_alpha.pdf, id=14, 722.7pt x 361.35pt>
 File: ../plot/ustar_alpha.pdf Graphic file (type pdf)
 <use ../plot/ustar_alpha.pdf>
-Package pdftex.def Info: ../plot/ustar_alpha.pdf  used on input line 81.
+Package pdftex.def Info: ../plot/ustar_alpha.pdf  used on input line 84.
 (pdftex.def)             Requested size: 318.66948pt x 159.33633pt.
  [2 <../plot/ustar_alpha.pdf>]
-<../plot/u_profile.pdf, id=54, 867.24pt x 361.35pt>
+<../plot/u_profile.pdf, id=56, 867.24pt x 361.35pt>
 File: ../plot/u_profile.pdf Graphic file (type pdf)
 <use ../plot/u_profile.pdf>
-Package pdftex.def Info: ../plot/u_profile.pdf  used on input line 124.
+Package pdftex.def Info: ../plot/u_profile.pdf  used on input line 127.
 (pdftex.def)             Requested size: 455.24411pt x 189.68402pt.
 
-Overfull \hbox (1.45972pt too wide) in paragraph at lines 135--139
+Overfull \hbox (1.45972pt too wide) in paragraph at lines 138--142
 []\OT1/cmr/m/n/10.95 For non-rotating, non-external flows the-o-ret-i-cal con-s
 id-er-a-tions by Townsend (cite to attached-
  []
@@ -283,34 +280,56 @@ id-er-a-tions by Townsend (cite to attached-
 ! Missing delimiter (. inserted).
 <to be read again> 
                    ,
-l.284 \end{align}
+l.287 \end{align}
                  
-? 
+I was expecting to see something like `(' or `\{' or
+`\}' here. If you typed, e.g., `{' instead of `\{', you
+should probably delete the `{' by typing `1' now, so that
+braces don't get unbalanced. Otherwise just proceed.
+Acceptable delimiters are characters whose \delcode is
+nonnegative, or you can use `\delimiter <delimiter code>'.
+
 ! Missing delimiter (. inserted).
 <to be read again> 
                    ,
-l.284 \end{align}
+l.287 \end{align}
                  
-? 
+I was expecting to see something like `(' or `\{' or
+`\}' here. If you typed, e.g., `{' instead of `\{', you
+should probably delete the `{' by typing `1' now, so that
+braces don't get unbalanced. Otherwise just proceed.
+Acceptable delimiters are characters whose \delcode is
+nonnegative, or you can use `\delimiter <delimiter code>'.
+
 [5]
 ! Misplaced alignment tab character &.
-l.312 with $\Delta V &
+l.315 with $\Delta V &
                       =& V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\t...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
 
-? 
 ! Misplaced alignment tab character &.
-l.312 with $\Delta V &=&
+l.315 with $\Delta V &=&
                          V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\t...
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
 
-? 
-<../plot/w_profile.pdf, id=103, 867.24pt x 361.35pt>
+<../plot/w_profile.pdf, id=105, 867.24pt x 361.35pt>
 File: ../plot/w_profile.pdf Graphic file (type pdf)
 <use ../plot/w_profile.pdf>
-Package pdftex.def Info: ../plot/w_profile.pdf  used on input line 322.
+Package pdftex.def Info: ../plot/w_profile.pdf  used on input line 325.
 (pdftex.def)             Requested size: 455.24411pt x 189.68402pt.
 
 LaTeX Warning: File `../plot/ekman_profiles_data.pdf' not found on input line 3
-33.
+36.
 
 
 ! Package pdftex.def Error: File `../plot/ekman_profiles_data.pdf' not found: u
@@ -320,59 +339,149 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.333 ...xtwidth]{../plot/ekman_profiles_data.pdf}
+l.336 ...xtwidth]{../plot/ekman_profiles_data.pdf}
                                                   
-? 
-<../plot/mag_dir.pdf, id=104, 722.7pt x 361.35pt>
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+<../plot/mag_dir.pdf, id=106, 722.7pt x 361.35pt>
 File: ../plot/mag_dir.pdf Graphic file (type pdf)
 <use ../plot/mag_dir.pdf>
-Package pdftex.def Info: ../plot/mag_dir.pdf  used on input line 349.
+Package pdftex.def Info: ../plot/mag_dir.pdf  used on input line 352.
 (pdftex.def)             Requested size: 455.24411pt x 227.62413pt.
-[6 <../plot/w_profile.pdf>] [7] (./manuscript.bbl [8 <../plot/mag_dir.pdf>])
+[6 <../plot/w_profile.pdf>] [7]
+! Missing { inserted.
+<to be read again> 
+                   \mathop 
+l.387 where the constants $U_\inf
+                                 $, $W_\inf$ set the top boundary condition ...
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
 
-! LaTeX Error: \begin{itemize} on input line 357 ended by \end{document}.
+! Missing } inserted.
+<inserted text> 
+                }
+l.387 where the constants $U_\inf$
+                                  , $W_\inf$ set the top boundary condition ...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.363 \end{document}
-                    
-? 
-[9] (./manuscript.aux) )
-(\end occurred inside a group at level 1)
+! Missing { inserted.
+<to be read again> 
+                   \mathop 
+l.387 where the constants $U_\inf$, $W_\inf
+                                           $ set the top boundary condition ...
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
 
-### semi simple group (level 1) entered at line 357 (\begingroup)
-### bottom level 
+! Missing } inserted.
+<inserted text> 
+                }
+l.387 where the constants $U_\inf$, $W_\inf$
+                                             set the top boundary condition ...
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing { inserted.
+<to be read again> 
+                   \mathop 
+l.389 ...on for a surface Ekman layer is $A=U_\inf
+                                                  =G$, $B=0$, and $W_\inf=0$.
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.389 ...for a surface Ekman layer is $A=U_\inf=G$
+                                                  , $B=0$, and $W_\inf=0$.
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing { inserted.
+<to be read again> 
+                   \mathop 
+l.389 ...layer is $A=U_\inf=G$, $B=0$, and $W_\inf
+                                                  =0$.
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.389 ...er is $A=U_\inf=G$, $B=0$, and $W_\inf=0$
+                                                  .
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Extra }, or forgotten $.
+l.399 ... u_\text{match} &=& U_{\inf} + e^{-\gzm}}
+                                                   \left [ A \cos\gzm + B\si...
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Extra }, or forgotten $.
+l.400 ... w_\text{match} &=& W_{\inf} + e^{-\gzm}}
+                                                   \left [-A \sin\gzm + B\co...
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+[8 <../plot/mag_dir.pdf>] (./manuscript.bbl [9]) [10] (./manuscript.aux) ) 
 Here is how much of TeX's memory you used:
- 4376 strings out of 482556
- 63819 string characters out of 5952074
- 307293 words of memory out of 5000000
- 19972 multiletter control sequences out of 15000+600000
+ 4377 strings out of 482556
+ 63822 string characters out of 5952074
+ 307301 words of memory out of 5000000
+ 19973 multiletter control sequences out of 15000+600000
  541213 words of font info for 57 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 41i,16n,42p,361b,315s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/opt/local/share/texmf-texlive/fonts/enc/dvips/cm-super/cm-sup
-er-ts1.enc}</opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx1
-0.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb
-></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></op
-t/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></opt/loc
-al/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb></opt/local/sha
-re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10.pfb></opt/local/share/tex
-mf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></opt/local/share/texmf-tex
-live/fonts/type1/public/amsfonts/cm/cmr17.pfb></opt/local/share/texmf-texlive/f
-onts/type1/public/amsfonts/cm/cmr6.pfb></opt/local/share/texmf-texlive/fonts/ty
-pe1/public/amsfonts/cm/cmr8.pfb></opt/local/share/texmf-texlive/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/a
-msfonts/cm/cmsy8.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfont
-s/cm/cmti10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
-cmtt10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/
-msam10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/cm-super/sfrm1095
-.pfb>
-Output written on manuscript.pdf (9 pages, 310840 bytes).
+ 41i,16n,42p,384b,315s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/opt
+/local/share/texmf-texlive/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</opt/loca
+l/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></opt/local/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/local/share/te
+xmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></opt/local/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></opt/local/share/texmf-texliv
+e/fonts/type1/public/amsfonts/cm/cmmi8.pfb></opt/local/share/texmf-texlive/font
+s/type1/public/amsfonts/cm/cmr10.pfb></opt/local/share/texmf-texlive/fonts/type
+1/public/amsfonts/cm/cmr12.pfb></opt/local/share/texmf-texlive/fonts/type1/publ
+ic/amsfonts/cm/cmr17.pfb></opt/local/share/texmf-texlive/fonts/type1/public/ams
+fonts/cm/cmr6.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/c
+m/cmr8.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+</opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb></opt
+/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt10.pfb></opt/loca
+l/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/loca
+l/share/texmf-texlive/fonts/type1/public/cm-super/sfrm1095.pfb>
+Output written on manuscript.pdf (10 pages, 315719 bytes).
 PDF statistics:
- 244 PDF objects out of 1000 (max. 8388607)
- 111 compressed objects within 2 object streams
+ 249 PDF objects out of 1000 (max. 8388607)
+ 113 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

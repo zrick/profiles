@@ -6,6 +6,9 @@
 \usepackage{caption}
 \usepackage{natbib}
 
+\newcommand{\p}{\partial}
+\newcommand{\gzm}{{\xi}}%{\gamma z_\text{match}}}
+
 \date{Draft \today}
 \title{Towards a Universal Veering Profile for Turbulent Ekman Flow at arbitrary Reynolds number \\
   \normalsize LES and DNS of Turbulent Ekman Flow \\}
@@ -357,7 +360,69 @@ Applications:
 \begin{itemize}
 \item reference-shear for neutral profile approaches(systematic!) $\rightarrow$ wind engineering! 
 \item initial condition for LES/DNS to eliminate/minimize inertial oscillation in Benchmark simulations
-\item 
+\item
+\end{itemize} 
+
+\appendix
+
+\section{Laminar Ekman solution with consideration of inner layer}
+
+\begin{subequations}
+\begin{eqnarray}
+  \left(\begin{matrix}
+    \p_t U\\
+    \p_t W  
+  \end{matrix}\right)&=&\left(\begin{matrix}
+     fW &+& \nu \p_z^2 U\\ 
+    -f(U-G) &+& \nu \p_z^2 W
+  \end{matrix}\right)\\ 
+  \Rightarrow \partial_t (U+iW) &=& f(W-i(U-G))) + \nu \p_z^2(U+iW)
+\end{eqnarray}
+In stationary conditions, this system is solved by
+\begin{eqnarray}
+  \hat{u}(z) &=& U_{\inf} + e^{-\gamma z} \left[A \cos\gamma z + B \sin\gamma z\right]   \\
+  \hat{w}(z) &=& W_{\inf} + e^{-\gamma z} \left[-A \sin\gamma z + B \cos\gamma z\right]
+\end{eqnarray} 
+\end{subequations}
+where the constants $U_\inf$, $W_\inf$ set the top boundary condition and $A$ and $B$ set the bottom boundary condition. 
+%
+The most common boundary condition for a surface Ekman layer is $A=U_\inf=G$, $B=0$, and $W_\inf=0$.
+%
+The lower boundary condition, however, neglects the existence of the surface layer, and it appears reasonable to define
+$A=c G$ where $c<1$ is a constant that icorporates the increased shear in the surface layer.
+%
+Given a 'matching height' $z_{match}$ and normalized matching height $\xi=\gamma z_\text{match}$ in the upper part of the inner layer, we can match the Ekman profile
+to the inner layer by letting
+%
+\begin{eqnarray}
+  \begin{matrix} 
+  u(z_\text{match}) \equiv u_\text{match} &=& U_{\inf} + e^{-\gzm}} \left [ A \cos\gzm + B\sin\gzm \right] \\
+    w(z_\text{match}) \equiv w_\text{match} &=& W_{\inf} + e^{-\gzm}} \left [-A \sin\gzm + B\cos\gzm \right]
+  \end{matrix} 
+\end{eqnarray}
+\begin{eqnarray}
+  e^\gzm  \left(\begin{matrix}
+     u_\text{match}-U_{\inf} \\ 
+     w_\text{match}-W_{\inf}
+  \end{matrix}\right) = \left(\begin{matrix}
+  \cos\gzm A &+ \sin\gzm B \\ -\sin\gzm A &+ \cos\gzm B
+  \end{matrix} \right) \\
+\end{eqnarray}
+Matching the profile at $\xi=0$, one obtains
+$A = \Delta u_\text{match} $ and $B=-\Delta w_\text{match} $. Otherwise, it is
+\begin{subequations} 
+\begin{eqnarray}
+  e^\gzm \Delta u_\text{match} = A \cos\gzm + B\sin\gzm \\
+  e^\gzm (\cos\gzm \Delta u_\text{match} - \sin\gzm \Delta w_\text{match}) = A (\cos^2\gzm + \sin^2\gzm)
+\end{eqnarray}
+\begin{eqnarray}
+  \Rightarrow A &=&e^\gzm (\cos\gzm\Delta u_\text{match} + \sin\gzm \Delta w_\text{match})\\
+  B&=&  \frac{e^\gzm \Delta u_\text{match} - A \cos \gzm}{\sin\gzm} \\
+  &=& e^\gzm \frac{ \sin^2\gzm \Delta u_\text{match}+\sin\xi\cos\xi \Delta w_\text{match} }{\sin\xi }  \\
+  &=& e^\gzm (\sin\xi\Delta u_\text{match} + \cos\xi\Delta w_\text{match}) 
+\end{eqnarray}
+\end{subequations} 
 \bibliographystyle{plainnat}
 \bibliography{ansorge.bib}
+
 \end{document} 

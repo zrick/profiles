@@ -133,7 +133,7 @@ class EkmanUniversalClass:
         A_i=np.average(f1.i[i1-2:i1+2])
         self.A=Complex(A_r,A_i) 
         self.yp=yp
-        print(self.A) 
+        #print(self.A) 
         # integrate constants C1 and C5 for higher-order theory
         # C1 = int_0^{\infty} f_1(y^- )dy^-
         C1_r=mp.integrate(yp/deltap,f1.r,len(yp))
@@ -143,7 +143,7 @@ class EkmanUniversalClass:
         # C5 = int_0^{50} f_5(y+)dy^+
         imax=mp.geti(yp,50)
         self.C5=Complex(mp.integrate(yp,f5.r,imax),mp.integrate(yp,f5.i,imax))
-        print(self.C5) 
+        #print(self.C5) 
 
         self.initialized=True
 
@@ -204,8 +204,22 @@ class EkmanUniversalClass:
 
         ym=np.array(yp/dp_loc)
 
-        u=np.zeros(len(yp))
+        # OUTER REFERENCE PROFILES
+        #
+        argz=0.66*(2.*np.pi*(ym+0.12)) 
+        dampA =  0.42*(us_loc/0.05- 0.07/re) #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
+        dampB =  0.0#np.exp(zdum) * ( dU_mtc*np.sin(zdum) + dW_mtc*np.cos(zdum) )
+
+        outer_u= (1-(dampA*np.cos(argz)+dampB*np.sin(argz))*np.exp(-argz))/us_loc
+        outer_w=   ( dampA*np.sin(argz)-dampB*np.cos(argz))*np.exp(-argz)/us_loc
+        [ous,ows]=mp.rotate(outer_u,outer_w,al_loc)
         
+
+        ################################################################################
+        # STREAMWISE COMPONENT (SHEAR-ALGINED)
+        ################################################################################
+
+        u=np.zeros(len(yp))
         i_x=mp.geti(yp,self.LIMIT_INNER)
 
         # start with logarithmic law (everywhere)
@@ -219,117 +233,68 @@ class EkmanUniversalClass:
         scale=2.03
         u_ref = 1/0.07825
         ymatch = 19 
-        w=np.zeros(len(yp))
-        w[1:] = ( 0.5*(sp.special.erf(scale*(np.log(yp[1:]/ymatch)))+1) )
+        wgt=np.zeros(len(yp)) 
+        wgt[1:] = ( 0.5*(sp.special.erf(scale*(np.log(yp[1:]/ymatch)))+1) )
         u_visc=( yp + c4*yp**4+c6*yp**6) / (1 + c6/u_ref*yp**6)
-        u[1:]=(1-w[1:])*u_visc[1:] + w[1:]*u[1:]
+        u[1:]=(1-wgt[1:])*u_visc[1:] + wgt[1:]*u[1:]
         u[0]=0 
 
 
         # outer-layer deficit [in outer units] 
-        scale_trans=2#1.20*1 #0.0495/us_loc #(0.0497)**(0.0)
-        ctr= 0.24 - (70./re)
+        scale_trans=2 
+        ctr= 0.29 - 70/re 
         arg=np.zeros(len(ym))
         arg[1:]=np.log(ym[1:]/ctr)
         delta_log=z * np.cos(al_loc)
 
-        argz=1.4*np.pi*(ym+0.13)
-        damp=0.53
-        outer_u= (1-damp*np.cos(argz)*np.exp(-argz))/us_loc
-        outer_w=  damp*np.sin(argz)*np.exp(-argz)/us_loc
-        [ous,ows]=mp.rotate(outer_u,outer_w,al_loc)
         
         wgt=(sp.special.erf(scale_trans*arg)+1)/2
 
         fit2= ( wgt*(log_law-delta_log) ) # + 0*fit1 * (0.0497/us_loc)**2 )
         fit2= ( wgt*(log_law-ous) ) 
         u[1:]-= fit2[1:] #* diff_u/dev_u
-        #u-= 0.25*np.exp( -5.* ( (yp/dp_loc-0.85)**2) )
-        #u[1:]=ous[1:]
-        ################################################################################
-        # OLD part for shear-spanwise velocity
-        ################################################################################
-        # match to outer boundary condition
-        #power=0.66
-        #w = self.outer_wp_itp(ym)*(us_loc**power)/(0.0485**(1+power)) #*us_loc**power/(0.0485**(1+power))
-        #wtrgt = np.sqrt(z**2-u[-1]**2)
-        #coef_w = wtrgt/w[-1]
-        #wgt = (sp.special.erf(1.0*np.log(6*ym))+1)/2
-        #scl = 1 + wgt*(coef_w-1)
-        #w *= scl#coef_w #scl 
 
-
-        #[u_geo,w_geo] = mp.rotate(u,w,al_loc)
-        # print('WSC:', u[-1],w[-1],u_geo[-1]*us_loc,w_geo[-1]*us_loc,np.amin(w_geo*us_loc))
-
-        #sqdp=np.sqrt(dp_loc)
-        #z=ym_loc*sqdp/1.5#*2*np.pi
-        #w_inner = 1.0*np.exp(-z)*np.sin(z)
-        #ip18=mp.geti(yp_loc,10) 
-        #wgt = (sp.special.erf( 1*np.log( yp_loc/yp_loc[ip18]) )+1)/2
-        #w_geo = w_geo # -(1-wgt)*w_inner/us_loc + wgt*w_geo
-        #[u,w] = mp.rotate(u_geo,w_geo,-al_loc)
-        #print(np.sqrt(u[-1]**2+w[-1]**2),z)
 
         ################################################################################
         # NEW part for shear-spanwise velocity
         ################################################################################            
         k = self.KAPPA * 0.836 * (1+150/1600)# us_loc   the second part is a low-re correction that is dispensable for re_loc >~ 1000 
-        match_o=0.4 
-        
-        # outer log-profile for spanwise component
-        #  - estimate log-offset at height match_o (in y-) from semi-empirical velocity wref (estimated based on DNS data) 
-        imatch=mp.geti(ym,match_o)-1
-        winf=1./us_loc*np.sin(al_loc)
-        wref=0.906*winf 
-        
-        log_w=np.zeros(len(yp)) 
-        #c3 = wref - 1/k*np.log(yp[imatch]) 
-        #log_w[1:]=1/k*np.log(yp[1:]) + c3
+        w = -ows#wgt + (1-wgt)*log_w
 
-        c3 = wref - 1/k*np.log(ym[imatch])
-        log_w[1:]=1/k*np.log(ym[1:])+c3 
-
-        # match log-profile and outer BC to produce wake 
-        winf=1./us_loc*np.sin(al_loc)
-        ot=ym[mp.geti(log_w,0.98*winf)]
-        width=2.0
-        wgt=np.zeros(len(ym)) 
-        wgt[1:] = (sp.special.erf(width*np.log(ym[1:]/ot))+1)/2.
-        w = winf*wgt + (1-wgt)*log_w
-
-        # inner region -- use power-law profile below height match_i
-        # boundary conditions:
-        #  (upper)  match log-profile at y-= match_i
-        #  (lower)  match w_10 from scaling analysis at y+ = 10                    
-        p_m=mp.geti(ym,0.10)#mp.geti(log_w,2.0)
-        i5=mp.geti(yp,4)
-        i10=mp.geti(yp,10) 
-        y_m=yp[p_m]
-        w_m=w[p_m]
-        pwr=0.5
-        y_10=yp[i10]
-        w_10 = 750*np.sin(al_loc)/np.sqrt(dp_loc)*us_loc
-        w_10*=(y_10/10)**pwr   # correct for the fact that y_10 may not be exactly at y+=10 
-        s_m=(w_m-w_10)/(y_m**pwr-y_10**pwr)
-        o_m=w_10 - s_m* (y_10**pwr)
-        print(re,s_m,o_m)
-        w[:p_m+1] = o_m + s_m * (yp[:p_m+1]**pwr)
-        w[:i5] = w[i5]*(yp[:i5]/yp[i5])**2
+        i0=mp.geti(yp,np.sqrt(dp_loc))
+        i1=mp.geti(yp,1.5*np.sqrt(dp_loc))
+        i2=mp.geti(yp,0.2*dp_loc)
+        c_off=4.9e2*us_loc/np.sqrt(dp_loc)
+        c1=2.7e3*us_loc/np.sqrt(dp_loc)/(np.log(yp[i0])**2.0)
+        dir_fit=c1*np.log(yp[1:])**2+c_off
+        slp=(dir_fit[i1+1]-dir_fit[i1])/(yp[i1+1]-yp[i1])
+        off=dir_fit[i1]-slp*yp[i1]
+        dir_fit[i1:]=slp*yp[i1:-1]+off
         
+        i_03=mp.geti(yp,0.30*dp_loc)
+        z_03=yp[i_03]
+        s_03=(w[i_03+1]-w[i_03-1])/(yp[i_03+1]-yp[i_03-1])
+        a_03=s_03*z_03
+        o_03=w[i_03]-a_03*np.log(z_03)
+        w[0]=0.
+        w[1:i_03]=o_03+a_03*np.log(yp[1:i_03])
+
+        #BLENDING (inner / outer)
+        #blending height: geometric avg between yp[i_03] and yp[i0]
+        ib=mp.geti(yp,0.12*dp_loc)
+        scale=2.0
+        wgt=np.zeros(len(yp)) 
+        wgt[1:] = ( 0.5*(sp.special.erf(scale*(np.log(yp[1:]/yp[ib])))+1) )
+
+
+        dir_fit[i_03:]=dir_fit[i_03]
+        w_inner=np.zeros(len(yp))
+        w_inner[0]=0. 
+        w_inner[1:]=np.tan(dir_fit/180*np.pi)*u[1:]
+
+        w=wgt*w + (1-wgt)*w_inner 
+
         
-        # matching procedure at ym=0.1 (smooth transition between power-law and log profile around y-=0.1 
-        i0 = mp.geti(ym,0.06)+1  # +1 only important at very low re where that height otherwise falls below y+~20 and then becomes too close to y+=10
-        i1 = mp.geti(ym,0.13)
-        deltay=yp[i1]-yp[i0]
-        deltaw=w[i1]-w[i0]
-        dw0=(w[i0+1]-w[i0-1])/(yp[i0+1]-yp[i0-1])
-        ratio= dw0 *deltay/deltaw
-        a=ratio; b=1-ratio
-        for i in range(i0,i1):
-            dy =yp[i] - yp[i0]
-            w[i] = w[i0] + deltaw* (   a* (dy/deltay)    +  b * (dy/deltay)**2 ) 
-            
         return u,w
 
     def profile_log(self,yp,re):

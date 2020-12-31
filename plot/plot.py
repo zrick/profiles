@@ -117,12 +117,16 @@ if plot_visc:
         ax.plot(yp_dat,u_sfc/us_dat, c=c,lw=3,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
         ax.plot(yp,up,               c=c,lw=3,ls=':')
 
-        if  re ==1600: 
+        if  re ==1600:
             ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$ (data)'.format(re),alpha=0.5)
+            ax2.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls=':',alpha=0.5)
             ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--',label=r'$Re={}$ (model)'.format(re))
+            ax2.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':',label=r'$Re={}$ (model)'.format(re))
         else:
             ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
+            ax2.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls=':',alpha=0.5)
             ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--')
+            ax2.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':')
 
 
             
@@ -142,19 +146,9 @@ if plot_visc:
     fig.savefig('visc_layer.pdf',format='pdf' )
     plt.close('all')
 
-    us,al=sc.ustar_alpha(1000)
-    argz=1.4*np.pi*(ym+0.14)
-    damp=np.sin(al)*1.7
-    outer_u = (1-damp*np.cos(argz)*np.exp(-argz))/us
-    outer_w =  damp*np.sin(argz)*np.exp(-argz)/us
-    [ous,ows]=mp.rotate(outer_u,outer_w,al) 
-
-    ax2.plot(ym,ous-ous[-1],c='black',ls=':',lw=0.5)
-    ax2.plot(ym,ows-ows[-1],c='black',ls='-',lw=0.5)
-    ax2.plot(ym,0*ym,ls='-',lw=0.5,c='black')
     
     ax2.set_xlim(0,1.5)
-    ax2.set_ylim(-0.5,1.2)
+    ax2.set_ylim(-0.5,3.2)
     ax2.set_xlabel(r'$z^-$')
     ax2.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$')
     lg2=ax2.legend(loc='best')
@@ -481,7 +475,7 @@ if plot_total_rot:
     ax1=fig.add_axes([0.07,0.11,0.42,0.85])
     ax2=fig.add_axes([0.57,0.11,0.42,0.85]) 
     
-    for re in [750,1000,1300,1600,5000,10000,30000]:
+    for re in [500,750,1000,1300,1600,5000,10000,30000]:
         nu=2./(re*re)
 
         if re <= 1600: 
@@ -530,8 +524,37 @@ if plot_total_rot:
         ax2.plot(ym[1:],(vm_mod[1:]-vm_mod[-1])/us,ls='-', lw=3,c=colors[re],alpha=0.5) 
         ax2.plot(ym[1:],d_mod[1:]-d_mod[-1],       ls='--',lw=3,c=colors[re],alpha=0.5)
 
+        deltap=us*us/nu
+        i0=mp.geti(yp,np.sqrt(deltap))
+        i1=mp.geti(yp,1.5*np.sqrt(deltap))
+        i2=mp.geti(yp,0.2*deltap)
+        
+        c_off=4.9e2*us/np.sqrt(deltap)
+        c1=2.7e3*us/np.sqrt(deltap)/(np.log(yp[i0])**2.0)
+        dir_fit=c1*np.log(yp[1:])**2.0+c_off
+        ax1.plot(yp[1:],dir_fit,c=colors[re])
+
+        slp=(dir_fit[i1+1]-dir_fit[i1])/(yp[i1+1]-yp[i1])
+        off=dir_fit[i1]-slp*yp[i1]
+        y_use=yp[i1:] 
+        ax1.plot(y_use,slp*y_use+off,ls=':',lw=0.5,c=colors[re]) 
+        
+        i_03=mp.geti(yp,0.30*deltap)
+        z_03=yp[i_03] 
+        s_03=(wp_mod[i_03+1]-wp_mod[i_03-1])/(yp[i_03+1]-yp[i_03-1]) 
+        a_03=s_03*z_03
+        o_03=wp_mod[i_03]-a_03*np.log(z_03)
+        ax1.scatter([yp[i0+1],yp[i_03]],[dir_fit[i0],d_mod[i_03]],c=colors[re])
+        ylen=30
+        y_use=yp[i_03-ylen:i_03]
+        dir_plt=- ( np.arctan( up_mod/ (o_03+a_03*np.log(yp))) - np.pi/2)/np.pi*180.
+        dir_plt = [d if d<180 else d-360 for d in dir_plt]
+        print('LEN:',len(dir_plt),len(y_use))
+        ax1.plot(y_use,dir_plt[i_03-ylen:i_03],c=colors[re],ls=':',lw=2) 
 
 
+
+        
 
     ax1.plot([-1,-1],[1,1],ls='-', c='black',label=r'$U_{mag}$')
     ax1.plot([-1,-1],[1,1],ls='--',c='black',label=r'DIR') 
@@ -540,6 +563,7 @@ if plot_total_rot:
     
     ax1.set_xscale('log')
     ax1.set_xlim(1,2e3)
+    ax1.set_ylim(0,25)
     ax1.set_xlabel(r'$z^+$')
     ax1.set_ylabel(r'$U_{mag}^+,  \alpha_{sfc}$')
 
