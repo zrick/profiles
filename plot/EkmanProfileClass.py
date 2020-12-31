@@ -179,7 +179,7 @@ class EkmanUniversalClass:
                 break;
             i=i+1
 
-        p=p-1.20*C5/(re**2) * (z**2)
+        p=p-1.00*C5/(re**2) * (z**2)
             
         return(1./z,p) 
 
