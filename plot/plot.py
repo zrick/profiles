@@ -734,7 +734,6 @@ if plot_convergence_1000:
 if plot_les_comp == True:
     les_path='../data/'
     f_cor=1.03e-04
-    nu_air=1.456e-05 
     les_ReD1000_10cm={'f':'N_ReD1000_10cm_big_pr.001.nc',
                       'z0m':0.05,
                       'z0':0.0021,
@@ -768,7 +767,7 @@ if plot_les_comp == True:
         t=t[i_srt:]
         print('')
         print('Plotting LES Data for Re=',c['re']) 
-        print('  - STARTING FROM INDEX:', i_srt, 'LEN:', len(t), 'RANGE: ', (t[-1]-t[0])/1.e4/np.pi/2 )
+        print('  STARTING FROM INDEX', i_srt, '(nt=', len(t), ') time-RANGE: ', (t[-1]-t[0])/1.e4/np.pi/2,'inertial periods' )
         u=f_h['u'][i_srt:,:]
         v=-f_h['v'][i_srt:,:]
         w=f_h['w'][i_srt:,:]
@@ -798,14 +797,18 @@ if plot_les_comp == True:
         z0 = c['z0']
         KAPPA=0.40
         log_level=1
-        us = avg[0][log_level] * KAPPA / np.log(z[log_level]/z0)
-        zp=z*us/nu_air
-        zm=z/us*f_cor
         nu_est=2*(t_geo)**2 / (c['re']**2 * f_cor) 
+        us = avg[0][log_level] * KAPPA / np.log(z[log_level]/z0)
+        zp=z*us/nu_est
+        zm=z/us*f_cor
         
-        print('  - roughness length:',c['z0'],'m') 
-        print('  - RE (CALCULATED):', t_geo*np.sqrt(2./(f_cor*nu_air)))
-        print('  - nu (estimated from exact Re):', nu_est )
+        print('  - roughness length                   [m]:',c['z0']) 
+        print('  - RE (CALCULATED)                    [1]:',t_geo*np.sqrt(2./(f_cor*nu_est)))
+        print('  - nu (estimated from exact Re)   [m^2/s]:',nu_est )
+        print('  - outer velocity (u,v,magnitude)   [m/s]:',u_geo,v_geo,t_geo)
+        print('  - domain rotation w.r.t. sfc-stress[deg]:',al4_sfc)
+        print('  - total surface veering            [deg]:',np.arctan(v_geo/u_geo)/np.pi*180+al4_sfc)
+        print('  - geostrophic drag u*/G              [1]:',us/t_geo) 
 
         
         z_ana=np.arange(0,8,0.1)
@@ -813,11 +816,11 @@ if plot_les_comp == True:
 
         [up_mod,wp_mod] = sc.profile_plus(zp,c['re'])
 
-        ax1.fill_between(zp[1:], (avg[0,1:]-std[0,1:])/us,(avg[0,1:]+std[0,1:])/us,alpha=0.5,color='gray',edgecolor=None)
+        ax1.fill_between(zp[1:], (avg[0,1:]-2*std[0,1:])/us,(avg[0,1:]+2*std[0,1:])/us,alpha=0.5,color='gray',edgecolor=None)
         ax1.plot(zp[1:], avg[0,1:]/us,ls='-',c=c['c'],lw=2,label='{}'.format(c['f'].split('_')[1]),alpha=0.5)
         ax1.plot(zp[1:], up_mod[1:],  ls=':',c=c['c'],lw=0.5)
 
-        ax1.fill_between(zp[1:],(avg[1,1:]-std[1,1:])/us,(avg[1,1:]+std[1,1:])/us,alpha=0.5,color='gray',edgecolor=None)
+        ax1.fill_between(zp[1:],(avg[1,1:]-2*std[1,1:])/us,(avg[1,1:]+2*std[1,1:])/us,alpha=0.5,color='gray',edgecolor=None)
         ax1.plot(zp[1:],avg[1,1:]/us, ls='-',c=c['c'],lw=2,alpha=0.5)
         ax1.plot(zp[1:], wp_mod[1:],  ls=':',c=c['c'],lw=0.5)
 
@@ -841,7 +844,6 @@ if plot_les_comp == True:
         ax3.scatter(uo/t_geo,-vo/t_geo,s=1,c=c['c'],marker='x')
         ax3.plot(uo_mod/t_mod,-vo_mod/t_mod,c=c['c'],ls=':',lw=0.5) 
 
-        print('  - outer velocity (u,v,magnitude)[ m/s ]:', u[0,-1],v[0,-1],np.sqrt(u[0,-1]**2+v[0,-1]**2)) 
         
     ax1.plot(z_ana, np.log(5.*z_ana)/KAPPA,ls=':',lw=0.5,c='black',label='log-law (PALM-est\'d)')
     ax1.plot(z_ana, np.log(z_ana)/0.416+5.416,ls='-',lw=0.5,c='black',label='log-law (DNS-based)')
