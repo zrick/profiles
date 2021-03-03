@@ -96,8 +96,8 @@ class EkmanUniversalClass:
         self.KAPPA = k
         self.C = C
 
-        log_law=np.zeros(len(yp))
-        log_law[1:] = np.log(yp[1:])/k + C
+        #log_law=np.zeros(len(yp))
+        log_law = self.profile_log(yp,re) # np.log(yp[1:])/k + C
         log_dev_outer_u=up-log_law
         log_dev_outer_u[:i2]=0.
         log_dev_outer_w=wm
@@ -183,6 +183,16 @@ class EkmanUniversalClass:
             
         return(1./z,p) 
 
+    def profile_log(self,yp,re):
+        self.qinit()
+
+        x=np.zeros(len(yp))
+        x[1:] = np.log(yp[1:])/self.KAPPA  + self.C
+        return x 
+
+    def erf_transition(self,w,l,x):
+        return 0.5*(sp.special.erf(w*np.log(x/l))+1)
+    
     def profile_plus(self,yp,re,us=-1,al=-1):
         self.qinit()
 
@@ -197,111 +207,63 @@ class EkmanUniversalClass:
         else:
             us_loc,al_loc=us,al
 
-        #print('PPLUS: us_loc, al_loc:',us_loc,al_loc, us,al)
+        u=np.zeros(len(yp))
+        w=np.zeros(len(yp)) 
         
         z=1/us_loc 
         dp_loc=re**2/(2*z**2)
-
         ym=np.array(yp/dp_loc)
+        trans_scale=2.0
 
-        # OUTER REFERENCE PROFILES
-        #
-        argz=0.66*(2.*np.pi*(ym+0.12)) 
-        dampA =  0.42*(us_loc/0.05- 0.07/re) #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
-        dampB =  0.0#np.exp(zdum) * ( dU_mtc*np.sin(zdum) + dW_mtc*np.cos(zdum) )
-
-        outer_u= (1-(dampA*np.cos(argz)+dampB*np.sin(argz))*np.exp(-argz))/us_loc
-        outer_w=   ( dampA*np.sin(argz)-dampB*np.cos(argz))*np.exp(-argz)/us_loc
+        ################################################################################
+        # 2-COMPONENT OUTER REFERENCE PROFILES
+        argz=    0.66*(2.*np.pi*(ym+0.12)) 
+        dampA =  8.4*us_loc       # - 150./re) #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
+        #dampB= 0. 
+        outer_u= (1-(dampA*np.cos(argz))*np.exp(-argz))*z  #-dampB*np.cos(argz)*np.exp(-argz)*z
+        outer_w=   ( dampA*np.sin(argz))*np.exp(-argz)*z   #-dampB*np.cos(argz)*np.exp(-argz)*z
         [ous,ows]=mp.rotate(outer_u,outer_w,al_loc)
         
+        ################################################################################
+        # STREAMWISE COMPONENT (shear-aligned) 
+        log_law=self.profile_log(yp,re) # np.log(yp)/self.KAPPA + self.C   
+
+        # inner-layer (empirical profile for viscous and buffer layer) 
+        c4=-0.0003825; c6=6.32e-6; u_ref = 0.07825
+        yp_mtc = 19 
+        wgt_i = self.erf_transition(trans_scale,yp_mtc,yp[1:]) 
+        u_visc=( yp + c4*yp**4+c6*yp**6) / (1 + u_ref*c6*yp**6)
+        u[1:]=(1-wgt_i)*u_visc[1:] + wgt_i*log_law[1:]
+
+        # outer-layer deficit
+        ctr= 0.30 - 120/re 
+        wgt_o=self.erf_transition(trans_scale,ctr,ym[1:]) #(sp.special.erf(trans_scale*np.log(ym[1:]/ctr))+1)/2 #starts at index 1! 
+        u[1:] -= ( wgt_o*(log_law[1:]-ous[1:]) )
 
         ################################################################################
-        # STREAMWISE COMPONENT (SHEAR-ALGINED)
-        ################################################################################
-
-        u=np.zeros(len(yp))
-        i_x=mp.geti(yp,self.LIMIT_INNER)
-
-        # start with logarithmic law (everywhere)
-        log_law=np.zeros(len(yp)) 
-        log_law[1:]=np.log(yp[1:])/self.KAPPA + self.C 
-        u[1:]=log_law[1:]
-        u[0]=0
-
-        # inner-layer correction [in inner units] 
-        c2=-0.0000; c4=-0.0003825; c6=6.32e-6;
-        scale=2.03
-        u_ref = 1/0.07825
-        ymatch = 19 
-        wgt=np.zeros(len(yp)) 
-        wgt[1:] = ( 0.5*(sp.special.erf(scale*(np.log(yp[1:]/ymatch)))+1) )
-        u_visc=( yp + c4*yp**4+c6*yp**6) / (1 + c6/u_ref*yp**6)
-        u[1:]=(1-wgt[1:])*u_visc[1:] + wgt[1:]*u[1:]
-        u[0]=0 
-
-
-        # outer-layer deficit [in outer units] 
-        scale_trans=2 
-        ctr= 0.29 - 70/re 
-        arg=np.zeros(len(ym))
-        arg[1:]=np.log(ym[1:]/ctr)
-        delta_log=z * np.cos(al_loc)
-
-        
-        wgt=(sp.special.erf(scale_trans*arg)+1)/2
-
-        fit2= ( wgt*(log_law-delta_log) ) # + 0*fit1 * (0.0497/us_loc)**2 )
-        fit2= ( wgt*(log_law-ous) ) 
-        u[1:]-= fit2[1:] #* diff_u/dev_u
-
-
-        ################################################################################
-        # NEW part for shear-spanwise velocity
-        ################################################################################            
-        k = self.KAPPA * 0.836 * (1+150/1600)# us_loc   the second part is a low-re correction that is dispensable for re_loc >~ 1000 
-        w = -ows#wgt + (1-wgt)*log_w
-
-        i0=mp.geti(yp,np.sqrt(dp_loc))
-        i1=mp.geti(yp,1.5*np.sqrt(dp_loc))
-        i2=mp.geti(yp,0.2*dp_loc)
-        c_off=4.9e2*us_loc/np.sqrt(dp_loc)
-        c1=2.7e3*us_loc/np.sqrt(dp_loc)/(np.log(yp[i0])**2.0)
-        dir_fit=c1*np.log(yp[1:])**2+c_off
-        slp=(dir_fit[i1+1]-dir_fit[i1])/(yp[i1+1]-yp[i1])
-        off=dir_fit[i1]-slp*yp[i1]
-        dir_fit[i1:]=slp*yp[i1:-1]+off
-        
-        i_03=mp.geti(yp,0.30*dp_loc)
-        z_03=yp[i_03]
-        s_03=(w[i_03+1]-w[i_03-1])/(yp[i_03+1]-yp[i_03-1])
-        a_03=s_03*z_03
-        o_03=w[i_03]-a_03*np.log(z_03)
-        w[0]=0.
-        w[1:i_03]=o_03+a_03*np.log(yp[1:i_03])
-
-        #BLENDING (inner / outer)
-        #blending height: geometric avg between yp[i_03] and yp[i0]
-        ib=mp.geti(yp,0.12*dp_loc)
-        scale=2.0
-        wgt=np.zeros(len(yp)) 
-        wgt[1:] = ( 0.5*(sp.special.erf(scale*(np.log(yp[1:]/yp[ib])))+1) )
-
-
-        dir_fit[i_03:]=dir_fit[i_03]
-        w_inner=np.zeros(len(yp))
-        w_inner[0]=0. 
-        w_inner[1:]=np.tan(dir_fit/180*np.pi)*u[1:]
-
-        w=wgt*w + (1-wgt)*w_inner 
-
+        # SPANWISE COMPONENT (in-plane orthogonal to shear)
+        # inner region - empirical profile
+        #   - based on direction below y+~10
+        i1=mp.geti(yp,10)
+        c_off=40/(dp_loc*us_loc) ##4.0e2*us_loc/np.sqrt(dp_loc)
+        c1=26./(dp_loc*us_loc)
+        dir_fit=c1*np.log(yp[1:i1+2])**2+c_off
+        w[1:i1+2]=np.tan(dir_fit/180*np.pi)*u[1:i1+2]
+        # inner-outer transition 
+        #   - match gradient and value at y+~10 (index i0) 
+        #   - match value at y-=0.27
+        match_height=0.27
+        i2=mp.geti(yp,match_height*dp_loc) 
+        C1=(w[i1+1]-w[i1-1])/(yp[i1+1]-yp[i1-1])
+        ap = ( -ows[i2] - w[i1] - C1 * (yp[i2]-yp[i1]) ) / ( np.log(yp[i2]/yp[i1]) - yp[i2]/yp[i1]) 
+        w[i1:] = w[i1] + ap * np.log(yp[i1:]/yp[i1]) + (C1-ap/yp[i1])*(yp[i1:]-yp[i1])
+        # Blend inner and outer profile
+        #   - matching height same as above 
+        wgt = ( 0.5*(sp.special.erf(trans_scale*(np.log(yp[1:]/yp[i2])))+1) )
+        w[1:]= (1-wgt)*w[1:] + wgt*(-ows[1:]) 
         
         return u,w
 
-    def profile_log(self,yp,re):
-        self.qinit()
-
-        return 1./self.KAPPA * np.log(yp)  + self.C
-        
     
     def profile_minus(self,ym,re,us=-1,al=-1): 
         self.qinit()
@@ -317,7 +279,6 @@ class EkmanUniversalClass:
         else: 
             us_loc,al_loc=us,al
 
-        #print('PMINUS: us_loc, al_loc:',us_loc,al_loc, us,al)
         nu_loc=2./re**2
         dp_loc=us_loc**2/nu_loc
         u,w = self.profile_plus(ym*dp_loc,re,us=us_loc,al=al_loc)

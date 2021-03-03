@@ -1,13 +1,17 @@
+
 \documentclass[a4paper,11pt]{article}
+
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{natbib}
+\usepackage{xcolor}
 
 \newcommand{\p}{\partial}
 \newcommand{\gzm}{{\xi}}%{\gamma z_\text{match}}}
+\newcommand{\todo}[1]{\textcolor{red}{$[$#1$]$}} 
 
 \date{Draft \today}
 \title{Towards a Universal Veering Profile for Turbulent Ekman Flow at arbitrary Reynolds number \\
@@ -27,9 +31,9 @@
   in the context of asymptotic mixing, and it exhibits a mixed scaling in the surface layer, but follows
   outer scaling for most of the outer layer.
   %
-  In both profiles, the wake region can be described by smooth error-function transition from a logarithmic layer
-  to the constant outer velocity.
-  
+  In the outer layer, the velocity component profiles can be described by an Ekman-spiral with adapted
+  boundary conditions that result in a reduction of the spiral-like rotation. 
+  %
 \end{abstract}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,30 +50,7 @@ and solved for analytically by \cite{Ekman:1905tl}.
 On the mesoscale, shear in the surface layer is known to be crucial for the initiation and sustainment of strong convective events (REFERENCE?).
 % 
 And locally, directional sheer of the wind in the upper part of the surface layer may cause a yaw for large wind power generation devices (REFERENCE?).
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-\section{Formulation}
-%
-\paragraph{Physical Problem.} We consider incompressible, turbulent Ekman flow, i.e. the turbulent flow over a flat rotating plate, as
-a physical model for the truly neutral atmospheric boundary layer (ABL).
-%
-That is, the f-plane approximation is used confining effects of rotation to the horizontal components of
-velocity and neglecting dynamical effects due to latitudinal changes of the rate of rotation. 
-%
-%%PAR
-%
-\paragraph{Notation.} The dimensional velocity vector of the numerical simulations is $\underline{U} = (U_1,U_2,U_3) = (U,V,W)$ over the coordinate system
-$Oxyz$, where an approximate alignment with the surface shear stress is achieved.
-%
-For analysis of the results, we use two coordinate systems that are
-(i)  exactly aligned with the surface shear stress and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
-(ii) the coordinate system aligned with the free-atmosphere geostrophic wind labelled by an upper index $G$ as in $\underline{U}^G$.
-%
-We denote by $u_\star$ the modulus surface friction velocity and let $Z_\star=1/u_\star$ for brevity. 
 
-\section{Towards a Universal Velocity Profile for the Turbulent Ekman Layer}
-\subsection{Drag-Law} 
 The drag law for Ekman flow, including prediction of surface veering, has received considerable attention in the past.
 \begin{itemize}
 \item \cite{Rossby:1935wa} first approach;
@@ -78,14 +59,7 @@ The drag law for Ekman flow, including prediction of surface veering, has receiv
 \item \cite{Ansorge:2014hf, Ansorge:2019di} re-evaluation of the constants with geophysical focus;
 \item \cite{Hogstrom:1988wg, Hgstrm:1996kt} (re-)consideration of observational data.
   %
-
-\end{itemize}
-\begin{figure}
-  \centerline{\includegraphics[width=0.7\textwidth]{../plot/ustar_alpha.pdf}}
-  \caption{Variation of $Z_\star$ and surface veering with Reynolds number according to
-    the theory by Spalart et al. (1989) and as estimated from DNS data}
-  \label{fig:drag_law}
-\end{figure} 
+\end{itemize} 
 %
 Attempts were also undertaken to obtain profiles of the wind speed: 
 \cite{Gryning:2007dy} present an extension of the wind-speed profile beyond the surface layer using a neutral referece profile
@@ -102,7 +76,66 @@ While this is indeed an academic problem, the Ekman boundary layer often serves 
 and thus not only needs to be understood but also well-described as reference for higher-order approaches that take into
 account possible effects of stratification, roughness or other physical complications of the geophysical system.
 %
-\subsection{Stream-wise Velocity} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\section{Formulation}
+%
+We consider here incompressible, turbulent Ekman flow, that is, the turbulent flow over a flat rotating plate, as
+a physical model for the truly neutral atmospheric boundary layer (ABL).
+%
+The f-plane approximation is applied such that rotation only acts on horizontal velocity components;
+we thus neglect rotational effects on the horizontal components of velocity and dynamical effects
+due to latitudinal variation of the rate of rotation.
+%
+\par
+%
+The dimensional velocity vector of the numerical simulations is $\underline{U} = (U_1,U_2,U_3) = (U,V,W)$ over the coordinate system
+$Oxyz$, where an approximate alignment (plus/minus few degrees centigrade) of the direction $Ox$ with the surface shear stress is achieved.
+The coordinate $O_y$ points away from the wall,  and $Oz$ points in the span-wise direction normal to $Oxy$. 
+%
+For analysis of the results, we use two coordinate systems that are
+(i)  exactly aligned with the surface shear stress and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
+(ii) the coordinate system aligned with the free-atmosphere geostrophic wind labelled by an upper index $G$ as in $\underline{U}^G$.
+%
+We denote by $u_\star$ the modulus surface friction velocity and let $Z_\star=1/u_\star$ for brevity. 
+
+\section{Towards a Universal Velocity Profile for the Turbulent Ekman Layer}
+
+\end{itemize}
+\begin{figure}
+  \centerline{\includegraphics[width=0.7\textwidth]{../plot/ustar_alpha.pdf}}
+  \caption{Variation of $Z_\star$ and surface veering with Reynolds number according to
+    the theory by Spalart et al. (1989) and as estimated from DNS data}
+  \label{fig:drag_law}
+\end{figure}
+% 
+\subsection{Drag-Law}
+Formulation of a drag-law for Ekman flow consists estimation of two key parameters in the flow as a function of Reynolds number.
+%
+First, the modulus of the surface friction normalized by the geostrophic wind forcing, $u_\star$ and,
+second, the direction of surface shear stress, $\alpha$, also termed wind veering. 
+%
+A non-zero veering of the wind is a rather special case in comparison with most turbulent flows conisdered in an
+engineering context, and it confronts us with a situation where the most appropriate coordinate system for analysis
+(namely that aligned with the surface shear stress) is a priori unknown. 
+%
+We compare our DNS data against a semi-empirical based on integral consideration \cite{Spalart:1989p2436}
+and find, as demonstrated in previous work \cite{Ansorge:2014hf} excellent agreement in the range
+ $400<\mathbf{Re}<1600$, representing a factor of 16 in variation of viscosity. 
+%
+\todo{Add LES points}
+% 
+\par
+%
+We also find that the solution of the transient equation involved in estimation of $u_\star$ for a given Reynolds number
+$Re_D$ is approximated reasonably by the formulation
+\begin{equation}
+  u_\star= 4\log(\mathbf{Re}_D))-8
+\end{equation}
+which quantifies the 'weak' dependence of $u_\star$ on the Reynolds number as an approximately logarithmic one.
+%
+
+\subsection{Stream-wise Velocity Component} 
 For the stream-wise velocity profile (that in non-rotating flows due to the geometry is always aligned with the surface shear stress),
 well-established theories exist for various regimes according to their distance from the wall and the relative role of
 viscosity, turbulence and interaction with the outer region of the flow with the logarithmic law for the mean velocity as a central anchor point:
@@ -114,12 +147,27 @@ viscosity, turbulence and interaction with the outer region of the flow with the
       (U,W)^{\alpha+}  = (z^+,0)  
     \end{equation}
     where the direction of 
-    in absence of roughness elements are marginal linear regime / viscous sub-layer \cite{Foken:2002gv,Foken:1978bc} 
-  \item buffer layer transition from linear regime to log-law  
-  \item log-layer (K\'arm\'an, Prandtl, Jimenez, Marusic)
-  \item outer log-layer () 
-  \item wake region
-  \item outer region 
+    in absence of roughness elements are marginal linear regime / viscous sub-layer \cite{Foken:2002gv,Foken:1978bc}.
+    This viscous law has no degree of freedom given the drag-law defining surface friction and veering.
+    %
+    Theoretical foundation is lacking for the exact shape of the velocity profile in the buffer layer; though crucial for turbulence
+    production, it is commonly understood as a transition region between the linear profile at the surface and the logarithmic profile
+    aloft.
+    A pure blending from the linear velocity profile into the logarithmic one is, however, not reasonable as both the linear and logarithmic
+    profile overestimate the velocity in the buffer layer. We therefore introduce a higher-order compensating term into
+    the linear profile before blending it into the logarithmic law:
+    \begin{equation}
+      U_\text{inner}^{\alpha}^+ = \frac{ y^+ + \gamma_4 (y^+)^{4} + \gamma_6 (y^+)^{6} } { 1 + \gamma_6 /u_{ref} (y^+ )^6}, 
+    \end{equation} 
+    where the fourth- and sixth-order terms in the nominator are designed to fit the profile below $y^+\approx 10$ and
+    the sixth-order correction in the denominator limits the growth of $u_\text{inner}$ for large $y^+$. 
+  \item In the logarithmic region, we use the profile
+    \begin{equation}
+      U_\text{log}^{\alpha}^+ = \frac{1}{\kappa} \log y^+ + C 
+    \end{equation}
+    with $\kappa=0.416$ and $C=5.4605$. %  log-layer (K\'arm\'an, Prandtl, Jimenez, Marusic)
+  \item The super-geostrophic maximum of streamwise velocity and a secondary minimum aloft the bulk-turbulent part of
+    the boundary layer are well-described by a classic Ekman spiral with adapted boundary conditions and a shift in reference height. 
   \end{itemize}
 \end{subequations} 
 %

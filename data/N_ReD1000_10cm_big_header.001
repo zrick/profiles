@@ -1,0 +1,243 @@
+
+ ******************************    --------------------------------------------
+ * PALM 6.0  Rev:             *    atmosphere - run with 1D - prerun
+ ******************************    --------------------------------------------
+
+ Date:               2020-12-16    Run:       N_ReD1000_10cm_big                
+ Time:                 16:46:17    Run-No.:   00
+ Run on host:           default
+ Number of PEs:             576    Processor grid (x,y): (  24,  24) predefined
+ ------------------------------------------------------------------------------
+
+ Numerical Schemes:
+ -----------------
+
+ --> Use the 1.5-order turbulence closure (LES mode).
+ --> Use the boussinesq approximation for the model equations.
+ --> Solve perturbation pressure via multigrid method (w-cycle)
+     number of grid levels:                    1
+     Gauss-Seidel red/black iterations:        2
+     fixed number of multigrid cycles:           4
+     perturbation pressure is calculated at every Runge-Kutta step
+ --> Momentum advection via Wicker-Skamarock-Scheme 5th order
+ --> Scalar advection via Wicker-Skamarock-Scheme 5th order
+ --> Loop optimization method: cache
+ --> Time differencing scheme: runge-kutta-3       
+ --> Rayleigh-Damping active, starts above z =    35.70 m
+     maximum damping coefficient: 0.010 1/s
+ --> No pt-equation solved. Neutral stratification with pt = 300.00 K assumed
+ ------------------------------------------------------------------------------
+
+
+ Run time and time step information:
+ ----------------------------------
+
+ Timestep:             variable     maximum value: 20.000 s    CFL-factor: 0.90
+ Start time:              0.000 s
+ End time:           125664.000 s
+
+ Time reached:       125665.610 s
+ CPU-time used:       29628.551 s     per timestep:                     0.634 s
+                                      per second of simulated time:     0.236 s
+
+
+ Computational grid and domain size:
+ ----------------------------------
+
+ Grid length:      dx =       0.100 m    dy =       0.100 m
+                dz(1) =       0.100 m
+                dz(2) =       0.600 m
+
+ Domain size:       x =     64.800 m     y =     64.800 m  z(u) =     54.145 m
+
+ Vertical stretching starts at height:      20.0 m,
+ Vertical stretching starts at index:          200,
+ Vertical stretching ends at height:   9999999.9 m,
+ Vertical stretching ends at index:            289,
+ Factor used for stretching:                 1.030,
+
+ Number of gridpoints (x,y,z):  (0: 647, 0: 647, 0: 289)
+ Subdomain size (x,y,z):        (    27,     27,    290)
+
+
+    Characteristic levels of the geo. wind component ug:
+
+       Height:         0.0     0.0  m
+       ug:            0.03    0.03  m/s
+       Gradient:    ------    0.00  1/100s
+       Gridpoint:        0       0
+
+    Characteristic levels of the geo. wind component vg:
+
+       Height:         0.0     0.0  m
+       vg:           -0.01   -0.01  m/s
+       Gradient:    ------    0.00  1/100s
+       Gridpoint:        0       0
+
+
+ Topography information:
+ ----------------------
+
+ Topography: flat                                    
+
+
+ Boundary conditions:
+ -------------------
+
+                     p                    uv                                  pt
+
+ B. bound.: p(0)     = p(1)   | uv(0)     = -uv(1)                | pt(0)     = pt(1)            
+ T. bound.: p(nzt+1) = 0      | uv(nzt+1) = ug(nzt+1), vg(nzt+1)  | pt(nzt+1) = pt(nzt) + dpt/dz_
+
+                     e
+
+ B. bound.: e(0)     = e(1)                                                                      
+ T. bound.: e(nzt+1) = e(nzt) = e(nzt-1)                                                         
+
+ Bottom surface fluxes are used in diffusion terms at k=1
+
+
+    Constant flux layer between bottom surface and first computational u,v-level:
+
+       z_mo =   0.05 m   z0 = 0.0021 m   z0h = 0.00208 m   kappa = 0.40
+       zeta value range:     -20.00 <= zeta <= 20.00
+       Predefined surface temperature
+
+
+ Lateral boundaries:
+       left/right:  cyclic              
+       north/south: cyclic              
+
+
+ Initial profiles:
+ ----------------
+
+    Characteristic levels of the initial temperature profile:
+
+       Height:           0.0  m
+       Temperature:   300.00  K
+       Gradient:      ------  K/100m
+       Gridpoint:          0
+
+
+ List output:
+ -----------
+
+    1D-Profiles:
+       Output every             9999999.90 s
+       Time averaged over        6283.20 s
+       Averaging input every        0.00 s
+
+
+ Data output:
+ -----------
+
+       Time averaged over        6283.20 s
+       Averaging input every        0.00 s
+
+    1D-Profiles:
+       Output format: netCDF4/HDF5                            
+
+
+       Profile: theta, theta*2, u, v, w, rho, e, e*, u*2, v*2, w*2,          
+
+              : w*3, l, km, kh, w"u", w*u*, wu, w"v", w*v*, wv, w"theta",    
+
+              : w*theta*, wtheta, w*u*u*:dz, w*p*:dz, w"e:dz, hyp, p,        
+
+              : thetav, w*e*, w*2theta*, w*theta*2, u2, u3, u4, u5,          
+
+              : u6, u7, u8, v2, v3, v4, v*6, v*8, w*2_var, w*3_var,          
+
+              : w*4, w*6, w*8, uv,                                           
+       Output every              6283.20 s
+       Time averaged over        6283.20 s
+       Averaging input every        0.00 s
+
+    Time series:
+       Output format: netCDF4/HDF5                            
+
+       Output every                 0.00 s
+
+
+    Restart data format(s):
+    Output format: fortran_binary
+ ------------------------------------------------------------------------------
+
+
+ Physical quantities:
+ -------------------
+
+    Geograph. latitude  :   latitude  =  45.0 degr
+    Geograph. longitude :   longitude =   0.0 degr
+    Rotation angle      :   rotation_angle =   0.0 degr
+    Angular velocity    :   omega  = 0.729E-04 rad/s
+    Coriolis parameter  :   f      =  0.000103 1/s
+                            f*     =  0.000000 1/s
+
+    Date and time at model start : 2019-06-21 12:00:00 +00
+
+    Gravity             :   g      =  9.8 m/s**2
+
+    Reference state used in buoyancy terms: initial_profile
+
+
+ Cloud physics quantities / methods:
+ ----------------------------------
+
+
+
+ LES / Turbulence quantities:
+ ---------------------------
+
+    Mixing length is limited close to surfaces
+
+
+ Actions during the simulation:
+ -----------------------------
+
+    Disturbance impulse (u,v) every :   150.00 s
+    Disturbance amplitude           :     0.00 m/s
+    Lower disturbance level         :     0.25 m (GP    3)
+    Upper disturbance level         :     9.55 m (GP   96)
+    Disturbances cease as soon as the disturbance energy exceeds 0.000 m**2/s**2
+    Random number generator used    : random-parallel
+
+
+
+ 1D-Model parameters:
+ -------------------
+
+    Simulation time:                    21600.0 s
+    Run-controll output every:             60.0 s
+    Vertical profile output every:     ******** s
+    Mixing length calculation:         blackadar           
+    Dissipation calculation:           detering            
+
+
+
+ *** dynamic module disabled
+
+    Spectra:
+       Output format: see profiles or other quantities
+
+       Output every 31426.0 s
+
+       Arrays:     u    ,v    ,w    ,     ,     ,     ,     ,     ,     ,     ,
+       Directions:    xy,   xy,   xy,   x ,   x ,   x ,   x ,   x ,   x ,   x ,
+       height levels  k =   1,  3, 11, 34, 81,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,
+                          ***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,
+                          ***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,
+                          ***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,
+                          ***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***,***.
+       Time averaged over 31416.0 s,
+       Profiles for the time averaging are taken every    0.0 s
+
+
+ ##############################################################################
+
+ User-defined variables and actions:
+ -----------------------------------
+
+
+ ------------------------------------------------------------------------------
