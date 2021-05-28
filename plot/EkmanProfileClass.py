@@ -5,7 +5,7 @@ import scipy as sp
 from scipy.special import lambertw as prodlog
 
 def build_grid(trgt,thick=1) :
-    vert_stretch=1.05   #grid stretching
+    vert_stretch=1.01   #grid stretching
     dyloc=1             #grid resolution at wall
     ny=1
     yloc=dyloc
@@ -96,7 +96,8 @@ class EkmanUniversalClass:
         self.KAPPA = k
         self.C = C
 
-        #log_law=np.zeros(len(yp))
+        re = np.sqrt(2*deltap/(us*us)) # nu = us*us/deltap
+
         log_law = self.profile_log(yp,re) # np.log(yp[1:])/k + C
         log_dev_outer_u=up-log_law
         log_dev_outer_u[:i2]=0.
@@ -107,8 +108,6 @@ class EkmanUniversalClass:
         
         f1=Complex(ud_align,wd_align) 
 
-        # self.outer_wp_itp=spip.interp1d(ym,wp*us)
-        
 
         imax=mp.geti(yp,50)
         f5_x=np.zeros(len(up))
@@ -119,10 +118,6 @@ class EkmanUniversalClass:
         f5_z[imax:]=0. 
         f5=Complex(f5_x,f5_z) 
         f1_high=Complex(f1.r-f5.r,f1.i) 
-
-        #self.outer_ud_itp=spip.interp1d(ym,log_dev_outer_u,'cubic')
-        #self.outer_wd_itp=spip.interp1d(ym,log_dev_outer_w,'cubic')
-        # self.inner_u_itp=spip.interp1d(yp,up,'cubic')
 
         #estimate intercept of f1 - log-law
         # Real part from f1_high u component at first grid point
@@ -157,7 +152,7 @@ class EkmanUniversalClass:
         Ar=self.A.r 
         k=self.KAPPA 
         C5=self.C5.r
-        k=0.415
+        k=0.416
         z=10
 
         #Ai=Ai+0.285
@@ -179,9 +174,9 @@ class EkmanUniversalClass:
                 break;
             i=i+1
 
-        p=p-1.00*C5/(re**2) * (z**2)
+        aleph=p-1.00*C5/(re**2) * (z**2)
             
-        return(1./z,p) 
+        return(1./z,aleph) 
 
     def profile_log(self,yp,re):
         self.qinit()
@@ -217,8 +212,9 @@ class EkmanUniversalClass:
 
         ################################################################################
         # 2-COMPONENT OUTER REFERENCE PROFILES
-        argz=    0.66*(2.*np.pi*(ym+0.12)) 
-        dampA =  8.4*us_loc       # - 150./re) #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
+        c_argz=0.66*2.*np.pi 
+        argz=    c_argz*ym + c_argz*0.12 #0.66*(2.*np.pi*(ym+0.12)) 
+        dampA =  8.4*us_loc        - 0./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
         #dampB= 0. 
         outer_u= (1-(dampA*np.cos(argz))*np.exp(-argz))*z  #-dampB*np.cos(argz)*np.exp(-argz)*z
         outer_w=   ( dampA*np.sin(argz))*np.exp(-argz)*z   #-dampB*np.cos(argz)*np.exp(-argz)*z
@@ -236,12 +232,13 @@ class EkmanUniversalClass:
         u[1:]=(1-wgt_i)*u_visc[1:] + wgt_i*log_law[1:]
 
         # outer-layer deficit
-        ctr= 0.30 - 120/re 
+        ctr= 0.33 - 120/re 
         wgt_o=self.erf_transition(trans_scale,ctr,ym[1:]) #(sp.special.erf(trans_scale*np.log(ym[1:]/ctr))+1)/2 #starts at index 1! 
         u[1:] -= ( wgt_o*(log_law[1:]-ous[1:]) )
 
         ################################################################################
         # SPANWISE COMPONENT (in-plane orthogonal to shear)
+        #
         # inner region - empirical profile
         #   - based on direction below y+~10
         i1=mp.geti(yp,10)
@@ -249,6 +246,7 @@ class EkmanUniversalClass:
         c1=26./(dp_loc*us_loc)
         dir_fit=c1*np.log(yp[1:i1+2])**2+c_off
         w[1:i1+2]=np.tan(dir_fit/180*np.pi)*u[1:i1+2]
+        #
         # inner-outer transition 
         #   - match gradient and value at y+~10 (index i0) 
         #   - match value at y-=0.27
@@ -257,6 +255,7 @@ class EkmanUniversalClass:
         C1=(w[i1+1]-w[i1-1])/(yp[i1+1]-yp[i1-1])
         ap = ( -ows[i2] - w[i1] - C1 * (yp[i2]-yp[i1]) ) / ( np.log(yp[i2]/yp[i1]) - yp[i2]/yp[i1]) 
         w[i1:] = w[i1] + ap * np.log(yp[i1:]/yp[i1]) + (C1-ap/yp[i1])*(yp[i1:]-yp[i1])
+        #
         # Blend inner and outer profile
         #   - matching height same as above 
         wgt = ( 0.5*(sp.special.erf(trans_scale*(np.log(yp[1:]/yp[i2])))+1) )

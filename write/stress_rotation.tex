@@ -13,7 +13,7 @@ consider the grid aligned with the positive vector of the velocity gradient
 at the surface}
 We require the velocities on the grid $Ox_\star \times Oy \times Oz_\star$ 
 that is aligned with the surface shear stress, i.e. 
-\begin{align}  
+\begin{eqnarray}  
   \left(\begin{array}{c}
     \hat{e}_{x_\star}\\
     \hat{e}_y\\
@@ -25,7 +25,7 @@ that is aligned with the surface shear stress, i.e.
   \end{array} \right)\left(\begin{array}{c} 
     \hat{e}_x \\ \hat{e}_y \\ \hat{e}_z
    \end{array}\right). 
-\end{align} 
+\end{eqnarray} 
 This implies 
 \begin{eqnarray*} 
   u_\theta&=&u\cos\theta  +w\sin\theta \\ 
@@ -33,7 +33,7 @@ This implies
 \end{eqnarray*}  
 Let $c_\theta\equiv \cos\theta$, $s_\theta\equiv \sin_\theta$ and $m_\theta=\sin\theta\cos\theta$.
 The corresponding Reynolds stress tensor is 
-\begin{align} 
+\begin{eqnarray} 
   \left(\begin{array}{ccc} 
     u_\theta u_\theta & u_\theta v_\theta & u_\theta w_\theta \\ 
     u_\theta v_\theta & v_\theta v_\theta & v_\theta w_\theta \\ 
@@ -54,6 +54,6 @@ The corresponding Reynolds stress tensor is
     \end{array}\right) \\ 
   = \left(\begin{array}{ccc} 
     u^2c_\theta +w^2s_\theta
-  \end{array}
-\end{align} 
+  \end{array}\right)
+\end{eqnarray} 
 \end{document} 

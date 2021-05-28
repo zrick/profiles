@@ -1,46 +1,65 @@
-This is BibTeX, Version 0.99d (TeX Live 2020/MacPorts 2020.54632_1)
+This is BibTeX, Version 0.99d (TeX Live 2020/MacPorts 2020.54632_3)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: manuscript.aux
-The style file: plainnat.bst
-Database file #1: ansorge.bib
-You've used 22 entries,
-            2773 wiz_defined-function locations,
-            754 strings with 8757 characters,
-and the built_in function-call counts, 9911 in all, are:
-= -- 906
-> -- 507
-< -- 14
-+ -- 175
-- -- 153
-* -- 839
-:= -- 1535
-add.period$ -- 68
-call.type$ -- 22
-change.case$ -- 117
-chr.to.int$ -- 22
-cite$ -- 44
-duplicate$ -- 447
-empty$ -- 847
-format.name$ -- 185
-if$ -- 2045
-int.to.chr$ -- 1
-int.to.str$ -- 1
-missing$ -- 24
-newline$ -- 118
-num.names$ -- 88
-pop$ -- 201
+The style file: biblatex.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: manuscript-blx.bib
+Database file #2: ansorge.bib
+Biblatex version: 3.13
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+You've used 33 entries,
+            6365 wiz_defined-function locations,
+            1536 strings with 39261 characters,
+and the built_in function-call counts, 243474 in all, are:
+= -- 15113
+> -- 8417
+< -- 1309
++ -- 8596
+- -- 5623
+* -- 18621
+:= -- 26850
+add.period$ -- 0
+call.type$ -- 33
+change.case$ -- 504
+chr.to.int$ -- 600
+cite$ -- 64
+duplicate$ -- 22784
+empty$ -- 21682
+format.name$ -- 2191
+if$ -- 46947
+int.to.chr$ -- 0
+int.to.str$ -- 92
+missing$ -- 0
+newline$ -- 1581
+num.names$ -- 1527
+pop$ -- 10834
 preamble$ -- 1
-purify$ -- 95
+purify$ -- 671
 quote$ -- 0
-skip$ -- 315
+skip$ -- 6527
 stack$ -- 0
-substring$ -- 478
-swap$ -- 32
-text.length$ -- 0
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 232
+substring$ -- 28907
+swap$ -- 6974
+text.length$ -- 1102
+text.prefix$ -- 32
+top$ -- 1
+type$ -- 1110
 warning$ -- 0
-while$ -- 102
+while$ -- 3232
 width$ -- 0
-write$ -- 297
+write$ -- 1549

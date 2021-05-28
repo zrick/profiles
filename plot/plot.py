@@ -18,12 +18,14 @@ D2R = np.pi / 180.
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
 plot_summary=False
-plot_visc=False
+plot_visc_outer=False
 print_table=False
 plot_outer_log=False
 plot_total_rot=False
 plot_convergence_1000=False
-plot_les_comp=True
+plot_re1600=True
+plot_les_comp=False
+plot_applications=False
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -85,14 +87,193 @@ if use_data:
 
     sc.estimate(yp_ref,up_ref,wp_ref,deltap_ref,us_ref,al_ref*D2R-geo_rotate,plot=False)
 
-if plot_visc:
+if plot_re1600:
+    re=1600;
+    nu=2./(re*re) 
+
+
+    f=Dataset(files[re],'r')
+    u_datC=f['rU'][:,:]
+    w_datC=f['rW'][:,:]
+    y_dat=f['y'][:]
+    t_dat=f['t'][:] 
+    us=np.average(f['FrictionVelocity'][:])
+    al=np.average(f['FrictionAngle'][:])
+    
+    print(t_dat[-1]-t_dat[0]) 
+
+    file_name = '/Users/zrick/WORK/research_projects/SIM_NEUTRAL/netcdf/avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc'
+    f=Dataset(file_name,'r')
+    y=f['y'][:]
+    ny=len(y)
+    fig=plt.figure(figsize=(10,5))
+    ax1=fig.add_axes([0.06,0.1,0.4,0.85])
+    ax2=fig.add_axes([0.50,0.1,0.47,0.85])
+    NT=10
+    U=np.zeros([NT,ny])
+    W=np.zeros([NT,ny])
+    us=np.zeros([NT])
+    al=np.zeros([NT]) 
+
+
+    U = u_datC[28:,:]
+    W = w_datC[28:,:]
+
+    al = f['FrictionAngle'][:]
+    us = f['FrictionVelocity'][:]
+
+    Uavg=np.average(U,0)
+    Wavg=np.average(W,0)
+    Udsh=(U-Uavg)/np.average(us) 
+    Wdsh=(W-Wavg)/np.average(us)
+
+    
+    im1=ax1.contourf(f['t'][28:]-f['t'][28],f['y'][:]*np.average(us)*1600*1600/2,np.transpose(Udsh),levels=64,vmin=-0.04,vmax=0.04)
+    im2=ax2.contourf(f['t'][28:]-f['t'][28],f['y'][:]*np.average(us)*1600*1600/2,np.transpose(Wdsh),levels=64,vmin=-0.04,vmax=0.04)
+
+    ax1.set_yscale('log')
+    ax1.set_ylim(1,3e3)
+    ax1.set_xlabel(r'time $(tf) [1]$')
+    ax1.set_ylabel(r'height $(y^+) [1]$') 
+    ax1.set_title(r'$U-\overline{U}$')
+    
+    ax2.set_yscale('log')
+    ax2.set_ylim(1,3e3)
+    ax2.set_xlabel(r'time $(tf) [1]$')
+    ax2.set_title(r'$W-\overline{W}$' )
+    # ax2.set_ylabel(r'height $(y^+) [1]$') 
+
+    fig.colorbar(im1,fraction=0.1) 
+    plt.savefig('re1600_uw_variation.jpg',format='jpg',dpi=900) 
+    plt.close('all')
+    
+
+    fig=plt.figure(figsize=(10,5))
+    ax=fig.add_axes([0.1,0.1,0.8,0.8]) 
+    
+    l = ['modified', 'orig','50','100','150','200','250','300','350','400','450','500']
+    
+    for it in range(NT): 
+        U_loc=f['rU'][it,:]
+        W_loc=f['rW'][it,:]
+        us[it]=f['FrictionVelocity'][it] 
+        al[it]=f['FrictionAngle'][it]
+        al_geo=np.arctan(W_loc[-1]/U_loc[-1]) 
+        [U[it],W[it]]  = mp.rotate(U_loc,W_loc,al[it]/180*np.pi)
+
+        yp=y*us[it]/nu
+        
+        print('I',it,us[it],al[it])
+
+        if it==0: 
+            ax.plot(yp,U[it]/us[it],label='{}'.format(l[it]),c='red',ls='-',lw=1)
+            ax.plot(yp,W[it]/us[it],label='{}'.format(l[it]),c='blue',ls='--',lw=1)
+        else:
+            print(U[it,10]) 
+            ax.plot(yp,U[it]/us[it],c='red', ls='-',lw=1)
+            ax.plot(yp,W[it]/us[it],c='blue',ls='--',lw=1)
+
+    IT=1
+    #print(al) 
+    al_mod = -al[IT]/180*np.pi+al_geo
+    print('ANGLE:', al_mod, al_mod*180/np.pi,al_geo)
+    
+    u_mod,w_mod= sc.profile_plus(yp,re,us=us[IT],al=al_mod)
+    u_modC,w_modC=mp.rotate(u_mod,w_mod,-al[IT])
+    ax.plot(y*us[IT]/nu,10*(U[1]-U[0])/us[1],c='red', ls=':',lw=0.5)
+    ax.plot(y*us[IT]/nu,10*(W[1]-W[0])/us[1],c='blue',ls=':',lw=0.5)
+    ax.plot(y*us[IT]/nu,u_mod,c='black',ls=':',label='model',lw=0.5)
+    ax.plot(y*us[IT]/nu,w_mod,c='black',ls=':', lw=0.5) 
+    ax.plot(y[1:]*us[IT]/nu,y[1:]*0,c='black',ls='-',lw=0.5) 
+    ax.set_xscale('log') 
+    ax.set_xlim(1,1e4)
+    lg=ax.legend(loc='best')
+
+    fig1=plt.figure(figsize=(5,4))
+    ax1=fig1.add_axes([0.1,0.1,0.8,0.8])
+
+    fig2=plt.figure(figsize=(5,4))
+    ax2=fig2.add_axes([0.1,0.1,0.8,0.8])
+    
+    al_geo = np.arctan(w_datC[0,-1]/u_datC[0,-1]) /np.pi*180
+    #print('AVERAGE:', us,    al_geo-al,     al,     al_geo)
+    us_last=f['FrictionVelocity'][-1]
+    al_last=f['FrictionAngle'][-1] 
+    print('FINAL:  ',us_last,al_geo-al_last,al_last,al_geo) 
+
+    # USING FINAL VALUES FOR U* and ALPHA 
+    us=us_last
+    al=al_last 
+    
+    ym=y_dat/us
+    yp=y_dat*us/nu
+    [u_datR,w_datR] = mp.rotate(u_datC,w_datC,al/180*np.pi) 
+    
+
+    print('DELTA PLUS (FRICTION-RE):', us*us/nu)
+    print('HIGHEST GRID POINT: (N=', len(ym), '):',ym[-1]) 
+    print(mp.geti(ym,0.66))
+    al_mod=(al_geo-al_last)/180*np.pi 
+    up_modR,wp_modR = sc.profile_plus(yp,re,us=us,al=al_mod)
+
+    print('PROFILE VALUES AT SFC:', up_modR[0],wp_modR[0])
+    print('DATA VALUES AT SFC:',    u_datC[-1,0],w_datC[-1,0])
+    up_modC,wp_modC=mp.rotate(up_modR,wp_modR,-al/180*np.pi) 
+
+    u_deltaR = up_modR-u_datR[-1,:]/us
+    w_deltaR = wp_modR-w_datR[-1,:]/us
+
+    u_deltaC = up_modC-u_datC[-1,:]/us   # => u_dat+ u_deltaC = up_modC
+    w_deltaC = wp_modC-w_datC[-1,:]/us
+    print('CORRECTION AT SFC:', u_deltaC[0],w_deltaC[0]) 
+
+    [utest,wtest] = mp.rotate(u_datC[-1]+u_deltaC,w_datC[-1]+w_deltaC,al/180*np.pi)
+    print('CHECK FOR DIFFERENCES IN PROFILES :',np.amin(utest-up_modR),np.amax(utest-up_modR),np.amin(wtest-wp_modR),np.amax(wtest-wp_modR))
+    
+    ax1.plot(yp,up_modR,c='red',ls='-',label='Model')
+    ax1.plot(yp,u_datR[-1]/us,c='red',ls=':',label='Data')
+    ax1.plot(yp,u_deltaR*10/us,ls='--',c='red',label='10 x (Model-Data)') 
+
+    ax1.plot(yp,wp_modR,c='blue',ls='-')
+    ax1.plot(yp,w_datR[-1]/us,c='blue',ls=':')
+    ax1.plot(yp,w_deltaR*10/us,c='blue',ls='--')
+    ax1.set_xscale('log')
+    lg1=ax1.legend(loc='best')
+
+    ax2.plot(yp,up_modC,c='red',ls='-',label='Model')
+    ax2.plot(yp,u_datC[-1]/us,c='red',ls=':',label='Data')
+    ax2.plot(yp,u_deltaC*10,ls='--',c='red',label='10 x (Model-Data)') 
+
+    ax2.plot(yp,wp_modC,c='blue',ls='-')
+    ax2.plot(yp,w_datC[-1]/us,c='blue',ls=':')
+    ax2.plot(yp,w_deltaC*10 ,c='blue',ls='--')
+    ax2.plot(yp,yp*0,c='black',ls='-',lw=0.5) 
+    ax2.set_xscale('log')
+    ax2.set_ylim(-1,5) 
+    lg2=ax2.legend(loc='best')
+
+    dat = np.array([y_dat,u_deltaC*us,w_deltaC*us])
+    #for i in range(len(dat[0])):
+    #    print(i,dat[0,i],dat[1,i],dat[2,i]) 
+    dat.T.tofile('velocity_correction.dat')
+    
+
+    ax1.set_xlim(1,1e4)
+    ax2.set_xlim(1,1e4)
+    
+    
+    
+if plot_visc_outer:
     fig=plt.figure(figsize=(5,4))
     ax=fig.add_axes([0.1,0.1,0.87,0.8])
 
-    fig2=plt.figure(figsize=(5,4))
+    fig2=plt.figure(figsize=(6,4))
     ax2=fig2.add_axes([0.13,0.1,0.85,0.87]) 
-    
-    for re in [1600,1300,1000,750,500]:
+
+    fig3=plt.figure(figsize=(6,4))
+    ax3=fig3.add_axes([0.13,0.1,0.85,0.87]) 
+
+    for re in [1600,1000,500]:
         c=colors[re]
         nu=2./re**2
         us,al=sc.ustar_alpha(re)
@@ -116,19 +297,33 @@ if plot_visc:
         yp_dat = y_dat*us_dat/nu
         ym_dat = y_dat/us_dat
 
+        argz=    0.66*(2.*np.pi*(ym+0.12)) 
+        dampA =  8.4*us       - 150./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
+        z=1/us
+        
+        dampB= 0. 
+        outer_u= (1-(dampA*np.cos(argz))*np.exp(-argz))*z  #-dampB*np.cos(argz)*np.exp(-argz)*z
+        outer_w=   ( dampA*np.sin(argz))*np.exp(-argz)*z   #-dampB*np.cos(argz)*np.exp(-argz)*z
+        [ous,ows]=mp.rotate(outer_u,outer_w,al)
+        print(ous[-1],ows[-1])
+
+
         ax.plot(yp_dat,u_sfc/us_dat, c=c,lw=3,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
         ax.plot(yp,up,               c=c,lw=3,ls=':')
 
-        if  re ==1600:
-            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$ (data)'.format(re),alpha=0.5)
-            ax2.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls=':',alpha=0.5)
+        ax2.plot(ym,ous-ous[-1],ls='--',lw=0.5, c=c)
+        ax3.plot(ym,-ows+ows[-1],ls='--',lw=0.5,c=c)
+        
+        if  re==1600 or re == 1300 :
+            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$ (data)'.format(re),alpha=0.25)
+            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls='-',alpha=1.00)
             ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--',label=r'$Re={}$ (model)'.format(re))
-            ax2.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':',label=r'$Re={}$ (model)'.format(re))
+            ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':',label=r'$Re={}$ (model)'.format(re))
         else:
-            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
-            ax2.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls=':',alpha=0.5)
+            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$'.format(re))
+            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls='-')
             ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--')
-            ax2.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':')
+            ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':')
 
 
             
@@ -149,14 +344,25 @@ if plot_visc:
     plt.close('all')
 
     
+    ax2.plot([0,1.5],[0,0],lw=1,c='black',ls='-') 
     ax2.set_xlim(0,1.5)
-    ax2.set_ylim(-0.5,3.2)
+    ax2.set_ylim(-3,1.3)
     ax2.set_xlabel(r'$z^-$')
     ax2.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$')
     lg2=ax2.legend(loc='best')
     lg2.get_frame().set_linewidth(0.0) 
-    fig2.savefig('outer_layer.pdf',format='pdf')
-    
+    fig2.savefig('outer_layer_u.pdf',format='pdf')
+
+
+    ax3.plot([0,1.5],[0,0],lw=1,c='black',ls='-') 
+    ax3.set_xlim(0,1.5)
+    ax3.set_ylim(-1.5,0.5)
+    ax3.set_xlabel(r'$z^-$')
+    ax3.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$')
+    lg3=ax3.legend(loc='best')
+    lg3.get_frame().set_linewidth(0.0) 
+    fig3.savefig('outer_layer_w.pdf',format='pdf')
+
         
 
 if print_table : 
@@ -411,6 +617,10 @@ if plot_ustar_alpha:
     #   NEW VALUES
     us_sim = np.array([0.0647, 0.0618, 0.0561, 0.0530, 0.0502, 0.0480])
     al_sim = np.array([ 28.21,  25.47,  21.00,  18.94,  17.93,  17.49])
+
+    re_les = np.array([1e3,15e4,1e6])
+    us_les = np.array([0.0532,0.0257,0.0211]) 
+    al_les = np.array([20.17,8.59,7.03])
     re_arr=10**np.arange(2.5,7,0.25)
     us_arr=np.zeros(len(re_arr))
     al_arr=np.zeros(len(re_arr))
@@ -442,21 +652,30 @@ if plot_ustar_alpha:
         err_al += (a/D2R-al_sim[i])**2
 
     print('TOTAL ERROR (us,alpha): {},{}'.format(err_us,err_al))
-    fig=plt.figure(figsize=(10,5))
-    ax=fig.add_axes([0.1,0.1,0.85,0.85])
-    ax.plot(re_arr,1./us_arr,label=r'$G/u_\star$')
-    ax.scatter(re_sim,1./us_sim) 
-    ax.plot(re_arr,al_arr/D2R,label=r'$\alpha$')
+    fig=plt.figure(figsize=(6,3))
+    ax=fig.add_axes([0.12,0.15,0.85,0.83])
+    ax.plot(re_arr,1./us_arr,label=r'$G/u_\star$',c='blue')
     us_est=3.9*np.log(re_arr)-8
     ax.plot(re_arr,us_est,ls=':',lw=1,c='black',label=r'$u_\star=4\log(Re)-8$') 
-    ax.scatter(re_sim,al_sim)
+    ax.plot(re_arr,al_arr/D2R,label=r'$\alpha$',c='red')
+    lg=plt.legend(loc='center right')
+    ax.set_xlim(4e2,1.5e6)
+    ax.set_ylim(0,49)
     ax.set_xscale('log')
     ax.set_xlabel(r'$Re_D$')
     ax.set_ylabel(r'$(G/u_{\star}), \alpha$') 
-    lg=plt.legend(loc='lower left')
     lg.get_frame().set_linewidth(0.0)
-    plt.xlim(3e2,1e4)
-    plt.ylim(10,30)  
+    plt.savefig('ustar_alpha_1.pdf')
+    
+    ax.scatter(re_sim,1./us_sim,c='blue')
+    ax.scatter(re_sim,al_sim,c='red')
+    lg=plt.legend(loc='center right')
+    lg.get_frame().set_linewidth(0.0)
+    plt.savefig('ustar_alpha_2.pdf')
+    ax.scatter(re_les,al_les,   marker='x',c='red',label='PALM-LES')
+    ax.scatter(re_les,1./us_les,marker='x',c='blue')
+    lg=plt.legend(loc='center right') 
+    lg.get_frame().set_linewidth(0.0)
     plt.savefig('ustar_alpha.pdf',format='pdf')
 
 # Mean wind speed profile according to Emeis et al. (2007) MetZet vol 16, p. 393-406
@@ -518,7 +737,7 @@ if plot_total_rot:
             us,al=sc.ustar_alpha(re)
             deltap=us*us/nu 
             ny,yp,ym=build_grid(deltap,2.5) 
-
+            
         up_mod,wp_mod=sc.profile_plus(yp,re)
         um_mod,wm_mod=sc.profile_minus(ym,re)
         vp_mod = np.sqrt(up_mod**2+wp_mod**2)
@@ -736,17 +955,17 @@ if plot_les_comp == True:
     f_cor=1.03e-04
     les_ReD1000_10cm={'f':'N_ReD1000_10cm_big_pr.001.nc',
                       'z0m':0.05,
-                      'z0':0.0021,
+                      'z0':0.00208,
                       'c':'red',
                       're':1e3}
     les_ReD15E4_10m={'f':'N_ReD15E4_10m_big_pr.000.nc',
                      'z0m':5.00,
-                     'z0':0.000029,
+                     'z0':0.0000287,
                      'c':'blue',
                      're':1.5e5} 
     les_ReD1e6_25m= {'f':'N_ReD1e6_25m_pr.000.nc',
                      'z0m':12.5,
-                     'z0':0.0000051,
+                     'z0':0.00000519,
                      'c':'green',
                      're':1e6} 
 
@@ -818,11 +1037,11 @@ if plot_les_comp == True:
 
         ax1.fill_between(zp[1:], (avg[0,1:]-2*std[0,1:])/us,(avg[0,1:]+2*std[0,1:])/us,alpha=0.5,color='gray',edgecolor=None)
         ax1.plot(zp[1:], avg[0,1:]/us,ls='-',c=c['c'],lw=2,label='{}'.format(c['f'].split('_')[1]),alpha=0.5)
-        ax1.plot(zp[1:], up_mod[1:],  ls=':',c=c['c'],lw=0.5)
+        ax1.plot(1.15*zp[1:], up_mod[1:],  ls=':',c=c['c'],lw=0.5)
 
         ax1.fill_between(zp[1:],(avg[1,1:]-2*std[1,1:])/us,(avg[1,1:]+2*std[1,1:])/us,alpha=0.5,color='gray',edgecolor=None)
         ax1.plot(zp[1:],avg[1,1:]/us, ls='-',c=c['c'],lw=2,alpha=0.5)
-        ax1.plot(zp[1:], wp_mod[1:],  ls=':',c=c['c'],lw=0.5)
+        ax1.plot(1.15*zp[1:], wp_mod[1:],  ls=':',c=c['c'],lw=0.5)
 
         ax2.fill_between(zm[1:],(avg[0,1:]-avg[0,-1]-std[0,1:])/us,(avg[0,1:]-avg[0,-1]+std[0,1:])/us,alpha=0.3,color=c['c'],edgecolor=c['c'],hatch='x') 
         ax2.plot(zm[1:],(avg[0,1:]-u_geo)/us,   lw=2.0,ls='-',c=c['c'],alpha=0.5)
@@ -845,7 +1064,7 @@ if plot_les_comp == True:
         ax3.plot(uo_mod/t_mod,-vo_mod/t_mod,c=c['c'],ls=':',lw=0.5) 
 
         
-    ax1.plot(z_ana, np.log(5.*z_ana)/KAPPA,ls=':',lw=0.5,c='black',label='log-law (PALM-est\'d)')
+    ax1.plot(z_ana, np.log(5*z_ana)/KAPPA,ls=':',lw=0.5,c='black',label='log-law (PALM-est\'d)')
     ax1.plot(z_ana, np.log(z_ana)/0.416+5.416,ls='-',lw=0.5,c='black',label='log-law (DNS-based)')
     ax1.axhline(c='black',lw=0.5,ls='-') 
     ax1.set_xscale('log')
@@ -878,3 +1097,66 @@ if plot_les_comp == True:
     plt.savefig('les_comparison.pdf',format='pdf') 
     plt.close('all') 
         
+
+
+if plot_applications == True:
+    print('plotting applications')
+    re_arr=np.arange(3.5,10.1,0.5)
+    re_arr=10**re_arr
+    cf_arr=np.zeros(len(re_arr))
+    df_arr=np.zeros(len(re_arr))
+    tn_arr1=np.zeros(len(re_arr))
+    tn_arr2=np.zeros(len(re_arr))
+    tn_arr3=np.zeros(len(re_arr)) 
+    i=0
+    for re in re_arr:
+        print('Calculating for re=',re) 
+        nu=2./re**2
+        us,al=sc.ustar_alpha(re)
+        dp=us**2/nu
+        ny,yp,ym=build_grid(dp,10.5)
+        [um,wm]=sc.profile_minus(ym,re)
+
+        [um,wm]=mp.rotate(um,wm,al)
+        print(um[-1],wm[-1])
+        wm=-wm
+        cf_arr[i]=mp.integrate(ym,wm,len(ym))
+        df_arr[i]=mp.integrate(ym,um,len(ym))
+        df_arr[i]-=ym[-1]
+
+        idx=[ mp.geti(ym,zs) for zs in [0.05,0.15,0.25,0.5] ]
+        d = [ np.arctan(wm[i]/um[i]) for i in idx ]
+        tn_arr1[i] = (d[0]-d[1] )/np.pi*180
+        tn_arr2[i] = (d[1]-d[2] )/np.pi*180
+        tn_arr3[i] = (d[2]-d[3] )/np.pi*180 
+
+        i+=1 
+    
+    print(df_arr)
+    fig=plt.figure(figsize=(4,3))
+    ax=fig.add_axes([0.1,0.15,0.8,0.8])
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.set_xlabel(r'$Re_D$') 
+    ax.plot(re_arr,cf_arr,label=r'$\frac{1}{G\delta}\int_0^{\infty} V^G dz$',c='black')
+    ax.plot(re_arr,0.32/np.log(re_arr),ls=':',label=r'$0.32/log(Re_D)$',c='black')
+    ax.plot(re_arr,-df_arr,label=r'$\frac{1}{G\delta}\int_0^{\infty} (G-U^G)dz$',ls='--',c='blue')
+    ax.plot(re_arr, df_arr,label=r'$\frac{1}{G\delta}\int_0^{\infty} (U^G-G)dz$',ls='--',c='red')
+    ax.set_ylim(2e-4,5e-2)
+    lg=plt.legend(loc='best')
+    lg.get_frame().set_linewidth(0.0) 
+    plt.savefig('mass_transport.pdf',format='pdf')
+
+    
+    fig=plt.figure(figsize=(4,3))
+    ax=fig.add_axes([0.15,0.15,0.8,0.8])
+    ax.set_xscale('log')
+    ax.set_xlabel(r'$Re_D$')
+    ax.set_ylabel(r'$\Delta_\alpha [deg]$') 
+    ax.plot(re_arr,tn_arr1,label=r'Turning $z^-\simeq 0.05 - 0.15$')
+    ax.plot(re_arr,tn_arr2,label=r'Turning $z^-\simeq 0.15 - 0.25$')
+    ax.plot(re_arr,tn_arr3,label=r'Turning $z^-\simeq 0.25 - 0.50$')
+
+    lg=plt.legend(loc='best')
+    lg.get_frame().set_linewidth(0.0) 
+    plt.savefig('turning.pdf',format='pdf') 
