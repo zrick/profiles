@@ -12,11 +12,10 @@
 %%% BIBLIOGRAPHY DETAILS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage[style=authoryear-comp,firstinits=true,citestyle=authoryear,natbib=true,backend=bibtex]{biblatex}
-\renewcommand\nameyeardelim{, }
+\usepackage[maxcitenames=2,style=authoryear-comp,firstinits=true,citestyle=authoryear,natbib=true,backend=bibtex]{biblatex}
 \DeclareNameAlias{sortname}{family-given}
 \renewcommand*{\multinamedelim}{\addcomma\space}
-\renewcommand*{\finalnamedelim}{\addcomma\space}
+\renewcommand*{\finalnamedelim}{~and\space}
 \setlength{\bibitemsep}{\baselineskip}
 \renewbibmacro{in:}{}
 
@@ -40,10 +39,15 @@
 %%% CUSTOM DEFINITIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newcommand{\todo}[1]{\textcolor{red}{$[$#1$]$}}
+
+% TO BE USED IN MATH-ENVIRONMENT 
+\newcommand{\SFC}{\mathrm{sfc}}
 \newcommand{\p}{\partial}
 \newcommand{\gzm}{{\xi}}%{\gamma z_\text{match}}}
-\newcommand{\todo}[1]{\textcolor{red}{$[$#1$]$}}
-\newcommand{\SFC}{\mathrm{sfc}}
+\newcommand{\RO}{\mathrm{Ro}}  
+\newcommand{\RE}{\mathrm{Re}}
+\newcommand{\LR}{\Lambda_\RO} 
 
 
 \date{\scriptsize Draft - Version \today}
@@ -104,10 +108,10 @@ uniquely determine the surface drag $\tau_\SFC$ in a turbulent Ekman flow.
 In any quantitative description of the surface layer, the friction velocity $u_\star$ is the dynamic scale
 and $\alpha$ defines the alignment of the frame of reference.
 %
-Therefore, knowing these parameters is a pre-requisite for any quantitative theory of the surface layer and a first
-attempt in theoretical quantification was undertaken by \cite{rossby:PPO1935} using integral relations in the boundary layer.
+Knowledge about $u_\star$ and $\alpha$ is thus a pre-requisite for any quantitative theory of the surface layer and a first
+attempt in theoretical quantification was undertaken by \citet{rossby:PPO1935} using integral relations in the boundary layer.
 %
-Asymptotic similarity theory was later used by \cite{tennekes:JAS1973, blackadar:JAS1968},
+Asymptotic similarity theory was later used by \citet{tennekes:JAS1973, blackadar:JAS1968},
 and--based on his seminal direct numerical simulations (DNS) of Ekman flow--,~\cite{spalart:JFM1989} suggested
 a modification to take into account effects of low to intermediate Reynolds numbers.
 Later on, constants were re-evaluated with a focus on the atmospheric boundary layer based on
@@ -118,11 +122,11 @@ and numerical modelling \citep{spalart:PF2008, spalart:PF2009, ansorge:BM2014, a
 %
 Attempts were also undertaken to obtain profiles of the wind speed: 
 One approach is to match the inner and outer layer at a reference height;
-\cite{etling:2002, emeis:2018}  (Sec. 21.10; Eq. 21.48) choose the Prandtl-layer height to match
+\citet{etling:2002, emeis:2018}  (Sec. 21.10; Eq. 21.48) choose the Prandtl-layer height to match
 the wind speed profiles, which, however, requires to externally prescribe the veering $\alpha$ at that height. 
-A one-dimensional profile with constant veering is given by \cite[Sec. 3; Eq. 3.1-3.19]{emeis:m2007}. 
+A one-dimensional profile with constant veering is given by \citet[Sec. 3; Eq. 3.1-3.19]{emeis:m2007}. 
 
-\cite{gryning:BM2007} present an extension of the wind-speed profile beyond the surface layer
+\citet{gryning:BM2007} present an extension of the wind-speed profile beyond the surface layer
 using a neutral referece profile and a stability correction;
 \cite{kelly:BM2010}, based on a probabilistic representation of stratification,
 develop a model for the long-term mean windspeed
@@ -152,7 +156,7 @@ a particular concern when it comes to wind-power forecasting \citep{optis:BM2014
 Despite rotational effects being considered, the formulation of these models for the outer layer
 and analysis of their performance primarily focuses on wind speed.
 % 
-\cite{jiang:JAS2018} recognized that the outer part of the Ekman boundary layer receives less attention in comparison
+\citet{jiang:JAS2018} recognized that the outer part of the Ekman boundary layer receives less attention in comparison
 with the surface layer and commence in studying the neutral problem by Large-Eddy simulation (LES).
 %
 They focus on the wind speed and find an extended logarithmic layer when considering the wind speed instead of
@@ -190,8 +194,9 @@ this conceptually well-defined problem.
 Large-Eddy simulation not only needs to be tuned for the surface shear stress and veering angle, but it also
 relies on sub-grid closures that often assume alignment of the stress with gradients -- a questionable pre-requisite when the wind rotates with height.
 %
-While recent advances have been made in analysis of this simplified set-up \cite{jiang:JAS2018} (MORE?),
-there is not enough understanding for a quantitative generalization of the results to arbitrary external forcing.
+Despite advances in analysis of this simplified set-up \citep{jiang:JAS2018} \todo{(MORE?)},
+there is yet insufficient understanding for a quantitative generalization of the results to
+arbitrary external forcing (manifest in variation of the Reynolds number).
 %
 At the same time, an increasing amount of high-quality and high-resolution data from turbulence-resolving approaches
 is emerging due to recent advances in high-performance computing and its application to geophysical problem sets;
@@ -211,8 +216,8 @@ Reynolds number.
 \todo{Numerical approach, DNS, Scale-separation, Re-similarity
   \citep{dimotakis:JFM2000, dasilva:ARF2014, pope:2000, moin:ARF1998, mellado:JAM2018}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-\section{Formulation}
+\section{Problem Formulation and Numerical Approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 We consider here incompressible, turbulent Ekman flow, that is, the turbulent flow over a flat rotating plate, as
 a physical model for the truly neutral atmospheric boundary layer (ABL).
@@ -221,20 +226,58 @@ The f-plane approximation is applied such that rotation only acts on horizontal 
 we thus neglect rotational effects on the horizontal components of velocity and dynamical effects
 due to latitudinal variation of the rate of rotation.
 %
-\par
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Notation and Governing Equations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 The dimensional velocity vector of the numerical simulations is $\underline{U} = (U_1,U_2,U_3) = (U,V,W)$ over the coordinate system
 $Oxyz$, where an approximate alignment (plus/ minus few degrees centigrade) of the direction $Ox$ with the surface shear stress is achieved.
-The coordinate $Oy$ points away from the wall,  and $Oz$ points in the span-wise direction normal to $Oxy$. 
-%
+The coordinate $Oy$ points away from the wall,  and $Oz$ points in the span-wise direction normal to $Oxy$.
 For analysis of the results, we use two coordinate systems that are
 (i)  exactly aligned with the surface shear stress and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
 (ii) the coordinate system aligned with the free-atmosphere geostrophic wind labelled by an upper index $G$ as in $\underline{U}^G$.
 %
 We denote by $u_\star$ the modulus surface friction velocity and let $Z_\star=1/u_\star$ for brevity. 
+%
+\par
+%
+We consider the incompressible Navier--Stokes equations for the three velocity components on the f-plane in a framework
+that is governed by the physical parameters
+(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_3^2}$ (where $\mathbf{G}=(G_1,0,G_3)$ is the geostrophic wind vector),
+(ii)  Coriolis parameter $f$ (representing the angular rotation), and
+(iii) kinematic viscosity $\nu$.
+   %
+These yield a Reynolds number $\RE$ as non-dimensional parameter governing the system.
+%
+We use the geostrophic wind as velocity and the Coriolis parameter $f$ as time scale for the non-dimensional framework which implies the Rossby radius $\LR=G/f$ as length scale, such that
+\begin{equation}
+  \RE=\frac{G \LR }{\nu}. 
+\end{equation}
+%
+\par
+%
+The non-dimensionalized set of governing equation reads as 
+\begin{subequations} 
+\begin{eqnarray}
+  \frac{\partial u_i}{\partial t} &=& \frac{\p \pi}{\p x_i} - u_j \frac{\p u_i}{\p x_j} + \epsilon_{i2j} (u_j -G_j)   + \frac{1}{\RE} \frac{\p^2 u_i}{\p x_{j}^2} \\ 
+  \frac{\partial u_j}{\partial x_j} &=& 0,   
+\end{eqnarray} 
+\label{eqn:governing} 
+\end{subequations}
+where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, and $g_j=G_j/G$ are non-dimensionalized components geostrophic wind (with $g_{1}^2+g_{3}^2=1$ by construction). 
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Numerical Simulations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\todo{DNS Code}
+\par
+\todo{(new and old) Simulations}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Towards a Universal Velocity Profile for the Turbulent Ekman Layer}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 Formulations for the outer layer that take into account the rotation, and thus deviation from the channel-flow analogy
 need to be matched to the framework of surface similarity, and it
 occurs that a smooth transition from the inner to the outer layer is not easily achieved.

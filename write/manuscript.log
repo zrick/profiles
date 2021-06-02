@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/MacPorts 2020.54632_3) (preloaded format=pdflatex 2021.2.9)  27 MAY 2021 11:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/MacPorts 2020.54632_3) (preloaded format=pdflatex 2021.2.9)  2 JUN 2021 11:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -486,7 +486,7 @@ Package biblatex Warning: 'firstinits' option is deprecated.
 
 Package biblatex Warning: Conflicting options.
 (biblatex)                '<namepart>inits' conflicts with 'uniquename=full'.
-(biblatex)                Setting 'uniquename=init' on input line 53.
+(biblatex)                Setting 'uniquename=init' on input line 57.
 
 (/opt/local/share/texmf-texlive/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
@@ -496,26 +496,26 @@ File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 (./manuscript.aux)
 \openout1 = `manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 53.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 57.
 
  (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 53.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 57.
 
 
 (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
@@ -608,12 +608,12 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'manuscript.bbl' found.
 
 (./manuscript.bbl)
-Package biblatex Info: Reference section=0 on input line 53.
-Package biblatex Info: Reference segment=0 on input line 53.
+Package biblatex Info: Reference section=0 on input line 57.
+Package biblatex Info: Reference segment=0 on input line 57.
 
 
 Class amsart Warning: Abstract should precede \maketitle in AMS document classe
-s; reported on input line 57.
+s; reported on input line 61.
 
 [1{/opt/local/var/db/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 
@@ -623,7 +623,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.149 ... heights on the order of 100-200\,\mathrm
+l.153 ... heights on the order of 100-200\,\mathrm
                                                   {m},
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -632,7 +632,7 @@ If that doesn't work, type  X <return>  to quit.
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2]
-Overfull \hbox (2.15372pt too wide) in paragraph at lines 212--215
+Overfull \hbox (2.15372pt too wide) in paragraph at lines 217--219
 [][]$\OT1/cmr/m/n/10.95 [$Numerical ap-proach, DNS, Scale-separation, Re-simila
 rity ([]Di-mo-takis, 2000; []Silva
  []
@@ -645,7 +645,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.251 \end{itemize}
+l.294 \end{itemize}
                    
 Your command was ignored.
 Type  I <command> <return>  to replace it with another command,
@@ -654,17 +654,18 @@ or  <return>  to continue without it.
 ! Extra \endgroup.
 <recently read> \endgroup 
                           
-l.251 \end{itemize}
+l.294 \end{itemize}
                    
 Things are pretty mixed up, but I think the worst is over.
 
 <../plot/ustar_alpha.pdf, id=22, 433.62pt x 216.81pt>
 File: ../plot/ustar_alpha.pdf Graphic file (type pdf)
 <use ../plot/ustar_alpha.pdf>
-Package pdftex.def Info: ../plot/ustar_alpha.pdf  used on input line 253.
+Package pdftex.def Info: ../plot/ustar_alpha.pdf  used on input line 296.
 (pdftex.def)             Requested size: 278.83578pt x 139.42288pt.
+[4 <../plot/ustar_alpha.pdf>]
 
-LaTeX Warning: File `../plot/outer_layer.pdf' not found on input line 296.
+LaTeX Warning: File `../plot/outer_layer.pdf' not found on input line 339.
 
 
 ! Package pdftex.def Error: File `../plot/outer_layer.pdf' not found: using dra
@@ -674,32 +675,32 @@ See the pdftex.def package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.296 ...idth=\textwidth]{../plot/outer_layer.pdf}
+l.339 ...idth=\textwidth]{../plot/outer_layer.pdf}
                                                   
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-[4 <../plot/ustar_alpha.pdf>] [5]
 ! Double superscript.
-l.326   U_\text{inner}^{\alpha}^
+l.369   U_\text{inner}^{\alpha}^
                                 + = \frac{ y^+ + \gamma_4 (y^+)^{4} + \gamma...
 I treat `x^1^2' essentially like `x^1{}^2'.
 
+[5]
 ! Double superscript.
-l.335   U_\text{log}^{\alpha}^
+l.378   U_\text{log}^{\alpha}^
                               + = \frac{1}{\kappa} \log y^+ + C
 I treat `x^1^2' essentially like `x^1{}^2'.
 
-<../plot/u_profile.pdf, id=76, 867.24pt x 361.35pt>
+<../plot/u_profile.pdf, id=75, 867.24pt x 361.35pt>
 File: ../plot/u_profile.pdf Graphic file (type pdf)
 <use ../plot/u_profile.pdf>
-Package pdftex.def Info: ../plot/u_profile.pdf  used on input line 344.
+Package pdftex.def Info: ../plot/u_profile.pdf  used on input line 387.
 (pdftex.def)             Requested size: 398.3386pt x 165.9749pt.
-[6 <../plot/u_profile.pdf>] [7]
+[6] [7 <../plot/u_profile.pdf>] [8]
 ! Missing delimiter (. inserted).
 <to be read again> 
                    ,
-l.498 \end{align}
+l.541 \end{align}
                  
 I was expecting to see something like `(' or `\{' or
 `\}' here. If you typed, e.g., `{' instead of `\{', you
@@ -711,7 +712,7 @@ nonnegative, or you can use `\delimiter <delimiter code>'.
 ! Missing delimiter (. inserted).
 <to be read again> 
                    ,
-l.498 \end{align}
+l.541 \end{align}
                  
 I was expecting to see something like `(' or `\{' or
 `\}' here. If you typed, e.g., `{' instead of `\{', you
@@ -720,12 +721,8 @@ braces don't get unbalanced. Otherwise just proceed.
 Acceptable delimiters are characters whose \delcode is
 nonnegative, or you can use `\delimiter <delimiter code>'.
 
-
-Underfull \vbox (badness 8170) has occurred while \output is active []
-
- [8]
 ! Misplaced alignment tab character &.
-l.526 with $\Delta V &
+l.569 with $\Delta V &
                       =& V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\t...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -735,7 +732,7 @@ you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
 ! Misplaced alignment tab character &.
-l.526 with $\Delta V &=&
+l.569 with $\Delta V &=&
                          V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\t...
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -747,28 +744,25 @@ might try typing `S' now just to see what is salvageable.
 <../plot/w_profile.pdf, id=124, 867.24pt x 361.35pt>
 File: ../plot/w_profile.pdf Graphic file (type pdf)
 <use ../plot/w_profile.pdf>
-Package pdftex.def Info: ../plot/w_profile.pdf  used on input line 536.
+Package pdftex.def Info: ../plot/w_profile.pdf  used on input line 579.
 (pdftex.def)             Requested size: 398.3386pt x 165.9749pt.
 <../plot/ekman_profiles.pdf, id=125, 939.51pt x 361.35pt>
 File: ../plot/ekman_profiles.pdf Graphic file (type pdf)
 <use ../plot/ekman_profiles.pdf>
-Package pdftex.def Info: ../plot/ekman_profiles.pdf  used on input line 547.
+Package pdftex.def Info: ../plot/ekman_profiles.pdf  used on input line 590.
 (pdftex.def)             Requested size: 398.3386pt x 153.20505pt.
 <../plot/mag_dir.pdf, id=126, 722.7pt x 361.35pt>
 File: ../plot/mag_dir.pdf Graphic file (type pdf)
 <use ../plot/mag_dir.pdf>
-Package pdftex.def Info: ../plot/mag_dir.pdf  used on input line 563.
+Package pdftex.def Info: ../plot/mag_dir.pdf  used on input line 606.
 (pdftex.def)             Requested size: 398.3386pt x 199.16766pt.
-[9 <../plot/w_profile.pdf>]
-Underfull \vbox (badness 4013) has occurred while \output is active []
+[9] [10 <../plot/w_profile.pdf> <../plot/ekman_profiles.pdf
 
- [10 <../plot/ekman_profiles.pdf> <../plot/mag_dir.pdf
-
-pdfTeX warning: pdflatex (file ../plot/mag_dir.pdf): PDF inclusion: multiple pd
-fs with page group included in a single page
+pdfTeX warning: pdflatex (file ../plot/ekman_profiles.pdf): PDF inclusion: mult
+iple pdfs with page group included in a single page
 >]
 ! Extra }, or forgotten $.
-l.610 ..._\text{match} &=& U_{\infty} + e^{-\gzm}}
+l.653 ..._\text{match} &=& U_{\infty} + e^{-\gzm}}
                                                    \left [ A \cos\gzm + B\si...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -777,7 +771,7 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 ! Extra }, or forgotten $.
-l.611 ..._\text{match} &=& W_{\infty} + e^{-\gzm}}
+l.654 ..._\text{match} &=& W_{\infty} + e^{-\gzm}}
                                                    \left [-A \sin\gzm + B\co...
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -785,8 +779,14 @@ you forgot something else, as in `\hbox{$x}'. In such cases
 the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
-[11]
-Overfull \hbox (13.10448pt too wide) in paragraph at lines 638--638
+[11 <../plot/mag_dir.pdf>]
+Overfull \hbox (14.70935pt too wide) in paragraph at lines 681--681
+[][]\OT1/cmr/m/n/10.95 Blackadar, A. K. and Ten-nekes, H. (1968). ``As-ymp-toti
+c Sim-i-lar-ity in Neu-tral Barotropic
+ []
+
+
+Overfull \hbox (13.10448pt too wide) in paragraph at lines 681--681
 [][]\OT1/cmr/m/n/10.95 Foken, T. (2002). ``Some as-pects of the vis-cous sub-la
 yer''. en. \OT1/cmr/m/it/10.95 Me-te-o-rol-o-gis-che Zeitschrift
  []
@@ -797,13 +797,13 @@ Package logreq Info: Writing requests to 'manuscript.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12790 strings out of 481722
- 220764 string characters out of 5926629
- 677733 words of memory out of 5000000
- 28202 multiletter control sequences out of 15000+600000
+ 12799 strings out of 481722
+ 220949 string characters out of 5926629
+ 678717 words of memory out of 5000000
+ 28211 multiletter control sequences out of 15000+600000
  541566 words of font info for 59 fonts, out of 8000000 for 9000
  591 hyphenation exceptions out of 8191
- 41i,16n,54p,849b,1493s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,16n,54p,859b,1493s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></o
 pt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></opt/l
 ocal/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmex10.pfb></opt/local/
@@ -819,7 +819,7 @@ m/cmti10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmt
 i9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt10.pf
 b></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam10.pf
 b>
-Output written on manuscript.pdf (14 pages, 396607 bytes).
+Output written on manuscript.pdf (14 pages, 401038 bytes).
 PDF statistics:
  330 PDF objects out of 1000 (max. 8388607)
  127 compressed objects within 2 object streams

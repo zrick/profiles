@@ -22,44 +22,44 @@ Database file #2: ansorge.bib
 Biblatex version: 3.13
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-You've used 33 entries,
+You've used 34 entries,
             6365 wiz_defined-function locations,
-            1536 strings with 39261 characters,
-and the built_in function-call counts, 243474 in all, are:
-= -- 15113
-> -- 8417
-< -- 1309
-+ -- 8596
-- -- 5623
-* -- 18621
-:= -- 26850
+            1547 strings with 39730 characters,
+and the built_in function-call counts, 253027 in all, are:
+= -- 15808
+> -- 8665
+< -- 1345
++ -- 8944
+- -- 5833
+* -- 19422
+:= -- 27943
 add.period$ -- 0
-call.type$ -- 33
-change.case$ -- 504
-chr.to.int$ -- 600
-cite$ -- 64
-duplicate$ -- 22784
-empty$ -- 21682
-format.name$ -- 2191
-if$ -- 46947
+call.type$ -- 34
+change.case$ -- 518
+chr.to.int$ -- 630
+cite$ -- 66
+duplicate$ -- 23622
+empty$ -- 22588
+format.name$ -- 2200
+if$ -- 48720
 int.to.chr$ -- 0
-int.to.str$ -- 92
+int.to.str$ -- 96
 missing$ -- 0
-newline$ -- 1581
-num.names$ -- 1527
-pop$ -- 10834
+newline$ -- 1638
+num.names$ -- 1576
+pop$ -- 11189
 preamble$ -- 1
-purify$ -- 671
+purify$ -- 677
 quote$ -- 0
-skip$ -- 6527
+skip$ -- 6609
 stack$ -- 0
-substring$ -- 28907
-swap$ -- 6974
-text.length$ -- 1102
-text.prefix$ -- 32
+substring$ -- 30411
+swap$ -- 7217
+text.length$ -- 1131
+text.prefix$ -- 33
 top$ -- 1
-type$ -- 1110
+type$ -- 1144
 warning$ -- 0
-while$ -- 3232
+while$ -- 3361
 width$ -- 0
-write$ -- 1549
+write$ -- 1605

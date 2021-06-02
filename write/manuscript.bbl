@@ -211,6 +211,63 @@
     \field{year}{1968}
   \endentry
 
+  \entry{coleman:JFM1990}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CGN}{%
+         family={Coleman},
+         familyi={C\bibinitperiod},
+         given={Gary\bibnamedelima Neil},
+         giveni={G\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=FJH}{%
+         family={Ferziger},
+         familyi={F\bibinitperiod},
+         given={J.\bibnamedelima H.},
+         giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=SPR}{%
+         family={Spalart},
+         familyi={S\bibinitperiod},
+         given={P.\bibnamedelima R.},
+         giveni={P\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \strng{namehash}{CGN+1}
+    \strng{fullhash}{CGNFJHSPR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1990}
+    \field{labeldatesource}{}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \verb{doi}
+    \verb 10.1017/S0022112090002348
+    \endverb
+    \field{issn}{0022-1120, 1469-7645}
+    \field{note}{142 citations (Crossref) [2021-05-12]}
+    \field{number}{-1}
+    \field{pages}{313}
+    \field{title}{A numerical study of the turbulent {Ekman} layer}
+    \verb{url}
+    \verb http://www.journals.cambridge.org/abstract_S0022112090002348
+    \endverb
+    \field{volume}{213}
+    \verb{file}
+    \verb Coleman et al. - 1990 - A numerical study of the turbulent Ekman laye
+    \verb r.pdf:/Users/zrick/Zotero/storage/PSDZ6KTR/Coleman et al. - 1990 - A
+    \verb numerical study of the turbulent Ekman layer.pdf:application/pdf
+    \endverb
+    \field{journaltitle}{Journal of Fluid Mechanics}
+    \field{month}{04}
+    \field{year}{1990}
+    \field{urlday}{10}
+    \field{urlmonth}{05}
+    \field{urlyear}{2021}
+  \endentry
+
   \entry{dimotakis:JFM2000}{article}{}
     \name{author}{1}{}{%
       {{hash=DPE}{%
@@ -458,7 +515,7 @@
     \list{language}{1}{%
       {en}%
     }
-    \strng{namehash}{FTKSAKOA1}
+    \strng{namehash}{FT+1}
     \strng{fullhash}{FTKSAKOA1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
@@ -808,7 +865,7 @@
     \list{language}{1}{%
       {en}%
     }
-    \strng{namehash}{JQWSSP1}
+    \strng{namehash}{JQ+1}
     \strng{fullhash}{JQWSSP1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
@@ -1160,7 +1217,7 @@
     \list{language}{1}{%
       {en}%
     }
-    \strng{namehash}{MJPHCCvGJR1}
+    \strng{namehash}{MJP+2}
     \strng{fullhash}{MJPHCCvGJR1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
@@ -1357,7 +1414,7 @@
          giveni={F\bibinitperiod\bibinitdelim C\bibinitperiod},
       }}%
     }
-    \strng{namehash}{OMMABFC1}
+    \strng{namehash}{OM+1}
     \strng{fullhash}{OMMABFC1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
@@ -1473,7 +1530,7 @@
     \list{language}{1}{%
       {en}%
     }
-    \strng{namehash}{SYHRPJC1}
+    \strng{namehash}{SY+1}
     \strng{fullhash}{SYHRPJC1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
@@ -1683,7 +1740,7 @@
     \list{language}{1}{%
       {en}%
     }
-    \strng{namehash}{SPRCGNJR1}
+    \strng{namehash}{SPR+1}
     \strng{fullhash}{SPRCGNJR1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{shorttitle}
@@ -1743,7 +1800,7 @@
     \list{language}{1}{%
       {en}%
     }
-    \strng{namehash}{SPRCGNJR1}
+    \strng{namehash}{SPR+1}
     \strng{fullhash}{SPRCGNJR1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{shorttitle}
