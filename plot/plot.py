@@ -18,12 +18,13 @@ D2R = np.pi / 180.
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
 plot_summary=False
+plot_evisc=True
 plot_visc_outer=False
-print_table=False
+print_table=True
 plot_outer_log=False
 plot_total_rot=False
-plot_convergence_1000=False
-plot_re1600=True
+plot_convergence=False
+plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 
@@ -32,6 +33,7 @@ colors = {400 : 'gray',
           750 : 'cyan',
           1000: 'blue',
           1300: 'red',
+          1301: 'red',
           1600: 'black',
           5000: 'black',
           10000:'gray',
@@ -46,7 +48,8 @@ files = { 400: base+'avg_flw_ri0.0_re400.0_1024x384x1024.nc',
           500: base+'avg_flw_ri0.0_re500.0_2048x192x2048.nc',
           750: base+'avg_flw_ri0.0_re750.0_3072x384x3072.nc',
           1000:base+'avg_flw_ri0.0_re1000.0_co0.0_1536x512x3072.nc',
-          1300:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120.nc',
+          1300:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120aligned.nc',
+          1301:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120aligned.nc',
           1600:base+'avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc' } 
 
 sc=EkmanUniversalClass() # yp_ref,up_ref,wp_ref,deltap_ref,us_ref,al_ref*D2R-geo_rotate,plot=False)
@@ -261,8 +264,89 @@ if plot_re1600:
     ax1.set_xlim(1,1e4)
     ax2.set_xlim(1,1e4)
     
+if plot_evisc:
+    fig=plt.figure(figsize=(7,4))
+    ax=fig.add_axes([0.1,0.11,0.8,0.87])
     
+    for re in [500,750,1000,1300,1600]:
+        nu=2./(re*re)
+        f=Dataset(files[re],'r',format='NETCDF4')
+        y=f['y'][:]
+        us_arr=f['FrictionVelocity'][:]
+        us=np.average(us_arr)
+        yp=y*us/nu
+        ym=y/us
+        deltap=us*us/nu  # = delta * (us/nu) =  (us/f) * us /  nu [with f=1]
+        ny=len(y)
+        nt=len(us_arr)
+        u=f['rU'][:,:]/us
+        w=f['rW'][:,:]/us
+        Rxy=f['Rxy'][:,:]/(us*us) # Reynolds Stress
+        Ryz=f['Ryz'][:,:]/(us*us)
+        # Get Gradient of velocity components
+        if  'U_y1XXX' in f.variables.keys() : # New outpout (contains derivatives
+            dUdy=f['U_y1'][:,:]/us/us*nu   # calculated using compct scheme)
+            dWdy=f['W_y1'][:,:]/us/us*nu
+        else :                                  # Old file format (does not contain
+            print("YP:",yp.shape)
+            print("U: ",u.shape)
+            dUdy = nu/us*mp.derivative1(y,np.transpose(u),ny,nt).transpose() # derivatives...) 
+            dWdy = nu/us*mp.derivative1(y,np.transpose(w),ny,nt).transpose()
+
+
+        print('RE=',re,np.average(dUdy[:,0]),np.average(dWdy[:,0]),us)
+        Txy=dUdy               # Viscous Stress 
+        Tyz=dWdy
+
+        us_mean=np.average(us)
+
+        print("Txy:",Txy.shape)
+        print("Rxy:",Rxy.shape)
+        
+        stress_x = -np.average(-Txy + Rxy,0)
+        stress_z = -np.average(-Tyz + Ryz,0)
+        stress_t = np.sqrt(stress_x**2 + stress_z**2)
+
+        dTdy = np.average(np.sqrt(dUdy**2+dWdy**2),0)
+
+        evisc = stress_t / dTdy  / (deltap * us * us)
+        evisc2= 0*evisc[:] 
+        for i in range(len(dTdy)):
+            if dTdy[i] < 1e-4:
+                evisc[i]=np.nan
+            elif i>2 :
+                evisc2[i] = (evisc[i-1]+ 2*evisc[i]+evisc[i+1])/5
+        evisc=evisc2
+        ax.plot(ym, evisc/20,lw=2,ls='-',label='Re={}'.format(re),c=colors[re])
+        if re == 1600:
+            ax.plot([1,1],[1,1],lw=0,ls=' ',label=' ',c='white') 
+            ax.plot(ym, evisc/20,lw=2,ls='-',label='Eddy Viscosity'.format(re),c=colors[re])
+            ax.plot(ym, stress_t, ls='--', lw=1, label='Total Stress'.format(re),c=colors[re])
+            ax.plot(ym, dTdy, ls=':',  lw=2, label='Viscous Stress (Gradient)',c=colors[re])
+        else : 
+            ax.plot(ym, stress_t, ls='--', lw=1, c=colors[re])
+            ax.plot(ym, dTdy, ls=':',      lw=2, c=colors[re])
+        
+    lg=plt.legend(loc='best')
+    lg.get_frame().set_linewidth(0.0 )
+    ax.set_xscale('log')
+    # ax.set_yscale('log')
+    def fw(X):
+        return X*20
+    def bw(X):
+        return X/20
+    ax2=ax.secondary_yaxis('right',functions=(fw,bw))
+
     
+
+    ax.set_xlabel(r'$z^-$')
+    ax.set_ylabel(r'Total, Viscous Stress')
+    ax2.set_ylabel(r'Eddy Viscosity  $\frac{\nu_E}{\nu} \frac{Z^2}{\delta+}$') 
+    ax.set_xlim(1e-3,2)
+    ax.set_ylim(0,1)
+
+    plt.savefig('eddy_viscosity.pdf',format='pdf') 
+        
 if plot_visc_outer:
     fig=plt.figure(figsize=(5,4))
     ax=fig.add_axes([0.1,0.1,0.87,0.8])
@@ -367,6 +451,7 @@ if plot_visc_outer:
 
 if print_table : 
 
+    print('DATA FROM SC MODEL') 
     print('#  Re_D  f[1/s] nu[m2/s] G[m/s] |   re_tau u*/G[1]   u*[m/s] alpha[deg] delta[m] Lambda[km] +unit[mm]') 
     for re_loc in [500,1000,2000,5000,1e4,2e4,4e4,8e4,9.5e4,1.5e5,3e5,1e6]:
         relambda_loc=re_loc**2/2
@@ -380,6 +465,42 @@ if print_table :
         wall_dim=nu_dim/us_dim                   #m
         print('{0:7.0f} {1:7.2g} {2:8.3g} {3:6.3f} | {4:8.3g} {5:7.4f} {6:9.4f}  {7:9.2f} {8:8.1f}  {9:9.1f}   {10:7.3g}'.format(re_loc,f_dim,nu_dim,G_dim,delta_dim/wall_dim,us_loc,us_dim,al_loc/D2R,us_dim/f_dim,G_dim/f_dim/1e3,wall_dim*1e3))
 
+    print(' ')
+    print('DATA FROM DNS')
+    print('=======================================================================')
+    print('  RE Delta+  u*     alpha    d95/d ')
+    for re in [500,750,1000,1300,1600]:
+        f=Dataset(files[re],'r',format='NETCDF4')
+        t=f['t'][:]
+        y=f['y'][:]
+        us=np.mean(f['FrictionVelocity'][:])
+        al=f['FrictionAngle'][:]
+        nu=2./(re*re)
+        yp=y*us/nu
+        deltap=us*us/nu 
+        wtop = np.average(f['rW'][:,-1])
+        utop = np.average(f['rU'][:,-1])
+        al_geo=np.arctan(wtop/utop)/np.pi*180
+        al_tot=al_geo-np.mean(al)
+        sx=np.mean(f['Rxy'][:,:],0)
+        sz=np.mean(f['Ryz'][:,:],0) 
+        st=np.sqrt(sx*sx+sz*sz)
+        ny=len(yp)
+        i95=ny-mp.geti(np.flip(st),0.05*us*us)
+
+        y=f['y']
+
+        dy=y[1:]-y[:-1]
+        tke = np.average(f['Tke'][:,:],0) 
+        eps = np.average(f['Eps'][:,:],0)
+        tke_int = (tke[1:] + tke[:-1])*dy/2
+        eps_int = (eps[1:] + eps[:-1])*dy/2
+
+        idelta=len(y)#mp.geti(y,us) 
+        tke_int = np.sum(tke_int[:idelta])
+        eps_int = np.sum(eps_int[:idelta]) 
+        print(' {0:4d} {1:5.0f} {2:7.4f} {3:7.4f} {4:6.3f} {5:6.3g} {6:8.2e} {7:8.2e} {8:5.2f} {9:5.2f}'.format(re,deltap,us,al_tot,yp[i95]/deltap,tke_int/us**3,tke_int,eps_int,eps_int/us**3,yp[1]))
+        
 if plot_outer_log : 
 
     fig1=plt.figure(figsize=(12,5))
@@ -848,106 +969,62 @@ if plot_total_rot:
     # plt.show() 
     # quit() 
 
-if plot_convergence_1000:
-    re=1000
-    nu=2./(re*re) 
-    f=Dataset(files[re],'r',format='NETCDF4')
-
-    t_all=f['t'][:]
-    i0=mp.geti(t_all,f['t'][-1]-2.*np.pi) -1
-
-    print(i0,f['it'][i0],f['t'][-1]-f['t'][i0]) 
-
-    us=f['FrictionVelocity'][i0:]
-    al=f['FrictionAngle'][i0:]
-    u_dat=f['rU'][i0:,:]
-    w_dat=f['rW'][i0:,:]
-    y_dat=f['y'][:]
-    t=f['t'][i0:] 
-    us_avg=np.mean(us)
-    al_avg=np.mean(al) 
-    
-    al_geo = np.arctan(w_dat[-1,-1]/u_dat[-1,-1])
-    al_sfc1 = al_avg*D2R
-    al_sfc2 = np.arctan(w_dat[-1,1]/u_dat[-1,1]) 
-
-    [u_geo,w_geo] = mp.rotate(u_dat,w_dat,al_geo)
-    [u_sfc,w_sfc] = mp.rotate(u_dat,w_dat,al_sfc1) 
-    yp = y_dat*us_avg/nu
-    ym = y_dat/us_avg 
-
-    al =np.arctan(w_dat/u_dat) / D2R
-    al_0 = np.arctan(w_dat[0,:]/u_dat[0,:]) 
-    al_1 = np.arctan(w_dat[-1,:]/u_dat[-1,:]) 
-
-    print(t[-1]-t[0])
-    fig=plt.figure(figsize=(10,5))
-    ax=fig.add_axes([0.1,0.1,0.8,0.8])
-
-
-    fangle=f['FrictionAngle'][i0:]
-    delta_al=al[0,1]-fangle[0]
-    al_avg=np.mean(fangle) 
-    #ax.plot(t,al[:,1],label=r'$\alpha(u,w,)$')
-    #ax.plot(t,fangle,label=r'$\alpha(DNS)$')
-    #ax.plot(t,t*0+al_avg,ls=':',lw=0.5,c='black')
-    print(al_avg)
-    ax.plot(yp,np.mean(u_sfc,0)/us_avg,label=r'$u^\alpha$',ls='-',c='blue')
-    ax.plot(yp,np.mean(w_sfc,0)/us_avg,label=r'$w^\alpha$',ls='-',c='red')
-    ax.plot(yp,np.mean(u_dat,0)/us_avg,label=r'$u^{comp}$',ls=':',c='blue')
-    ax.plot(yp,np.mean(w_dat,0)/us_avg,label=r'$w^{comp}$',ls=':',c='red')
-    ax.plot(yp,np.mean(u_geo,0)/us_avg,label=r'$u^{geo}$',ls='--',c='blue')
-    ax.plot(yp,np.mean(-w_geo,0)/us_avg,label=r'$w^{geo}$',ls='--',c='red')
-    #ax.set_xlim(1,1e2)
-    #ax.set_ylim(0,5)
-    ax.set_xscale('log')
-    lg=plt.legend(loc='best')
-    lg.get_frame().set_linewidth(0.0) 
-    plt.show()
-    plt.close('all')
-
-
-
-    fig=plt.figure()
-    ax=fig.add_axes([0.1,0.1,0.8,0.8]) 
-    #ax.plot(ym,(u_sfc[-1,:]-u_sfc[0,:])/us_avg,c='blue', ls='-',label=r'$\Delta U^{\alpha+}$')
-    ###ax.plot(ym,(u_geo[-1,:]-u_geo[0,:])/us_avg,c='blue', ls=':',label=r'$\Delta U^{G+}$')
-    #ax.plot(ym,(w_sfc[-1,:]-w_sfc[0,:])/us_avg,c='red',  ls='-',label=r'$\Delta W^{\alpha+}$')
-    #ax.plot(ym,(w_geo[-1,:]-w_geo[0,:])/us_avg,c='red',  ls=':',label=r'$\Delta W^{G+}$')
-    #ax.plot(ym,(al_1-al_0)/D2R,                c='black',ls='-',label=r'$\Delta \alpha$')
-    mag=np.sqrt(u_sfc*u_sfc+w_sfc*w_sfc)
-
-    usmin=np.amin(u_sfc[:,:],0); ugmin=np.amin(u_geo[:,:],0) 
-    usmax=np.amax(u_sfc[:,:],0); ugmax=np.amax(u_geo[:,:],0) 
-    wsmin=np.amin(w_sfc[:,:],0); wgmin=np.amin(w_geo[:,:],0)
-    wsmax=np.amax(w_sfc[:,:],0); wgmax=np.amax(w_geo[:,:],0)
-    usavg=np.mean(u_sfc[:,:],0); ugavg=np.mean(u_geo[:,:],0)
-    wsavg=np.mean(w_sfc[:,:],0); wgavg=np.mean(w_geo[:,:],0)
-    mgmin=np.amin(mag[:,:],0);
-    mgmax=np.amax(mag[:,:],0);
-    mgavg=np.mean(mag[:,:],0);
-
-    #
-    ax.fill_between(ym,(usmin-usmin[-1])/us_avg,(usmax-usmax[-1])/us_avg,alpha=0.5,color='blue')
-    ax.fill_between(ym,(wsmin-wsmin[-1])/us_avg,(wsmax-wsmax[-1])/us_avg,alpha=0.5,color='red')
-    ax.fill_between(ym,(mgmin-mgmin[-1])/us_avg,(mgmax-mgmax[-1])/us_avg,alpha=0.5,color='black') 
-    #ax.plot(ym,(u_geo[0,:]-u_geo[0,-1])/us_avg,c='blue',ls='--', alpha=0.5)
-    #ax.plot(ym,(w_geo[0,:]-w_geo[0,-1])/us_avg,c='red',ls='--',  alpha=0.5)
-
-    ax.plot(ym,(usavg-usavg[-1])/us_avg,c='blue',ls='-',  lw=1,label=r'$U^\alpha$')
-    ax.plot(ym,(wsavg-wsavg[-1])/us_avg,c='red', ls='-',  lw=1,label=r'$W^\alpha$')
-    ax.plot(ym,(mgavg-mgavg[-1])/us_avg,c='black',   label=r'$T$',lw=1)
-    #ax.plot(ym,(u_geo[0,:]-u_geo[0,-1])/us_avg,c='blue',ls='--', alpha=0.5)
-    #ax.plot(ym,(w_geo[0,:]-w_geo[0,-1])/us_avg,c='red',ls='--',  alpha=0.5)
-    ax.set_ylim(-1,1)
-    ax.set_xlim(0,2)
-
-    plt.show()
+if plot_convergence:
+    re_arr=[500,750,1000,1300,1301,1600] 
     plt.close('all') 
+    fig1=plt.figure(figsize=(8,6))
+    ax1=fig1.add_axes([0.1,0.1,0.8,0.8]) 
+    fig2=plt.figure(figsize=(8,6))
+    ax2=fig2.add_axes([0.1,0.1,0.8,0.8])
 
-    plt.imshow(u_sfc[:,:] - u_sfc[0,:],vmin=-0.02,vmax=0.02)
-    plt.colorbar()
-    plt.show() 
+    re_col= {500:'gray',750:'blue',1000:'pink',1300:'green',1301:'green',1600:'black'}
+
+    for re in re_arr: 
+        f=Dataset(files[re],'r',format='NETCDF4')
+        nu=2./(re*re)
+
+        t_all=f['t'][:]
+        i0=mp.geti(t_all,f['t'][-1]-2*np.pi)
+
+        print(i0,len(t_all),f['t'][-1]-f['t'][i0]) 
+
+        us=f['FrictionVelocity'][i0:]
+        al=f['FrictionAngle'][i0:]
+        u_dat=f['rU'][i0:,:]
+        w_dat=f['rW'][i0:,:]
+        y_dat=f['y'][:]
+        t=f['t'][i0:] 
+        us_avg=np.average(us)
+        al_avg=np.average(al)
+    
+        al_geo = np.arctan(w_dat[-1,-1]/u_dat[-1,-1])
+        al_sfc1 = al_avg*D2R
+        al_sfc2 = np.arctan(w_dat[-1,1]/u_dat[-1,1]) 
+        
+        [u_geo,w_geo] = mp.rotate(u_dat,w_dat,al_geo)
+        [u_sfc,w_sfc] = mp.rotate(u_dat,w_dat,al_sfc1) 
+        yp = y_dat*us_avg/nu
+        ym = y_dat/us_avg
+
+        al =np.arctan(w_dat/u_dat) / D2R
+        al_0 = np.arctan(w_dat[0,:]/u_dat[0,:]) 
+        al_1 = np.arctan(w_dat[-1,:]/u_dat[-1,:]) 
+
+
+        fangle=f['FrictionAngle'][i0:]
+        delta_al=al[0,1]-fangle[0]
+        al_avg=np.mean(fangle) 
+
+        print('====', re)
+        print(t[0],t[-1],us_avg,al_avg)
+        us_anom=1/us-1/us_avg
+        al_anom=al[:,1]-np.average(al[:,1])
+        ax1.plot((t-t[0])/(2*np.pi),us_anom,label=r'Re={} $Z-<Z>$'.format(re),  c=re_col[re],ls='-')
+        ax1.plot((t-t[0])/(2*np.pi),al_anom*D2R,label=r'$\alpha-<\alpha>$',c=re_col[re],ls=':')
+
+    lg=ax1.legend(loc='best')
+    lg.get_frame().set_linewidth(0.0) 
+    fig1.savefig('convergence_usalpha.pdf',format='pdf') 
 
 
 if plot_les_comp == True:

@@ -7,6 +7,9 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{xcolor}
+\usepackage{dirtytalk}
+\usepackage{colortbl}
+\usepackage{booktabs} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% BIBLIOGRAPHY DETAILS
@@ -17,6 +20,8 @@
 \renewcommand*{\multinamedelim}{\addcomma\space}
 \renewcommand*{\finalnamedelim}{~and\space}
 \setlength{\bibitemsep}{\baselineskip}
+\setlength\parindent{3em}
+\setlength\parskip{0.5em}
 \renewbibmacro{in:}{}
 
 \AtEveryBibitem{%
@@ -40,6 +45,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\todo}[1]{\textcolor{red}{$[$#1$]$}}
+\newcommand{\quotation}[1]{"#1"}
 
 % TO BE USED IN MATH-ENVIRONMENT 
 \newcommand{\SFC}{\mathrm{sfc}}
@@ -84,7 +90,7 @@ cause a slow-down of the mean wind reducing the Coriolis force thus turning the 
 in favor of the pressure gradient force. 
 %%
 Not only does the veering set the frame of reference for surface layer theory, it also has
-physical effects on large and small scales.
+effects at small and large scales.
 %
 From a large-scale perspective, the veering of wind across the planetary boundary layer determines
 the amount of cross-isobaric mass-flux, commonly referred to as 'Ekman pumping' \citep{ekman:AMA1905},
@@ -93,9 +99,9 @@ and it is thus a key factor in the life-cycle of large-scale synoptic systems.
 % %% This shear is probably not related to Ekman-turning 
 % On the mesoscale, shear in the surface layer a crucial factor for the initiation and sustainment of strong convective events (REFERENCE?).
 % 
-Locally, the directional shear of the wind in the upper part of the surface layer may cause a systmatic yaw
-for tall wind power generation devices where blades reach into the Ekman layer, i.e. that part of the boundary
-layer where the wind starts to turn. 
+At the small-scale end, the directional shear of the wind in the upper part of the surface layer
+may cause a systmatic yaw for tall wind power generation devices where blades reach into the Ekman layer,
+i.e. that part of the boundary layer where the wind starts to turn. 
 %
 \par
 %
@@ -115,7 +121,7 @@ Asymptotic similarity theory was later used by \citet{tennekes:JAS1973, blackada
 and--based on his seminal direct numerical simulations (DNS) of Ekman flow--,~\cite{spalart:JFM1989} suggested
 a modification to take into account effects of low to intermediate Reynolds numbers.
 Later on, constants were re-evaluated with a focus on the atmospheric boundary layer based on
-observations \cite{hogstrom:BM1988,hogstrom:BM1996}
+observations \citep{hogstrom:BM1988,hogstrom:BM1996}
 and numerical modelling \citep{spalart:PF2008, spalart:PF2009, ansorge:BM2014, ansorge:BM2019}. 
 %
 \par
@@ -156,7 +162,8 @@ a particular concern when it comes to wind-power forecasting \citep{optis:BM2014
 Despite rotational effects being considered, the formulation of these models for the outer layer
 and analysis of their performance primarily focuses on wind speed.
 % 
-\citet{jiang:JAS2018} recognized that the outer part of the Ekman boundary layer receives less attention in comparison
+Still, in \citeyear{jiang:JAS2018}, \citeauthor{jiang:JAS2018}
+recognized that the outer part of the Ekman boundary layer receives less attention in comparison
 with the surface layer and commence in studying the neutral problem by Large-Eddy simulation (LES).
 %
 They focus on the wind speed and find an extended logarithmic layer when considering the wind speed instead of
@@ -169,9 +176,9 @@ it is assumed that the shear vector $\tau(z)$ and stress vectors $(\p_zU,\p_zV)$
 Turbulent Ekman flow is considered here as a conceptual model of the
 homogeneous, stationary atmospheric boundary layer over a flat surface under neutral stratification. 
 %
-Universal profiles of the wind vector for turbulent Ekman flow can serve as well-described limit and reference
-for higher-order approaches taking into account possible effects of stratification, roughness or other physical
-complications encountered in the realgeophysical system.
+Universal profiles of the wind vector for turbulent Ekman flow not only are a well-described limit
+for theoretical exploration or higher-order approaches taking into account possible effects of stratification,
+roughness or other physical complications encountered in the realgeophysical system.
 %
 While, on first sight, the study of such a strongly idealized case appears as an academic problem, it contains the essence
 of surface similarity as it is used in most atmospheric models, be it conceptual or numeric ones.
@@ -182,7 +189,7 @@ roughness parameter $z_0$ and for larger roughness also a displacement height~%
 effects of stability are commonly accounted for by a linearization around the neutrally stratified profile~%
 \citep{monin:ARF1970, monin:1975, hogstrom:BM1988, hogstrom:BM1996,sakagami:BM2020}.
 %
-Such generalized profiles may also serve as better initial condition for numerical simulation of the flow,
+Furthermure, profiles can serve as better initial condition for numerical simulation of the flow,
 to minimize the length of initial transient periods, or as benchmark for turbulence
 closures that can be tuned to reproduce the neutral limit case.
 %
@@ -192,29 +199,46 @@ Despite the strong simplifications implied by our choice of set-up, there is no 
 this conceptually well-defined problem.
 %
 Large-Eddy simulation not only needs to be tuned for the surface shear stress and veering angle, but it also
-relies on sub-grid closures that often assume alignment of the stress with gradients -- a questionable pre-requisite when the wind rotates with height.
+relies on sub-grid closures that often assume alignment of the stress with gradients -- a questionable
+pre-requisite when the wind rotates with height.
 %
-Despite advances in analysis of this simplified set-up \citep{jiang:JAS2018} \todo{(MORE?)},
+\citet{esau:EFM2004} investigated the representation of the Ekman boundary layer by dynamical subgrid closures
+and \cite{zikanov:JFM2003} proposed a closure for the wind profile using a linearized representation of the eddy viscosity.
+%
+Despite advances in analysis of this simplified set-up \citep{jiang:JAS2018}, 
 there is yet insufficient understanding for a quantitative generalization of the results to
-arbitrary external forcing (manifest in variation of the Reynolds number).
+arbitrary external forcing (manifest in variation of the Reynolds number) -- and indeed the fundamental
+questions pertaining to such relatively simple dynamics of turbulence are not reflected in the
+research foci of LES for the ABL over the past 50 years \citep{stoll:BM2020}. 
 %
+\par
+% 
 At the same time, an increasing amount of high-quality and high-resolution data from turbulence-resolving approaches
 is emerging due to recent advances in high-performance computing and its application to geophysical problem sets;
 the geophysical range of scale separation, however, is--and it will remain so for the foreseeable future--out of reach
-for such simulation.
+for such simulation \citep{dimotakis:ARF2005}.
 %
-Here, the routinely employed concept of Reynolds-number similarity can help: it states that certain statistics (normally those of low order) become independent of the Reynolds number when scaled appropriately \todo{Dimotakis / da Silva / Pope referece?} .
+Here, the routinely employed concept of Reynolds-number similarity can help. It postulates the existence
+of \say{\emph{fully developed turbulence}  believed to occur for a sufficiently large but finite Reynolds number}
+\citep{barenblatt:PF1995}.
 %
-It appears that for certain statistics in Ekman flow, this regime is reached with the Reynolds numbers that became
-possible with the increasing capabilities of supercomputering over the past years.
+(Already in \citeyear{moin:ARF1998}, this in fact lead \citeauthor{moin:ARF1998} to the question \emph{how high a Re is high enough}?) 
 %
-The robust features of mean velocity profiles across a range of Reynolds numbers
-are exploited in this work to develop a formulation for
-both the stream-wise and span-wise components of the mean velocity vector as a function of the
-Reynolds number. 
-
-\todo{Numerical approach, DNS, Scale-separation, Re-similarity
-  \citep{dimotakis:JFM2000, dasilva:ARF2014, pope:2000, moin:ARF1998, mellado:JAM2018}}
+In fully developed turbulence certain statistics such as dissipation \citep{dimotakis:ARF2005} or profiles of
+mean velocity \citep{barenblatt:JFM1993} become independent of the Reynolds number when scaled appropriately while
+other statistics, such as the near-wall maximum in velocity fluctuation depend on $\RE$ \citep{baars:JFM2020a} and external
+interfaces may exert an impact on near-wall scaling \citep{dasilva:ARF2014}. 
+%
+It appears that for certain statistics in Ekman flow, fully-developed turbulence is reached with the
+Reynolds numbers that became possible with the increasing capabilities of supercomputering over
+the past decades.
+%
+\par
+% 
+This paper exploits the robust features of mean velocity profiles from direct numerical
+simulation across a range of Reynolds numbers to formulate both the stream-wise and span-wise components
+of the mean velocity vector as a function of the Reynolds number.
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Problem Formulation and Numerical Approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,7 +280,7 @@ We use the geostrophic wind as velocity and the Coriolis parameter $f$ as time s
 %
 \par
 %
-The non-dimensionalized set of governing equation reads as 
+The non-dimensionalized governing equations read as 
 \begin{subequations} 
 \begin{eqnarray}
   \frac{\partial u_i}{\partial t} &=& \frac{\p \pi}{\p x_i} - u_j \frac{\p u_i}{\p x_j} + \epsilon_{i2j} (u_j -G_j)   + \frac{1}{\RE} \frac{\p^2 u_i}{\p x_{j}^2} \\ 
@@ -264,15 +288,106 @@ The non-dimensionalized set of governing equation reads as
 \end{eqnarray} 
 \label{eqn:governing} 
 \end{subequations}
-where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, and $g_j=G_j/G$ are non-dimensionalized components geostrophic wind (with $g_{1}^2+g_{3}^2=1$ by construction). 
+where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, and $g_j=G_j/G$ are non-dimensionalized components
+geostrophic wind (with $g_{1}^2+g_{3}^2=1$ by construction).
 %
+These equations are solved inside a bounded cube of size $L_x \times L_y \times L_z$ with periodic boundary conditions in the lateral directions $Oxz$, a no-slip--no-penetration boundary at $y=0$ and
+a no-penetration, free-slip boundary at $y=L_y$.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Numerical Simulations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\todo{DNS Code}
+The problem is solved numerically by tLab\footnote{https://github.com/turbulencia/tlab},
+an open-source tool-suite to simulate and analyze turbulent flows.
+% 
+We use here a fourth-order--five-step Runge--Kutta integration and sixth-order compact schemes
+for spatial derivatives in all directions.
+%
+The incompressibility constraint is enforced by a fractional step approach where the Poisson equation
+for the pressure field is soled to machine accuracy using a combined spectral/compact approach as
+described in \citet{mellado:ZaM2012}.
+%
 \par
+%
+Simulations used here are shown in Tab.~\ref{tab:sim-setup}.
+%
+We extend an existing set of simulations for $\RE\in\{125\,000, 281\,250,\ 500\,000\}$ \citep[gray shading; cf.][]{ansorge:BM2014,ansorge:JFM2016} 
+by new simulations at higher Reynolds numbers up to $1.28\times10^6$.
+%
+In total, this yields one order of magnitude variation in terms of the scale separation in the boundary layer.
+%
 \todo{(new and old) Simulations}
+\begin{table}
+  \caption{\label{tab:sim-setup} Direct numerical simulation datasets used in this work}
+  \begin{tabular}{c r r c c c c c}
+    \toprule 
+    $\RE_\Lambda$ & $\RE_D$ & $L_{xy}/\Lambda$ & $N_x\times N_y\times N_z$ & $\Delta x^+$ & $\Delta y^+$ & $\left.\Delta z^+\right|_{z=0}$ \\ 
+    \midrule
+    \rowcolor{gray!30}
+       $125\,000$ &    $500$& 1.08 & $2048\times2048\times192$&4.1& 4.1& 1.05\\
+    \rowcolor{gray!30}
+       $281\,250$ & $   750$& 1.08 & $3072\times3072\times384$&5.6&11.2& 1.60\\
+    \rowcolor{gray!30}
+       $500\,000$ & $1\,000$& 1.08 & $3072\times6144\times512$&9.3& 4.7& 1.14\\
+    \midrule
+       $845\,000$ & $1\,300$& 0.54 & $2560\times5120\times640$&8.9& 4.5& 0.99\\
+
+    $1\,280\,000$ & $1\,600$& 0.54 & $3860\times7680\times960$&8.6& 4.3& 1.00\\ 
+    \bottomrule 
+  \end{tabular} 
+\end{table}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Overview of the new simulations at $\RE_\tau$ up to 3000}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+Uniqueness and necessity of new simulations
+%
+\par
+%
+PARAGRAPH ON BULK PARAMETERS AND SCALING (cf. \ref{tab:bulk_results})
+\begin{table}
+  \caption{Bulk characterization of the simulations \label{tab:bulk_results}}
+  \begin{tabular}{r r r r r r r }
+    \toprule
+    Re & $\delta^+=\RE_\tau$& $u_\star$ & $\alpha$ & $\delta_{95}/\delta$ & $f u_\star^{-3}\int_{0}^{\delta} e \mathrm{d} z $ & $ G^{-3}\int_{0}^{\delta} \epsilon \mathrm{d}z$\\
+      \midrule 
+      \rowcolor{gray!30} 
+      500 & 479 & 0.0619& 25.5 & 0.66& 0.88& 1.31 \\
+      \rowcolor{gray!30} 
+      750 & 886 & 0.0561& 21.0 & 0.65& 0.90& 1.34 \\
+      \rowcolor{gray!30}
+      1000& 1403& 0.0530& 18.8 & 0.62& 0.92& 1.30 \\
+      \midrule
+      1300& 2122& 0.0501& 17.9 & 0.59& 0.85& 1.24 \\
+      1600& 2978& 0.0482& 17.2 & 0.61& 0.91& 1.21 \\ 
+      \bottomrule
+    \end{tabular}
+\end{table} 
+%
+\par
+%
+PARAGRAPH ON VELOCITY AND STRESS PROFILES cf. \ref{fig:stresses}
+\begin{figure}
+  \includegraphics[width=0.66\textwidth]{../plot/eddy_viscosity.pdf}
+  \caption{Reynolds stresses and eddy viscosity across the Ekman layer plotted in ineer scaling for
+    various Reynolds number
+    \label{fig:stresses}} 
+\end{figure} 
+%
+\par
+%
+PARAGRAPH ON TURBULENCE STRUCTURE (2D SLICES, SPECTRA?) cf. Fig.~\ref{fig:slices}  
+
+\begin{figure}
+  \centerline{\includegraphics[width=0.33\textwidth]{../plot/PLANES/tke_xz_10.pdf}
+  \includegraphics[width=0.33\textwidth]{../plot/PLANES/tke_xz_50.pdf}
+  \includegraphics[width=0.33\textwidth]{../plot/PLANES/tke_xz_400.pdf}}
+  \centerline{\includegraphics[width=\textwidth]{../plot/PLANES/tke_xy_1.pdf}}
+  \caption{horizontal slices of turbulence kinetic energy in the Buffer layer (i=10), Logarithmich Layer (i=100) and outer lzayer (i=400); coloring between percentiles 4 and 96 of the respective image. Lower panel:streamwise--vertical intersect through the domain} 
+  \label{fig:slices} }
+  
+\end{figure} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Towards a Universal Velocity Profile for the Turbulent Ekman Layer}
@@ -294,7 +409,7 @@ turbulent Ekman flow.
 \end{itemize}
 \begin{figure}
   \centerline{\includegraphics[width=0.7\textwidth]{../plot/ustar_alpha.pdf}}
-  \caption{Variation of $Z_\star$ and surface veering with Reynolds number according to
+  \caption{Variation of geostrophic drag, $Z_\star$, and surface veering, $\alpha$, with Reynolds number according to
     the theory by Spalart et al. (1989) and as estimated from DNS data}
   \label{fig:drag_law}
 \end{figure}
@@ -321,7 +436,7 @@ $Re_D$ is approximated reasonably by the formulation
   u_\star= 4\log(\mathbf{Re}_D))-8
 \end{equation}
 which quantifies the 'weak' dependence of $u_\star$ on the Reynolds number as an approximately logarithmic one, at least
-for problems with a scale separation on the order that is relevant to geophysical problem ($Re_D<10^{8}$).  
+for problems with a scale separation on the order that is relevant to geophysical problems ($Re_D<10^{8}$).  
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -333,10 +448,8 @@ The super-geostrophic maximum of streamwise velocity and a secondary minimum alo
 the boundary layer are well-described by a classic Ekman spiral with adapted boundary conditions and a shift
 in reference height.
 %
-The textbook solution for the Ekman layer reads as 
-\todo{equations / figures}
 \begin{figure}
-  \includegraphics[width=\textwidth]{../plot/outer_layer.pdf}
+  \includegraphics[width=0.5\textwidth]{../plot/outer_layer_u.pdf}\includegraphics[width=0.5\textwidth]{../plot/outer_layer_w.pdf}
   \caption{} 
 \end{figure}
 
@@ -476,7 +589,7 @@ DNS data to the statistical equilibrium.
 %
 %%% PAR
 %
-\paragraph{Inner Layer.} It is important to note that the logarithmic layer observed here for the spanwise velocity does not
+\subsub{Inner Layer.} It is important to note that the logarithmic layer observed here for the spanwise velocity does not
 conincide with the log-region of the streamwise velocity but is rather a 'continuation' through the outer layer.
 %
 This is consistent with the recent finding of a second log-region in the outer region of Ekman flow
@@ -663,19 +776,30 @@ to the inner layer by letting
   \end{matrix} \right) \\
 \end{eqnarray}
 Matching the profile at $\xi=0$, one obtains
-$A = \Delta u_\text{match} $ and $B=-\Delta w_\text{match} $. Otherwise, it is
-\begin{subequations} 
-\begin{eqnarray}
-  e^\gzm \Delta u_\text{match} = A \cos\gzm + B\sin\gzm \\
-  e^\gzm (\cos\gzm \Delta u_\text{match} - \sin\gzm \Delta w_\text{match}) = A (\cos^2\gzm + \sin^2\gzm)
-\end{eqnarray}
-\begin{eqnarray}
-  \Rightarrow A &=&e^\gzm (\cos\gzm\Delta u_\text{match} + \sin\gzm \Delta w_\text{match})\\
-  B&=&  \frac{e^\gzm \Delta u_\text{match} - A \cos \gzm}{\sin\gzm} \\
-  &=& e^\gzm \frac{ \sin^2\gzm \Delta u_\text{match}+\sin\xi\cos\xi \Delta w_\text{match} }{\sin\xi }  \\
-  &=& e^\gzm (\sin\xi\Delta u_\text{match} + \cos\xi\Delta w_\text{match}) 
-\end{eqnarray}
-\end{subequations} 
+$A = \Delta u_\text{match} $ and $B=-\Delta w_\text{match} $; and when the direction $Ox$ is aligned
+with the geostrophic wind, we obtain the textbook-case $A=|\mathbf{G}|$ and $B=0$. 
+
+Otherwise, choosing $B \ne 0$ allows to introduce a phase shift of the Ekman rotation with respect to
+the decay of the wind spiral.
+%
+As, however, in our context, the thickness and position of the spiral can already be controlled by
+the eddy viscosity and an offset in $\zeta$, here we let $B=0$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Determining parameters A and B from profile values at a given height
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% \begin{subequations} 
+%% \begin{eqnarray}
+%%   e^\gzm \Delta u_\text{match} = A \cos\gzm + B\sin\gzm \\
+%%   e^\gzm (\cos\gzm \Delta u_\text{match} - \sin\gzm \Delta w_\text{match}) = A (\cos^2\gzm + \sin^2\gzm)
+%% \end{eqnarray}
+%% \begin{eqnarray}
+%%   \Rightarrow A &=&e^\gzm (\cos\gzm\Delta u_\text{match} + \sin\gzm \Delta w_\text{match})\\
+%%   B&=&  \frac{e^\gzm \Delta u_\text{match} - A \cos \gzm}{\sin\gzm} \\
+%%   &=& e^\gzm \frac{ \sin^2\gzm \Delta u_\text{match}+\sin\xi\cos\xi \Delta w_\text{match} }{\sin\xi }  \\
+%%   &=& e^\gzm (\sin\xi\Delta u_\text{match} + \cos\xi\Delta w_\text{match}) 
+%% \end{eqnarray}
+%% \end{subequations} 
 
 \printbibliography 
 
