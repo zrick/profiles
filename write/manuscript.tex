@@ -77,6 +77,12 @@
   in the context of asymptotic matching; it exhibits a mixed scaling in the surface layer, but follows
   outer scaling for most of the outer layer.
   %
+  Viscous stress scales universally across the boundary layer in inner units while the total stress
+  becomes universal as a function of outer height.
+  %
+  This implies a mixed scaling for the turbulent stress and eddy viscosity across the inner layer
+  and convergence to a universal scaling as function of the outer height across the outer layer
+  for increasing scale separation vide Reynolds numbers. 
 \end{abstract}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -255,28 +261,51 @@ due to latitudinal variation of the rate of rotation.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 The dimensional velocity vector of the numerical simulations is $\underline{U} = (U_1,U_2,U_3) = (U,V,W)$ over the coordinate system
-$Oxyz$, where an approximate alignment (plus/ minus few degrees centigrade) of the direction $Ox$ with the surface shear stress is achieved.
+$Oxyz$, where an approximate alignment (plus/ minus few degrees) of the direction $Ox$ with the surface shear stress is achieved.
 The coordinate $Oy$ points away from the wall,  and $Oz$ points in the span-wise direction normal to $Oxy$.
 For analysis of the results, we use two coordinate systems that are
-(i)  exactly aligned with the surface shear stress and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
+(i)  exactly aligned with the surface shear stress
+\begin{subequations}
+\begin{equation}
+  \underline{\tau}_\mathrm{sfc} = \left(\begin{array}{c} \tau_x\\ \tau_y\\\tau_z\end{array}\right) = - \nu \left( \frac{\partial U}{\partial z} \hat{e}_x + \frac{\partial V}{\partial z} \hat{e}_y\right)
+\end{equation}
+and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
 (ii) the coordinate system aligned with the free-atmosphere geostrophic wind labelled by an upper index $G$ as in $\underline{U}^G$.
 %
-We denote by $u_\star$ the modulus surface friction velocity and let $Z_\star=1/u_\star$ for brevity. 
+We denote the normalized modulus of the surface friction by
+\begin{equation}
+  u_\star = \sqrt{ || - \underline{\tau}_\mathrm{sfc} || } 
+  \label{eqn:ustar_def}
+\end{equation} and let $Z_\star=G/u_\star$;
+the surface veering angle $\alpha_\star$ is the angle between $\underline{\tau}$ and the geostrophic wind 
+\begin{equation}
+  \alpha_\star = \sphericalangle \left(\underline{G}, \underline{\tau}_\mathrm{sfc} \right). 
+\end{equation}
+\end{subequations}
+Analogously, we denote the height-local veering of the wind
+$\alpha(z)= \sphericalangle \left( \underline{G},\underline{U}(z)\right)$. 
 %
 \par
 %
 We consider the incompressible Navier--Stokes equations for the three velocity components on the f-plane in a framework
 that is governed by the physical parameters
-(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_3^2}$ (where $\mathbf{G}=(G_1,0,G_3)$ is the geostrophic wind vector),
+(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_3^2}$ (where $\mathbf{G}=(G_1,G_2,0)$ is the geostrophic wind vector),
 (ii)  Coriolis parameter $f$ (representing the angular rotation), and
 (iii) kinematic viscosity $\nu$.
    %
 These yield a Reynolds number $\RE$ as non-dimensional parameter governing the system.
 %
-We use the geostrophic wind as velocity and the Coriolis parameter $f$ as time scale for the non-dimensional framework which implies the Rossby radius $\LR=G/f$ as length scale, such that
+We use the geostrophic wind as velocity and the Coriolis parameter $f$ as time scale for the non-dimensional framework which implies the Rossby radius $\LR=G/f$ as length scale, such that the Reynolds number governing the problem reads as
 \begin{equation}
-  \RE=\frac{G \LR }{\nu}. 
+  \RE_\Lambda=\frac{G \LR }{\nu}. 
 \end{equation}
+%
+The scales used in defining $\RE_\Lambda$ loose there relevance in describing the turbulent state of the flow. The friction Reynolds number
+\begin{equation}
+  \RE_\tau = \frac{u_\star\delta}{\nu} = \frac{\RE_\Lambda}{Z_\star^2}, 
+\end{equation}
+where $\delta=u_\star/f$, gives a measure for the turbulence scale separation that is comparable to other
+wall-bounded flow geometries such as rotating or non-rotating channel, pipe, or Couette flow.
 %
 \par
 %
@@ -289,10 +318,10 @@ The non-dimensionalized governing equations read as
 \label{eqn:governing} 
 \end{subequations}
 where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, and $g_j=G_j/G$ are non-dimensionalized components
-geostrophic wind (with $g_{1}^2+g_{3}^2=1$ by construction).
+geostrophic wind (with $g_{1}^2+g_{2}^2=1$ by construction).
 %
-These equations are solved inside a bounded cube of size $L_x \times L_y \times L_z$ with periodic boundary conditions in the lateral directions $Oxz$, a no-slip--no-penetration boundary at $y=0$ and
-a no-penetration, free-slip boundary at $y=L_y$.
+These equations are solved inside a bounded cube of size $L_x \times L_y \times L_z$ with periodic boundary conditions in the lateral directions $Oxy$, a no-slip--no-penetration boundary at $z=0$, and
+a no-penetration, free-slip boundary at $z=L_z$.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Numerical Simulations}
@@ -304,21 +333,21 @@ We use here a fourth-order--five-step Runge--Kutta integration and sixth-order c
 for spatial derivatives in all directions.
 %
 The incompressibility constraint is enforced by a fractional step approach where the Poisson equation
-for the pressure field is soled to machine accuracy using a combined spectral/compact approach as
+for the pressure field is solved to machine accuracy using a combined spectral/compact approach as
 described in \citet{mellado:ZaM2012}.
 %
 \par
 %
 Simulations used here are shown in Tab.~\ref{tab:sim-setup}.
 %
-We extend an existing set of simulations for $\RE\in\{125\,000, 281\,250,\ 500\,000\}$ \citep[gray shading; cf.][]{ansorge:BM2014,ansorge:JFM2016} 
-by new simulations at higher Reynolds numbers up to $1.28\times10^6$.
+We extend an existing set of simulations for $\RE_\Lambda\in\{125\,000; 281\,250;\ 500\,000\}$ \citep[gray shading; cf.][]{ansorge:BM2014,ansorge:JFM2016} 
+by new simulations at higher Reynolds numbers up to $1.28\times10^6$ with a horizontal domain extent up to $3.3\times 10^4$ viscous units. 
 %
 In total, this yields one order of magnitude variation in terms of the scale separation in the boundary layer.
 %
-\todo{(new and old) Simulations}
 \begin{table}
-  \caption{\label{tab:sim-setup} Direct numerical simulation datasets used in this work}
+  \caption{Direct numerical simulation datasets used in this
+    work \label{tab:sim-setup}}
   \begin{tabular}{c r r c c c c c}
     \toprule 
     $\RE_\Lambda$ & $\RE_D$ & $L_{xy}/\Lambda$ & $N_x\times N_y\times N_z$ & $\Delta x^+$ & $\Delta y^+$ & $\left.\Delta z^+\right|_{z=0}$ \\ 
@@ -338,19 +367,77 @@ In total, this yields one order of magnitude variation in terms of the scale sep
 \end{table}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Overview of the new simulations at $\RE_\tau$ up to 3000}
+\section{Scaling behavior of the flow for $\RE_\tau$ up to 3000}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-Uniqueness and necessity of new simulations
+The generalization of profiles to arbitrary Reynolds numbers 
+requires sufficient scale separation in the simulations to not only quantify the effect of
+the Reynolds number on low-order flow statistics, but also assess the corresponding rate-of-change
+to eventually allow for an extrapolation of the findings.
+%
+While the simulations available give confidence in a first-order representation of the turbulent
+problem, the estimation of higher-order effects such as the dependency of the Reynolds number requires
+a broader scale separation that is made available by the two new simulations for 
+(cf. Tab.~\ref{tab:sim-setup}). 
+%
+%%% We thus require sufficient scale separation; while we are certain that even the lower Reynolds numbers
+%%% are well within the turbulent regime, the range of separation required to estimate $\RE$-effects should
+%%% be about one magnitude at the least, i.e. we anticipate that data for $\mathcal{O}(\RE)=10^6$ would 
+%%% allow us to extrapolate findings. 
+%
+Data at such scale separation has been obtained previously \citep[cf.][]{spalart:PF2008,spalart:PF2009}, 
+but we also need high confidence with respect to the convergence of simulation data for slow oscillations 
+and with respect to sampling convergence, which translates to two further requirements on the data: 
+%
+First, data should be free of artifacts from long-term oscillations across the vertical
+extent of the domain--primarily, simulations should be free of effects originating from the
+inertial oscillation; this is achieved here by replacing the mean value of the three-dimensional
+velocity fields by the time mean over a whole inertial oscillation. 
+%
+Second, high accuracy is also needed in terms of the statistical convergence of averages,
+bulk measures and large-scale structures; this requires a domain size $L_{x} > \mathcal{O}(\delta_{95})$. 
+%
+We use here $L_{x}=L_{y}=1.08\Lambda$ for cases with $\RE \le 1000$ and
+$L_{x}=L_{y}=0.54\Lambda$ for $\RE \ge 1300$ which corresponds to $L_{x}/\delta_{95}\approx 25$ for $Re_D=500$
+and $L_{x}/\delta_{95} \approx 18$ for $Re_D=1300$.
 %
 \par
 %
-PARAGRAPH ON BULK PARAMETERS AND SCALING (cf. \ref{tab:bulk_results})
+Bulk parameters of the simulations are given in Tab.~\ref{tab:bulk_results}.
+%
+The surface stress is characterized by $u_\star$ and $\alpha_\star$ in relation to the geostrophic wind vector
+and discussed in more detail as the drag law below in Sec.~\ref{sec:drag-law}
+(we find the expected slight decrease of $u_\star$ and $\alpha_\star$ with increasing $\RE$).
+%
+The boundary-layer height estimated from the 95\% stress reduction, $\delta_{95}$, is around $0.6\delta$ to $0.66\delta$. 
+%
+Interestingly, the integrated TKE $\int_{0}^{\delta} e\mathrm{d}z$ stays constant when normalized by the friction velocity $u_\star$
+while the integrated dissipation $\int_{0}^{\delta} \epsilon\mathrm{d}z$ exhibits inviscid scaling when normalized
+by the magnitude $G$ of the geostrophic wind. 
+%
+(Alternatively normalized TKE and dissipation,
+$f G^{-3} \int e \mathrm{d} z$ and $u_\star^{-3} \int \epsilon\mathrm{d}z$, exhibit substantial
+dependence on $\RE$ for the variation of $u_s\tar$.)
+%
+This indicates that the bulk dissipation is governed by the forcing $G$--irrespective of $\RE$. 
+%
+Changes in $\RE$, however, affect the level and organization of turbulence, and the parameter
+representing this dependency is the friction velocity $u_\star$ which describes the turbulence
+production processes in the surface layer, in particular in the buffer layer. 
+% 
 \begin{table}
-  \caption{Bulk characterization of the simulations \label{tab:bulk_results}}
+  \caption{Bulk characterization of the simulations for different Reynolds numbers 
+    Viscous Reynolds number $\RE$,
+    friction Reynolds number  $\RE_\tau$,
+    friction velocity $u_\star$,
+    surface veering angle $\alpha_\star$,
+    normalized boundary layer depth $\delta_{95}/\delta$
+    inner normalization of vertically integrated TKE,
+    outer normalization of vertically integrated dissipation.
+    \label{tab:bulk_results}}
   \begin{tabular}{r r r r r r r }
     \toprule
-    Re & $\delta^+=\RE_\tau$& $u_\star$ & $\alpha$ & $\delta_{95}/\delta$ & $f u_\star^{-3}\int_{0}^{\delta} e \mathrm{d} z $ & $ G^{-3}\int_{0}^{\delta} \epsilon \mathrm{d}z$\\
+    Re & $\delta^+=\RE_\tau$& $u_\star$ & $\alpha_\star$ & $\delta_{95}/\delta$ & $f u_\star^{-3}\int_{0}^{\delta} e \mathrm{d} z $ & $ G^{-3}\int_{0}^{\delta} \epsilon \mathrm{d}z$\\
       \midrule 
       \rowcolor{gray!30} 
       500 & 479 & 0.0619& 25.5 & 0.66& 0.88& 1.31 \\
@@ -367,25 +454,138 @@ PARAGRAPH ON BULK PARAMETERS AND SCALING (cf. \ref{tab:bulk_results})
 %
 \par
 %
-PARAGRAPH ON VELOCITY AND STRESS PROFILES cf. \ref{fig:stresses}
-\begin{figure}
-  \includegraphics[width=0.66\textwidth]{../plot/eddy_viscosity.pdf}
-  \caption{Reynolds stresses and eddy viscosity across the Ekman layer plotted in ineer scaling for
-    various Reynolds number
-    \label{fig:stresses}} 
-\end{figure} 
+Velocity profiles in inner and units (Fig.~\ref{fig:profiles}a,b) are in accordance
+with previous work \citep{coleman:JFM1992,spalart:PF2008,spalart:PF2009,ansorge:BM2014,ansorge:BM2019}:
+%
+The profile of the shear-aligned streamwise velocity component are well-collapsed for the Reynolds
+numbers investigated below $z^-\approx 0.15$ (circles in Fig.~\ref{fig:profiles}a); the logarithmic
+law is appropriate for $50 < z^+ < 0.15 Re_\tau$, where $z^+ = Re_\tau z^-$.
+%
+While the profiles $U^{\alpha_\star+}(z^+)$ diverge between different $\Re$ beyond $z^-=0.15$,
+the corresponding profiles $U^{\alpha_\star}(z^-)/u_\star$ agree closely,
+irrespective of $\RE$ which illustrates the
+inner--outer scale-duality in this external flow. 
+%
+It is noteworthy that also in the outer layer of the flow, $u_\star$--and not the magnitude the
+geostrophic wind speed $G$--is the governing velocity scale for inviscid, i.e. $\RE$-independent,
+normalization. \todo{WHY? cf. TKE/Dissipation normalization above}
+%
+No collapse in inner units is found for the profiles of spanwise velocity $V^{\alpha_\star+}(z^+)$;
+%
+When normalized in outer units, the profiles of spanwise velocity $V^{\alpha_\star}(z^-)/u_\star$
+agree well beyond $z^-\approx 0.3$ whereas the profiles of the streamwise component collapse also
+within the overlap layer that extends much closer down to the surface
+(circles in Fig.~\ref{fig:profiles}b).
+%
+While low-$\RE$ effects appear to be present for $\mathcal{O}(\RE)<10^3$, the spanwise component
+appears to converge to an $\RE$-independent limit within the range of scale separation considered
+here.
 %
 \par
 %
-PARAGRAPH ON TURBULENCE STRUCTURE (2D SLICES, SPECTRA?) cf. Fig.~\ref{fig:slices}  
+\begin{figure}
+  \begin{flushleft}
+    \textbf{a)}\hspace{0.47\textwidth} \textbf{b)}\\
+    \includegraphics[width=\textwidth]{../plot/uv_innerouter.pdf}\\
+    \caption{
+      \textbf{a)} Shear-aligned velocity profiles in inner units;
+      \textbf{b)} Shear-aligned velocity deficit in outer units; circles mark the
+      height $z^-=0.15$; dashed line gives the best logarithmic fit to the data. 
+      \label{fig:profiles}
+    }
+  \end{flushleft}
+\end{figure}
 
 \begin{figure}
-  \centerline{\includegraphics[width=0.33\textwidth]{../plot/PLANES/tke_xz_10.pdf}
-  \includegraphics[width=0.33\textwidth]{../plot/PLANES/tke_xz_50.pdf}
-  \includegraphics[width=0.33\textwidth]{../plot/PLANES/tke_xz_400.pdf}}
-  \centerline{\includegraphics[width=\textwidth]{../plot/PLANES/tke_xy_1.pdf}}
-  \caption{horizontal slices of turbulence kinetic energy in the Buffer layer (i=10), Logarithmich Layer (i=100) and outer lzayer (i=400); coloring between percentiles 4 and 96 of the respective image. Lower panel:streamwise--vertical intersect through the domain} 
-  \label{fig:slices} }
+  \begin{flushleft} 
+    \textbf{a)}\hspace{0.47\textwidth} \textbf{b)}\\
+    \includegraphics[width=\textwidth]{../plot/stresses.pdf}
+    \textbf{c)}\hspace{0.47\textwidth} \textbf{d)}\\    
+    \includegraphics[width=\textwidth]{../plot/eddy_viscosity.pdf}\\
+  \end{flushleft} 
+  \caption{
+    \textbf{a-b)} Profiles of
+    the turbulent stress $S_\mathrm{turb}^+$ (solid), 
+    the viscous stress  $S_\mathrm{visc}^+$ (dotted), 
+    and the total stress, $S^+=S_\mathrm{visc}^++S_\mathrm{turb}^+$ (dashed)
+    as a function of inner height \textbf{(a)} and outer height \textbf{(b)}. 
+    \textbf{c-d)} Normalized eddy viscosity $\nu_E$ (solid) plotted versus
+    inner \textbf{(c)} and outer height \textbf{(d)}.
+    Different colors are for different Reynolds numbers (cf. Tab.~\ref{tab:sim-setup}).
+    Circles in \textbf{(a)} and \textbf{(b)} denote the height
+    $z^-=0.15$, diamonds in \textbf{(c)} and \textbf{(d)} are for $z^+=50$
+    as in Fig.~\ref{fig:profiles}.
+    \label{fig:stresses}}  
+\end{figure} 
+The normalized viscous stress
+\begin{subequations}
+\begin{equation}
+  S_\mathrm{visc}= \nu \sqrt\left(\frac{\p U}{\p z}\right)^2  + \left(\frac{\p V}{\p z}\right)^2}
+\end{equation}
+exhibits universal scaling when considered as $S_\mathrm{visc}^+(z^+)$ (Fig.~\ref{fig:stresses}c); this normalization is also appropriate in the outer layer where the viscous stress
+is, however, small. 
+%
+Small deviations from the universal profile are observed for the smallest Reynolds number $\RE=500$; 
+we attribute these to low-$\RE$ effects in the only transitionally turbulent flow ($\RE_\tau=479$). 
+%
+In contrast to the viscous stress, the total stress follows outer normalization, i.e.
+$S^+(z^-)$ is universal.
+%
+This implies a mixed scaling for the turbulent stress, 
+\begin{equation}
+  S_\mathrm{turb} = \sqrt{\overline{uw}^2 + \overline{vw}^2}. 
+\end{equation} 
+Indeed, $S_\mathrm{turb}$ only follows inner normalization below $z^+\lesssim 20$
+(where the turbulent contribution is negligible).
+%
+In the outer layer, where $S_\mathrm{visc}\rightarrow 0$, $S_\mathrm{turb}^+$
+follows outer normalization for $z^-\gtrsim0.15$---with increasing accuracy for larger $\RE$ and larger distance from
+the surface. 
+%
+In the overlap region, i.e. for $z^+>20$ and $z^-<0.15$, the mixed scaling for the
+turbulent stress can be expressed as
+\begin{equation}
+  S_\mathrm{turb}^+(z^+,\RE_\tau) = S^+(z^-) - S_\mathrm{visc}^+(z^+), 
+\end{equation}
+where $z^-=z^+/\RE_\tau$. 
+%
+\par
+%
+The Eddy viscosity plays a crucial part when modelling profiles and the vertical
+transport in turbulent flow. 
+%
+In analogy to the Fick-law for molecular diffusion, the eddy diffusivity is
+the effective diffusivity that yields the turbulent transport $S_\mathrm{turb}$ based
+on the strain rate.
+%
+For the symmetries in the flow (horizontal homoegeneity, and $W=0$), it is
+%
+\begin{equation}
+  \nu_{E}= \frac{S_\mathrm{turb}}{\sqrt{\left(\frac{\p U}{\p z} \right)^2 + \left(\frac{\p V}{\p z}\right)^2}} = \nu \frac{S_\mathrm{turb}}{S_\mathrm{visc}}.  
+\end{equation}
+%
+The inner normalization of $\nu_E$ s 
+
+\begin{eqnarray}
+ \nu_E^+  \frac{Z_{\star}^{2}}{\delta+} &=& \frac{\nu_E^+}{\nu}
+\end{eqnarray} 
+\par
+%
+\todo{PARAGRAPH ON TURBULENCE STRUCTURE (2D SLICES, SPECTRA?) cf. Fig.~\ref{fig:slices}}
+
+\begin{figure}
+  \centerline{
+    \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_10.pdf}
+    \includegraphics[trim=1152 0 0 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_50.pdf}
+    \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_400.pdf}}
+  \centerline{
+    \includegraphics[trim=1152 0 0 0, clip, width=\textwidth]{../plot/PLANES/tke_xy_1.pdf}}
+  \caption{horizontal slices of turbulence kinetic energy in the
+    Buffer layer (i=10),
+    logarithmic Layer (i=100), and
+    outer layer (i=400);
+    coloring between percentiles 4 and 96 of the respective image. Lower panel:streamwise--vertical intersect through the domain 
+    \label{fig:slices}}
   
 \end{figure} 
 
@@ -409,16 +609,17 @@ turbulent Ekman flow.
 \end{itemize}
 \begin{figure}
   \centerline{\includegraphics[width=0.7\textwidth]{../plot/ustar_alpha.pdf}}
-  \caption{Variation of geostrophic drag, $Z_\star$, and surface veering, $\alpha$, with Reynolds number according to
-    the theory by Spalart et al. (1989) and as estimated from DNS data}
-  \label{fig:drag_law}
+  \caption{Variation of geostrophic drag, $Z_\star$, and surface veering, $\alpha_\star$, with Reynolds number according to
+    the theory by Spalart et al. (1989) and as estimated from DNS data
+    \label{fig:drag_law}}
 \end{figure}
 % 
 \subsection{Drag-Law}
+\label{sec:drag-law}
 A drag-law for Ekman flow determines two key parameters of the flow as a function of Reynolds number alone.
 %
 These are, first, the modulus of the surface friction normalized by the geostrophic wind forcing, $u_\star$ and,
-second, the direction of surface shear stress, $\alpha$, also termed wind veering. 
+second, the direction of surface shear stress, $\alpha_\star$, also termed wind veering. 
 %
 A non-zero veering of the wind is a rather special case in comparison with most turbulent flows conisdered in an
 engineering context, and it confronts us with a situation where the most appropriate coordinate system for analysis
@@ -465,12 +666,12 @@ viscosity, turbulence and interaction with the outer region of the flow with the
 In immediate vicinity to the surface, local turbulent mixing cannot occur for the no-slip/no-penetration boundary condition,
 and the mean velocity is described by a viscous profile of the form
 \begin{equation}
-  (U,W)^{\alpha+}  = (z^+,0)  
+  (U,W)^{\alpha_\star+}  = (z^+,0)  
 \end{equation}
 where the direction of the velocity points into the exact opposite direction of the wall shear stress $\tau$. 
 In absence of roughness elements and for small roughness ($z_0^+<5$), this linear regime is known as
 viscous sub-layer \cite{foken:m2002,foken:BM1978}.
-In fact, this law of the wall has no degree of freedom given the drag, i.e. once $u_\star$ and $\alpha$ are defined. 
+In fact, this law of the wall has no degree of freedom given the drag, i.e. once $u_\star$ and $\alpha_\star$ are defined. 
 %
 However, theoretical foundation is lacking for the exact shape of the velocity profile in the buffer layer; though crucial for turbulence
 production, it is commonly understood as a transition region between the linear profile at the surface and the logarithmic profile
@@ -479,7 +680,7 @@ A pure blending from the linear velocity profile into the logarithmic one is, ho
 profile overestimate the velocity in the buffer layer. We therefore introduce a higher-order compensating term into
 the linear profile before blending it into the logarithmic law:
 \begin{equation}
-  U_\text{inner}^{\alpha}^+ = \frac{ y^+ + \gamma_4 (y^+)^{4} + \gamma_6 (y^+)^{6} } { 1 + \gamma_6 /u_{ref} (y^+ )^6}, 
+  U_\text{inner}^{\alpha_\star}^+ = \frac{ y^+ + \gamma_4 (y^+)^{4} + \gamma_6 (y^+)^{6} } { 1 + \gamma_6 /u_{ref} (y^+ )^6}, 
 \end{equation} 
 where the fourth- and sixth-order terms in the nominator are designed to fit the profile below $y^+\approx 10$ and
 the sixth-order correction in the denominator limits the growth of $u_\text{inner}$ for large $y^+$.
@@ -488,7 +689,7 @@ the sixth-order correction in the denominator limits the growth of $u_\text{inne
 %
 In the logarithmic region, we use the profile
 \begin{equation}
-  U_\text{log}^{\alpha}^+ = \frac{1}{\kappa} \log y^+ + C 
+  U_\text{log}^{\alpha_\star}^+ = \frac{1}{\kappa} \log y^+ + C 
 \end{equation}
 with the von-K\'arm\'an constant $\kappa=0.416$ and the boundary condition $C=5.4605$. %  log-layer (K\'arm\'an, Prandtl, Jimenez, Marusic)
 %
@@ -498,7 +699,7 @@ with the von-K\'arm\'an constant $\kappa=0.416$ and the boundary condition $C=5.
 %
 \begin{figure}
   \includegraphics[width=\textwidth]{../plot/u_profile.pdf}
-  \caption{Shear-aligned profiles of velocity components $U^{\alpha+}$ in inner (left) and outer (right) units.} 
+  \caption{Shear-aligned profiles of velocity components $U^{\alpha_\star+}$ in inner (left) and outer (right) units.} 
 \end{figure} 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -511,7 +712,7 @@ The background rotation and associated veering of the surface wind implies a non
 velocity which challenges the conventional assumptions related to the so-called channel-flow analogy:
 %
 While the universal profiles in vicinity of the wall implies that the profile be zero or at least small with respect to the stream-wise
-component, the veering requires a value of $V_{top}=U_G\sin\alpha$ in the free stream (and thus also at the top of the boundary layer if we assume
+component, the veering requires a value of $V_{top}=U_G\sin\alpha_\star$ in the free stream (and thus also at the top of the boundary layer if we assume
 that substantial velocity gradients are confined to the turbulent part of the flow). 
 %
 This is commonly shown in terms of velocity hodographs aligned with the outer, geostrophic flow (cf. Fig.~\ref{fig:hodograph}) and normalized by
@@ -525,23 +726,23 @@ Thus, the drag-law already implies three important properties of these hodograph
 \begin{eqnarray} 
  \underline{U}^{G}(z=0) &=& 0,\\ 
  \underline{U}^{G}(z\mapsto\infty) &=& \underline{G}^G = \left(\begin{array}{c}1\\0\end{array}\right) \\
-   \left.\frac{\partial V^G}{\partial U^G}\right|_{z=0} &=& \sin\alpha
+   \left.\frac{\partial V^G}{\partial U^G}\right|_{z=0} &=& \sin\alpha_\star
 \end{eqnarray} 
 \end{subequations} 
 %
-Outer scaling of the velocity profile further implies that the velocity deficity of the spanwise component $V^\alpha-G^\alpha$
+Outer scaling of the velocity profile further implies that the velocity deficity of the spanwise component $V^\alpha_star-G^\alpha_\star$
 be a universal function of the outer height $z^-$, i.e.  
 \begin{eqnarray}
-  V^\alpha-G^\alpha = f^\alpha_V(z^-).  
+  V^\alpha_\star-G^\alpha_\star = f^\alpha_\star_V(z^-).  
 \end{eqnarray}
 %
-Interpreting the shear-aligned spanwise velocity deficit $f_{V}^{\alpha}(z^-)$ as 
+Interpreting the shear-aligned spanwise velocity deficit $f_{V}^{\alpha_\star}(z^-)$ as 
 a signature of outer rotation may lead one to conclude that this universal function
 is appropriate down to the surface--irrespective of the Reynolds number.
 %
-This cannot be the case for the variation of $f_{V}^{\alpha}(z^-)$ across the boundary layer (i.e. between $0<z^-<1$)
+This cannot be the case for the variation of $f_{V}^{\alpha_\star}(z^-)$ across the boundary layer (i.e. between $0<z^-<1$)
 must fulfill the drag law and boundary conditions;
-at the same time, the weak dependence of $\alpha$ and $u_\star$ on $Re$ implies this range depends on $Re$.
+at the same time, the weak dependence of $\alpha_\star$ and $u_\star$ on $Re$ implies this range depends on $Re$.
 %
 %%%PAR
 %

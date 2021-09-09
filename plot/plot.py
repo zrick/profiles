@@ -19,8 +19,9 @@ use_data=False   # if true -- the netcdf files from DNS are needed
 plot_ustar_alpha=False
 plot_summary=False
 plot_evisc=True
+plot_profiles=True
 plot_visc_outer=False
-print_table=True
+print_table=False
 plot_outer_log=False
 plot_total_rot=False
 plot_convergence=False
@@ -49,7 +50,7 @@ files = { 400: base+'avg_flw_ri0.0_re400.0_1024x384x1024.nc',
           750: base+'avg_flw_ri0.0_re750.0_3072x384x3072.nc',
           1000:base+'avg_flw_ri0.0_re1000.0_co0.0_1536x512x3072.nc',
           1300:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120aligned.nc',
-          1301:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120aligned.nc',
+          1301:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120.nc',
           1600:base+'avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc' } 
 
 sc=EkmanUniversalClass() # yp_ref,up_ref,wp_ref,deltap_ref,us_ref,al_ref*D2R-geo_rotate,plot=False)
@@ -265,9 +266,13 @@ if plot_re1600:
     ax2.set_xlim(1,1e4)
     
 if plot_evisc:
-    fig=plt.figure(figsize=(7,4))
-    ax=fig.add_axes([0.1,0.11,0.8,0.87])
-    
+    fig=plt.figure(figsize=(12,4.5))
+    ax2=fig.add_axes([0.06,0.11,0.43,0.87])
+    ax1=fig.add_axes([0.55,0.11,0.43,0.87])
+    fig2=plt.figure(figsize=(12,4.5)) 
+    ax3=fig2.add_axes([0.55,0.11,0.43,0.87])
+    ax4=fig2.add_axes([0.06,0.11,0.43,0.87])
+
     for re in [500,750,1000,1300,1600]:
         nu=2./(re*re)
         f=Dataset(files[re],'r',format='NETCDF4')
@@ -279,24 +284,24 @@ if plot_evisc:
         deltap=us*us/nu  # = delta * (us/nu) =  (us/f) * us /  nu [with f=1]
         ny=len(y)
         nt=len(us_arr)
-        u=f['rU'][:,:]/us
-        w=f['rW'][:,:]/us
-        Rxy=f['Rxy'][:,:]/(us*us) # Reynolds Stress
-        Ryz=f['Ryz'][:,:]/(us*us)
+        u=f['rU'][:,:]
+        w=f['rW'][:,:]
+        Rxy=f['Rxy'][:,:]
+        Ryz=f['Ryz'][:,:]
         # Get Gradient of velocity components
         if  'U_y1XXX' in f.variables.keys() : # New outpout (contains derivatives
-            dUdy=f['U_y1'][:,:]/us/us*nu   # calculated using compct scheme)
-            dWdy=f['W_y1'][:,:]/us/us*nu
+            dUdy=f['U_y1'][:,:]   # calculated using compct scheme)
+            dWdy=f['W_y1'][:,:]
         else :                                  # Old file format (does not contain
             print("YP:",yp.shape)
             print("U: ",u.shape)
-            dUdy = nu/us*mp.derivative1(y,np.transpose(u),ny,nt).transpose() # derivatives...) 
-            dWdy = nu/us*mp.derivative1(y,np.transpose(w),ny,nt).transpose()
+            dUdy = mp.derivative1(y,np.transpose(u),ny,nt).transpose() # derivatives...) 
+            dWdy = mp.derivative1(y,np.transpose(w),ny,nt).transpose()
 
 
         print('RE=',re,np.average(dUdy[:,0]),np.average(dWdy[:,0]),us)
-        Txy=dUdy               # Viscous Stress 
-        Tyz=dWdy
+        Txy=nu*dUdy               # Viscous Stress 
+        Tyz=nu*dWdy
 
         us_mean=np.average(us)
 
@@ -306,47 +311,168 @@ if plot_evisc:
         stress_x = -np.average(-Txy + Rxy,0)
         stress_z = -np.average(-Tyz + Ryz,0)
         stress_t = np.sqrt(stress_x**2 + stress_z**2)
+        tstress_t  = np.sqrt(np.average(Rxy,0)**2+np.average(Ryz,0)**2) 
 
         dTdy = np.average(np.sqrt(dUdy**2+dWdy**2),0)
-
-        evisc = stress_t / dTdy  / (deltap * us * us)
-        evisc2= 0*evisc[:] 
-        for i in range(len(dTdy)):
-            if dTdy[i] < 1e-4:
+        tstress_v = nu*dTdy
+        tstress_s = tstress_t+tstress_v
+        # evisc = stress_t / dTdy  / (deltap * us * us)
+        evisc = tstress_t / dTdy # / (deltap*us*us) 
+        evisc2= 0.*evisc[:]
+        print(evisc.shape,evisc2.shape,dTdy.shape)
+        evisc[0]=0
+        for i in range(1,len(dTdy)-1):
+            if dTdy[i] < 1e-6:
                 evisc[i]=np.nan
-            elif i>2 :
-                evisc2[i] = (evisc[i-1]+ 2*evisc[i]+evisc[i+1])/5
+            else :
+                evisc2[i] = (evisc[i-1]+ 2*evisc[i]+evisc[i+1])/4.
         evisc=evisc2
-        ax.plot(ym, evisc/20,lw=2,ls='-',label='Re={}'.format(re),c=colors[re])
+
+        print(evisc[10],evisc2[10])
+        
+        norm = 1./(us*us)
+        norm_v_outer=nu/(nu*us*us*us)
+        norm_v_inner=1./nu
+
+        ax3.plot(ym, evisc2*norm_v_outer,lw=2,ls='-',label='Re={}'.format(re),c=colors[re])
+        ax4.plot(yp, evisc2*norm_v_inner,lw=2,ls='-',label='Re={}'.format(re),c=colors[re])
         if re == 1600:
-            ax.plot([1,1],[1,1],lw=0,ls=' ',label=' ',c='white') 
-            ax.plot(ym, evisc/20,lw=2,ls='-',label='Eddy Viscosity'.format(re),c=colors[re])
-            ax.plot(ym, stress_t, ls='--', lw=1, label='Total Stress'.format(re),c=colors[re])
-            ax.plot(ym, dTdy, ls=':',  lw=2, label='Viscous Stress (Gradient)',c=colors[re])
+            ax1.plot([1,1],[1,1],lw=2,ls='-',label=r'$Re={}$'.format(re),c=colors[re]) 
+            ax1.plot([1,1],[1,1],lw=0,ls=' ',label=' ',c='white') 
+            ax1.plot(ym, tstress_t*norm, ls='--', lw=1, label=r'$S_\mathrm{turb}^+$',c=colors[re])
+            ax1.plot(ym, tstress_v*norm, ls=':',  lw=1, label=r'$S_\mathrm{visc}^+$',c=colors[re])
+            ax1.plot(ym, tstress_s*norm, ls='-',  lw=2, label=r'$S^+$',c=colors[re])
+
+            ax2.plot([1,1],[1,1],lw=2,ls='-',label=r'$Re={}$'.format(re),c=colors[re])
+            ax2.plot([1,1],[1,1],lw=0,ls=' ',label=' ',c='white') 
+            ax2.plot(yp, tstress_t*norm, ls='--', lw=1, label=r'$S_\mathrm{turb}^+$',c=colors[re])
+            ax2.plot(yp, tstress_v*norm, ls=':',  lw=1, label=r'$S_\mathrm{visc}^+$',c=colors[re])
+            ax2.plot(yp, tstress_s*norm, ls='-',  lw=2, label=r'$S^+$',c=colors[re])
+
+            ax3.plot(ym, evisc2*norm_v_outer,lw=2,ls='-',label=''.format(re),c=colors[re])
+            ax4.plot(yp, evisc2*norm_v_inner,lw=2,ls='-',label=''.format(re),c=colors[re])
+
         else : 
-            ax.plot(ym, stress_t, ls='--', lw=1, c=colors[re])
-            ax.plot(ym, dTdy, ls=':',      lw=2, c=colors[re])
-        
-    lg=plt.legend(loc='best')
-    lg.get_frame().set_linewidth(0.0 )
-    ax.set_xscale('log')
+            ax1.plot(ym, tstress_t*norm, ls='--', lw=1, c=colors[re])
+            ax1.plot(ym, tstress_v*norm, ls=':',  lw=1, c=colors[re])
+            ax1.plot(ym, tstress_s*norm, ls='-',  lw=2, c=colors[re],label=r'$Re={}$'.format(re))
+
+            ax2.plot(yp, tstress_t*norm, ls='--', lw=1, c=colors[re])
+            ax2.plot(yp, tstress_v*norm, ls=':',  lw=1, c=colors[re])
+            ax2.plot(yp, tstress_s*norm, ls='-',  lw=2, c=colors[re],label=r'$Re={}$'.format(re))
+
+        i01 = mp.geti(ym,0.15)
+        i50 = mp.geti(yp,50)
+        ax1.scatter(ym[i50],tstress_s[i50]*norm,c=colors[re],marker='d')
+        ax2.scatter(yp[i01],tstress_s[i01]*norm,c=colors[re],marker='o') 
+        ax3.scatter(ym[i50],evisc2[i50]*norm_v_outer,c=colors[re],marker='d') 
+        ax4.scatter(yp[i01],evisc2[i01]*norm_v_inner,c=colors[re],marker='o') 
+
+            
+    ax4.plot(yp, 23*np.log(yp)-72,ls=':',lw=1,label=r'$ 24 log z^+ -76$',c='black') 
+
+    #lg=ax1.legend(loc=(0.11,0.5))
+    #lg.get_frame().set_linewidth(0.0 )
+    ax1.set_xscale('log')
     # ax.set_yscale('log')
-    def fw(X):
-        return X*20
-    def bw(X):
-        return X/20
-    ax2=ax.secondary_yaxis('right',functions=(fw,bw))
 
+    ax1.set_xlabel(r'$z^-$')
+    # ax1.set_ylabel(r'$S^+, S_\mathrm{turb}^+, S_\mathrm{visc}^+$')
+    ax1.set_xlim(1e-3,2)
+    ax1.set_ylim(0,1)
+
+    lg2=ax2.legend(loc='upper right')
+    lg2.get_frame().set_linewidth(0.0)
+    ax2.set_xscale('log')
+    ax2.set_xlabel(r'$z^+$')
+    ax2.set_ylabel(r'$S^+, S_\mathrm{turb}^+, S_\mathrm{visc}^+$')
+    ax2.set_xlim(1,2e3)
+    ax2.set_ylim(0,1) 
+
+    lg4=ax4.legend(loc='upper left')
+    lg4.get_frame().set_linewidth(0.0)
+    ax4.set_xlabel(r'$z^+$')
+    ax4.set_xscale('log')
+    ax4.set_xlim(1,2e3)
+    ax4.set_ylim(0,1e2)
+    ax4.set_ylabel(r'$\dfrac{\nu_E}{\nu}$')
+
+
+    ax3.set_xlabel(r'$z^-$')
+    ax3.set_xscale('log')
+    ax3.set_xlim(1e-3,2)
+    ax3.set_ylim(0,0.7)
+    ax3.set_ylabel(r'$\dfrac{\nu_E}{\nu} \dfrac{Z_\star}{\delta^+}$')
     
+    fig.savefig('stresses.pdf',format='pdf')
+    fig2.savefig('eddy_viscosity.pdf',format='pdf')
 
-    ax.set_xlabel(r'$z^-$')
-    ax.set_ylabel(r'Total, Viscous Stress')
-    ax2.set_ylabel(r'Eddy Viscosity  $\frac{\nu_E}{\nu} \frac{Z^2}{\delta+}$') 
-    ax.set_xlim(1e-3,2)
-    ax.set_ylim(0,1)
+if plot_profiles:
+    fig=plt.figure(figsize=(12,4.5))
+    ax1=fig.add_axes([0.06,0.11,0.43,0.87])
+    ax2=fig.add_axes([0.56,0.11,0.43,0.87])
 
-    plt.savefig('eddy_viscosity.pdf',format='pdf') 
+    ylog=np.arange(1e1,1e3)
+    vlog=sc.profile_log(ylog) 
+    ax1.plot(ylog,sc.profile_log(ylog),lw=3,ls='-',c='black',alpha=0.5,
+             label=r'$\kappa^{-1} log z^+ + C$')
+    ax1.plot([50,50],[0,21],ls='--',lw=0.5,c='black') 
+    for re in [500,750,1000,1300,1600]:
+        c=colors[re]
+        nu=2./re**2
+        f=Dataset(files[re],'r')
+        y=f['y'][:]
+        u_dat=np.average(f['rU'][:,:],0)
+        v_dat=np.average(f['rW'][:,:],0) 
+        us_tim=f['FrictionVelocity'][:]
+        al_tim=f['FrictionAngle'][:]
+        us=np.average(us_tim)
+        al=np.average(al_tim)
+
+        [u,v]=mp.rotate(u_dat,v_dat,al/180*np.pi)
+        yp=y*us/nu
+        ym=y/us
+        up,vp=u/us,v/us
+        um,vm=u/us,v/us
+        ax1.plot(yp[1:],up[1:],ls='-', c=c,lw=2,label=r'Re={}'.format(re))
+        ax1.plot(yp[1:],vp[1:],ls='--',c=c,lw=2)
+
+        ax2.plot(ym[1:],um[1:]-um[-1],ls='-',c=c,lw=2)
+        ax2.plot(ym[1:],vm[1:]-vm[-1],ls='--',c=c,lw=2)
+        ax2.plot([0,1.5],[0,0],ls='--',lw=0.5,c='black')
+        ax2.plot([0.3,0.3],[-7,1.1],ls='--',lw=0.5,c='black')
+        ax2.plot([0.15,0.15],[-7,1.1],ls='--',lw=0.5,c='black')
+
+        i01 = mp.geti(ym,0.15)
+        i50 = mp.geti(yp,50)
+        ax1.scatter(yp[i01],up[i01],c=c,marker='o') 
+        ax2.scatter(ym[i50],um[i50]-um[-1],c=c,marker='d') 
         
+        print(re,us,al)
+    ax1.plot([1,1],[1,1],ls=':', c='white',lw=0,label=' ')
+    ax1.plot([1,1],[1,1],ls='-', lw=2,c='gray',label=r'$U^\alpha$')
+    ax1.plot([1,1],[1,1],ls='--',lw=2,c='gray',label=r'$V^\alpha$')
+        
+    ax1.set_xscale('log')
+    ax1.set_xlim(1,2e3) 
+    ax1.set_xlabel(r'$z^+$')
+    ax1.set_ylabel(r'$U_{\alpha+}, V^{\alpha+}$')
+    ax1.set_ylim(0,21)
+
+    lg1=ax1.legend(loc='best')
+    lg1.get_frame().set_linewidth(0.0)
+
+    ax2.set_xscale('log') 
+    ax2.set_xlim(1e-3,2.e0)
+    ax2.set_ylim(-7,1.2)
+    ax2.set_xlabel(r'$z^-$')
+    ax2.set_ylabel(r'$(U^\alpha-G_{1}^\alpha)/u_\star, (V^\alpha-G_{2}^{\alpha}/u_\star$') 
+
+    lg2=ax2.legend(loc='best')
+    lg2.get_frame().set_linewidth(0.0)
+    plt.savefig('uv_innerouter.pdf',format='pdf')
+    plt.close('all')
+    
 if plot_visc_outer:
     fig=plt.figure(figsize=(5,4))
     ax=fig.add_axes([0.1,0.1,0.87,0.8])
@@ -513,7 +639,43 @@ if plot_outer_log :
     ax4=fig2.add_axes([0.55,0.1,0.4,0.8])
     ax6=fig2.add_axes([0.26,0.185,0.18,0.37]) 
 
-    for re in [500,750,1000,1300,1600,5000,10000,150000,1000000]:
+    fig3=plt.figure(figsize=(6,5))
+    ax7=fig3.add_axes([0.1,0.1,0.8,0.8]) 
+
+    fig4=plt.figure(figsize=(6,5))
+    ax8=fig4.add_axes([0.13,0.1,0.8,0.8])
+    ylog=10**np.arange(0.7,3.5,0.01)
+    alog=-46.5
+    blog=29.
+    clog=0.68 
+    mlog=alog+blog*np.log(ylog) + clog*ylog
+    mlog[1]=(mlog[0]+mlog[2])/2.
+
+    yvisc=np.arange(0,30,1) 
+    y10 = 9. 
+    f10 = alog + blog*np.log(y10) + clog*y10
+    d10 = blog/y10 + clog
+    print('FITTING BASED ON:', f10,d10)
+
+    # first guess
+    bvisc = -0.2353
+    avisc = f10 / (1 -np.exp(bvisc*y10) + bvisc*y10) #est'd from f10 
+
+    #CHECK
+    mvisc = avisc + avisc*bvisc*yvisc - avisc*np.exp(bvisc*yvisc)
+    print('F0: ',mvisc[0]  )
+    print('F10:',f10, avisc+avisc*bvisc*y10 - avisc*np.exp(bvisc*y10))
+    print('D0: ',avisc*bvisc-avisc*bvisc,(mvisc[1]-mvisc[0])/(yvisc[1]-yvisc[0]))
+    print('D10:',avisc*bvisc - avisc*bvisc*np.exp(bvisc*y10), d10)
+    print(avisc,bvisc)
+    ax8.plot(yvisc,   mvisc,   lw=2,c='blue', alpha=0.5,label=r'$a_\mathrm{visc}(b_\mathrm{visc}z^+ + 1-e^{b_\mathrm{visc} z^+})$')
+    ax8.plot(ylog[1:],mlog[1:],lw=2,c='black',alpha=0.5,label=r'$a_\mathrm{log} + b_\mathrm{log} log(z^+) + c_\mathrm{log} z^+ $') 
+    ax8.plot([y10,y10],[0,100],c='black',lw=0.5,ls=':')
+    ax8.plot([0,30],[f10,f10], c='black',lw=0.5,ls=':') 
+    print(yvisc,mvisc)
+    
+    re_use=[500,750,1000,1300,1600,5000,10000,150000,1000000]
+    for re in re_use:
         c=colors[re]
         nu=2./re**2
         if  re <= 1600 :
@@ -540,8 +702,6 @@ if plot_outer_log :
             
         dp= us**2 / nu
         ny,yp,ym=build_grid(dp,5)
-
-        print(re,nu,us,al,dp,ny)
         
         um,wm=sc.profile_minus(ym,re)
         up,wp=sc.profile_plus(yp,re)
@@ -554,7 +714,7 @@ if plot_outer_log :
         ax3.plot(yp[1:],up[1:],         c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re))
         ax4.plot(ym[1:],up[1:]-up[-1],  c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re))
         ax6.plot(yp[1:],up[1:],         c=c,ls='-',lw=1) 
-        
+
         i1=mp.geti(ym,0.001)
         ax1.scatter(yp[i1],wp[i1],marker='D',c=c,s=20)
 
@@ -564,12 +724,21 @@ if plot_outer_log :
 
         ax1.plot(yp_dat[1:],w_sfc[1:]/us_dat,            c=c,ls='--',lw=1) 
         ax2.plot(ym_dat[1:],(w_sfc[1:]-w_sfc[-1])/us_dat,c=c,ls='--',lw=1)
-        ax5.plot(yp_dat[1:],w_sfc[1:]/us_dat,            c=c,ls='--',lw=1)
+        ax5.plot(yp_dat[:],w_sfc[:]/us_dat,            c=c,ls='--',lw=1)
 
         ax3.plot(yp_dat[1:],u_sfc[1:]/us_dat,            c=c,ls='--',lw=1)
         ax4.plot(ym_dat[1:],(u_sfc[1:]-u_sfc[-1])/us_dat,c=c,ls='--',lw=1)
-        ax6.plot(yp_dat[1:],u_sfc[1:]/us_dat,            c=c,ls='--',lw=1) 
+        ax6.plot(yp_dat[:],u_sfc[:]/us_dat,            c=c,ls='--',lw=1)
+
+        dp_dat = us_dat*us_dat/nu
+        ax7.plot(yp_dat[:20],w_sfc[:20]*dp_dat,    c=c,ls='--',lw=1,label=r'$DNS: Re_D={}$'.format(re))
+        ax8.plot(yp_dat,     w_sfc*dp_dat,         c=c,ls='--',lw=1,label=r'$DNS: Re_D={}$'.format(re))
+        ctr=0.28-2.25*np.sqrt(1./re)
+        ictr=mp.geti(yp_dat,dp*ctr) 
+        print('CENTER_LOC:', ctr,yp_dat[ictr],yp_dat[ictr]/dp,ictr) 
+        ax8.scatter(yp_dat[ictr],w_sfc[ictr]*dp_dat,     c=c) 
         
+    ax7.plot(yp[:20],wp[:20]*us*dp,     c=c,ls='-',lw=2,label=r'$Model: Re_D={}$'.format(re),alpha=0.5)
     ax2.plot([1e-3,1e2],[0,0],lw=0.5,ls='-',c='black')
 
     ax1.set_xscale('log')
@@ -607,6 +776,19 @@ if plot_outer_log :
     ax6.set_ylim(0,10)
     ax6.set_xlabel(r'$z^+$')
     ax6.set_ylabel(r'$U^{\alpha+}$')
+
+    ax7.set_xscale('linear')
+    ax7.set_xlim(0,12)
+    ax7.set_ylim(0,35)
+    ax7.set_xlabel(r'$z^+$')
+    ax7.set_ylabel(r'$V^+ \dfrac{u_\star}{G} \mathrm{Re}_\tau$') 
+    
+    ax8.set_xscale('log')
+    ax8.set_yscale('log')
+    ax8.set_xlim(1,1e3)
+    ax8.set_ylim(2e-1,1e3)
+    ax8.set_xlabel(r'$z^+$')
+    ax8.set_ylabel(r'$V^+ \dfrac{u_\star}{G} \mathrm{Re}_\tau$') 
     
     lg1=ax2.legend(loc='best')
     lg1.get_frame().set_linewidth(0.0) 
@@ -614,10 +796,16 @@ if plot_outer_log :
     lg2=ax4.legend(loc='best')
     lg2.get_frame().set_linewidth(0.0)
 
+    lg3=ax7.legend(loc='best')
+    lg3.get_frame().set_linewidth(0.0) 
 
+    lg4=ax8.legend(loc='best')
+    lg4.get_frame().set_linewidth(0.0)
+    
     fig1.savefig('w_profile.pdf',format='pdf')
     fig2.savefig('u_profile.pdf',format='pdf')
-
+    fig3.savefig('w_viscous.pdf',format='pdf')
+    fig4.savefig('w_log.pdf',format='pdf') 
 
     fig1.clf()
     fig2.clf() 
@@ -1109,28 +1297,30 @@ if plot_les_comp == True:
         
         z_ana=np.arange(0,8,0.1)
         z_ana=10**z_ana
-
-        [up_mod,wp_mod] = sc.profile_plus(zp,c['re'])
-
+        us_mod,al_mod=sc.ustar_alpha(c['re'])
+        dp_mod=us_mod*us_mod*(c['re']**2)/2.
+        print('CHECK:',c['re'],us,dp_mod)
+        ny_mod,zp_mod,zm_mod=build_grid(dp_mod)
+        up_mod,wp_mod=sc.profile_plus(zp_mod,c['re']) 
+        
         ax1.fill_between(zp[1:], (avg[0,1:]-2*std[0,1:])/us,(avg[0,1:]+2*std[0,1:])/us,alpha=0.5,color='gray',edgecolor=None)
         ax1.plot(zp[1:], avg[0,1:]/us,ls='-',c=c['c'],lw=2,label='{}'.format(c['f'].split('_')[1]),alpha=0.5)
-        ax1.plot(1.15*zp[1:], up_mod[1:],  ls=':',c=c['c'],lw=0.5)
+        ax1.plot(1.15*zp_mod[1:], up_mod[1:],  ls=':',c=c['c'],lw=0.5)
 
         ax1.fill_between(zp[1:],(avg[1,1:]-2*std[1,1:])/us,(avg[1,1:]+2*std[1,1:])/us,alpha=0.5,color='gray',edgecolor=None)
         ax1.plot(zp[1:],avg[1,1:]/us, ls='-',c=c['c'],lw=2,alpha=0.5)
-        ax1.plot(1.15*zp[1:], wp_mod[1:],  ls=':',c=c['c'],lw=0.5)
+        ax1.plot(1.15*zp_mod[1:], wp_mod[1:],  ls=':',c=c['c'],lw=0.5)
 
         ax2.fill_between(zm[1:],(avg[0,1:]-avg[0,-1]-std[0,1:])/us,(avg[0,1:]-avg[0,-1]+std[0,1:])/us,alpha=0.3,color=c['c'],edgecolor=c['c'],hatch='x') 
         ax2.plot(zm[1:],(avg[0,1:]-u_geo)/us,   lw=2.0,ls='-',c=c['c'],alpha=0.5)
-        ax2.plot(zm[1:],(up_mod[1:]-up_mod[-1]),lw=0.5,ls=':',c=c['c'])
+        ax2.plot(zm_mod[1:],(up_mod[1:]-up_mod[-1]),lw=0.5,ls=':',c=c['c'])
         
         ax2.fill_between(zm[1:],(avg[1,1:]-avg[1,-1]-std[1,1:])/us,(avg[1,1:]-avg[1,-1]+std[1,1:])/us,alpha=0.3,color=c['c'],edgecolor=c['c'],hatch='x')
         ax2.plot(zm[1:],(avg[1,1:]-v_geo)/us,   lw=2.0,ls='-',c=c['c'],alpha=0.5)
-        ax2.plot(zm[1:],(wp_mod[1:]-wp_mod[-1]),lw=0.5,ls=':',c=c['c'])
+        ax2.plot(zm_mod[1:],(wp_mod[1:]-wp_mod[-1]),lw=0.5,ls=':',c=c['c'])
 
 
         al=np.arctan(avg[1,-1]/avg[0,-1])
-        al_mod=np.arctan(wp_mod[-1]/up_mod[-1])
         
         [uo,vo] = mp.rotate(avg[0],avg[1],al)
         [uo_mod,vo_mod] = mp.rotate(up_mod,wp_mod,al_mod)

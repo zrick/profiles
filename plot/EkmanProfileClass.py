@@ -98,7 +98,7 @@ class EkmanUniversalClass:
 
         re = np.sqrt(2*deltap/(us*us)) # nu = us*us/deltap
 
-        log_law = self.profile_log(yp,re) # np.log(yp[1:])/k + C
+        log_law = self.profile_log(yp) # np.log(yp[1:])/k + C
         log_dev_outer_u=up-log_law
         log_dev_outer_u[:i2]=0.
         log_dev_outer_w=wm
@@ -178,11 +178,13 @@ class EkmanUniversalClass:
             
         return(1./z,aleph) 
 
-    def profile_log(self,yp,re):
+    def profile_log(self,yp):
         self.qinit()
 
         x=np.zeros(len(yp))
         x[1:] = np.log(yp[1:])/self.KAPPA  + self.C
+        if yp[0] > 0:
+            x[0] =np.log(yp[0])/self.KAPPA  + self.C 
         return x 
 
     def erf_transition(self,w,l,x):
@@ -207,7 +209,7 @@ class EkmanUniversalClass:
         
         z=1/us_loc 
         dp_loc=re**2/(2*z**2)
-        ym=np.array(yp/dp_loc)
+        ym=np.array(yp)/dp_loc
         trans_scale=2.0
 
         ################################################################################
@@ -222,7 +224,7 @@ class EkmanUniversalClass:
         
         ################################################################################
         # STREAMWISE COMPONENT (shear-aligned) 
-        log_law=self.profile_log(yp,re) # np.log(yp)/self.KAPPA + self.C   
+        log_law=self.profile_log(yp) # np.log(yp)/self.KAPPA + self.C   
 
         # inner-layer (empirical profile for viscous and buffer layer) 
         c4=-0.0003825; c6=6.32e-6; u_ref = 0.07825
@@ -232,7 +234,7 @@ class EkmanUniversalClass:
         u[1:]=(1-wgt_i)*u_visc[1:] + wgt_i*log_law[1:]
 
         # outer-layer deficit
-        ctr= 0.33 - 120/re 
+        ctr=0.28- 2.25*np.sqrt(1./re)
         wgt_o=self.erf_transition(trans_scale,ctr,ym[1:]) #(sp.special.erf(trans_scale*np.log(ym[1:]/ctr))+1)/2 #starts at index 1! 
         u[1:] -= ( wgt_o*(log_law[1:]-ous[1:]) )
 
@@ -241,26 +243,33 @@ class EkmanUniversalClass:
         #
         # inner region - empirical profile
         #   - based on direction below y+~10
-        i1=mp.geti(yp,10)
-        c_off=40/(dp_loc*us_loc) ##4.0e2*us_loc/np.sqrt(dp_loc)
-        c1=26./(dp_loc*us_loc)
-        dir_fit=c1*np.log(yp[1:i1+2])**2+c_off
-        w[1:i1+2]=np.tan(dir_fit/180*np.pi)*u[1:i1+2]
+        w_norm = us_loc*dp_loc
+        i1=mp.geti(yp,9)
+        avisc=-18.852472992784048/w_norm
+        bvisc=-0.2353 
+        w[:i1+2] = avisc*( bvisc*yp[:i1+2] + 1. - np.exp(bvisc*yp[:i1+2]) )
         #
-        # inner-outer transition 
+        # inner-outer transition by log-linear profile
         #   - match gradient and value at y+~10 (index i0) 
-        #   - match value at y-=0.27
-        match_height=0.27
-        i2=mp.geti(yp,match_height*dp_loc) 
-        C1=(w[i1+1]-w[i1-1])/(yp[i1+1]-yp[i1-1])
-        ap = ( -ows[i2] - w[i1] - C1 * (yp[i2]-yp[i1]) ) / ( np.log(yp[i2]/yp[i1]) - yp[i2]/yp[i1]) 
-        w[i1:] = w[i1] + ap * np.log(yp[i1:]/yp[i1]) + (C1-ap/yp[i1])*(yp[i1:]-yp[i1])
-        #
-        # Blend inner and outer profile
-        #   - matching height same as above 
-        wgt = ( 0.5*(sp.special.erf(trans_scale*(np.log(yp[1:]/yp[i2])))+1) )
+        #   - match value at y-=ctr
+        i2=mp.geti(yp,ctr*dp_loc)
+        d1=(w[i1+1]-w[i1-1])/(yp[i1+1]-yp[i1-1])   # dW/dz @ yp[i1]
+        x1=yp[i1]; x2=yp[i2]
+        b= ( (w[i1]+ows[i2]) - d1*(x1-x2) ) / ( np.log(x1/x2) - 1+x2/x1) 
+        c =d1-b/x1
+        a1=w[i1]-b*np.log(x1)-c*x1 
+        a2=-ows[i2]-b*np.log(x2)-c*x2
+        if ( np.abs(a1-a2) > 1e-6 ) :
+            print('ERROR: SINGULARITY IN LINEAR SYSTEM DETECTED')
+        else :
+            a=(a1+a2)/2.
+        print('PARAMTERS:',a*us_loc*dp_loc,b*us_loc*dp_loc,c*us_loc*dp_loc)
+        w[i1:] = a + b * np.log(yp[i1:]) + c*yp[i1:]
+
+        # Blend inner and outer profile to eliminate discontinuous second derivative at y-=ctr
+        trans_scale=2.
+        wgt=self.erf_transition(trans_scale,ctr*dp_loc,yp[1:]) 
         w[1:]= (1-wgt)*w[1:] + wgt*(-ows[1:]) 
-        
         return u,w
 
     
