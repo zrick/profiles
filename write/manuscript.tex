@@ -558,21 +558,40 @@ In analogy to the Fick-law for molecular diffusion, the eddy diffusivity is
 the effective diffusivity that yields the turbulent transport $S_\mathrm{turb}$ based
 on the strain rate.
 %
-For the symmetries in the flow (horizontal homoegeneity, and $W=0$), it is
+For the symmetries in the flow (horizontal homogeneity, and $W=0$), it is
 %
 \begin{equation}
   \nu_{E}= \frac{S_\mathrm{turb}}{\sqrt{\left(\frac{\p U}{\p z} \right)^2 + \left(\frac{\p V}{\p z}\right)^2}} = \nu \frac{S_\mathrm{turb}}{S_\mathrm{visc}}.  
 \end{equation}
 %
-The inner normalization of $\nu_E$ s 
-
+The inner normalization of $\nu_E$ is obtained by division through the molecular viscosity, and it is $\nu_E^+=\nu_E/\nu = S_\mathrm{turb}/S_\mathrm{visc}$. Under this normalization, the profiles of eddy viscosity collapse below $z^+\approx 20$ with a tendency towards better collapse
+at higher $z^+$ (up to $z^+\approx 50$ for $\RE=1600$; Fig.~\ref{fig:stresses}b).
+%
+In the outer layer, the eddy viscosity is characterized by a distinct minimum at $z^-\approx 0.6-0.8$,
+and we find that the following mixed normalization of $\nu_E$ by the geostrophic wind and friction velocity
+collapses the value of $\nu_E$ at this minimum (cf. Fig.~\ref{fig:stresses}d): 
+%
 \begin{eqnarray}
- \nu_E^+  \frac{Z_{\star}^{2}}{\delta+} &=& \frac{\nu_E^+}{\nu}
-\end{eqnarray} 
+  \nu_E^-=\nu_E^+  \frac{Z_{\star}}{\delta^+} = \nu_E \frac{1}{\nu} \frac{G}{u_\star}\frac{\nu}{u_\star \delta}  = \nu _E \frac{Gf}{u_\star^3}. 
+\end{eqnarray}
+%
+Substantial variation of the profiles is, however observed below and above this minimum for different $\RE$ which illustrates that
+this normalization is probably not generally appropriate across the outer layer.
+% 
 \par
 %
-\todo{PARAGRAPH ON TURBULENCE STRUCTURE (2D SLICES, SPECTRA?) cf. Fig.~\ref{fig:slices}}
-
+The organization of the flow is depicted in terms of the turbulence kinetic energy in Fig.~\ref{fig:slices}.
+%
+In vicinity of the wall, at $y^+\approx 10$, (Fig.~\ref{fig:slices}a), elongated streaks aligned with the
+surface shear stress dominate.
+%
+Moving away from the wall, to $y^+\approx 150$ (well within the logarithmic region), the structures
+are larger and more isotropic, but they are still largely aligned with the surface shear stress.
+%
+Finally in the upper part of the outer layer, around $y^+\approx 1000$, no clear visual signature of the
+surface veering direction is found, and intense TKE structures (bright yellow)
+are organized on a large spatial scale with with weaker eddies (greenish structures) and quiescent regions
+in between.  
 \begin{figure}
   \centerline{
     \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_10.pdf}
