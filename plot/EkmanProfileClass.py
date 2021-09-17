@@ -242,7 +242,6 @@ class EkmanUniversalClass:
         # SPANWISE COMPONENT (in-plane orthogonal to shear)
         #
         # inner region - empirical profile
-        #   - based on direction below y+~10
         w_norm = us_loc*dp_loc
         i1=mp.geti(yp,9)
         avisc=-18.852472992784048/w_norm

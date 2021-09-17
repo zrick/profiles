@@ -68,7 +68,7 @@
   The profiles of wind speed and direction in turbulent Ekman flow
   are formulated based on asymptotic theory and data from direct numerical simulation. 
   %
-  The profile of the stream-wise component follows the classical viscous, logarithmic and wake scaling.
+  The profile of the streamwise component follows the classical viscous, logarithmic and wake scaling.
   %
   In the outer layer, the velocity component profiles can be described by an Ekman-spiral with adapted
   boundary conditions that result in a reduction of the spiral-like rotation. 
@@ -242,7 +242,7 @@ the past decades.
 \par
 % 
 This paper exploits the robust features of mean velocity profiles from direct numerical
-simulation across a range of Reynolds numbers to formulate both the stream-wise and span-wise components
+simulation across a range of Reynolds numbers to formulate both the streamwise and span-wise components
 of the mean velocity vector as a function of the Reynolds number.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -262,7 +262,7 @@ due to latitudinal variation of the rate of rotation.
 %
 The dimensional velocity vector of the numerical simulations is $\underline{U} = (U_1,U_2,U_3) = (U,V,W)$ over the coordinate system
 $Oxyz$, where an approximate alignment (plus/ minus few degrees) of the direction $Ox$ with the surface shear stress is achieved.
-The coordinate $Oy$ points away from the wall,  and $Oz$ points in the span-wise direction normal to $Oxy$.
+The coordinate $Oz$ points away from the wall, and $Oy$ points in the span-wise direction normal to $Oxz$.
 For analysis of the results, we use two coordinate systems that are
 (i)  exactly aligned with the surface shear stress
 \begin{subequations}
@@ -289,27 +289,37 @@ $\alpha(z)= \sphericalangle \left( \underline{G},\underline{U}(z)\right)$.
 %
 We consider the incompressible Navier--Stokes equations for the three velocity components on the f-plane in a framework
 that is governed by the physical parameters
-(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_3^2}$ (where $\mathbf{G}=(G_1,G_2,0)$ is the geostrophic wind vector),
+(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_2^2}$ (where $\mathbf{G}=(G_1,G_2,0)$ is the geostrophic wind vector),
 (ii)  Coriolis parameter $f$ (representing the angular rotation), and
 (iii) kinematic viscosity $\nu$.
    %
-These yield a Reynolds number $\RE$ as non-dimensional parameter governing the system.
+These yield a Reynolds number as non-dimensional parameter governing the system.
 %
-We use the geostrophic wind as velocity and the Coriolis parameter $f$ as time scale for the non-dimensional framework which implies the Rossby radius $\LR=G/f$ as length scale, such that the Reynolds number governing the problem reads as
+We use the geostrophic wind as velocity and the Coriolis parameter $f$ as time scale for the non-dimensional
+framework.
+%
+This implies the Rossby radius $\LR=G/f$ as length scale, such that one Reynolds number
+governing the problem reads as
+%
 \begin{equation}
   \RE_\Lambda=\frac{G \LR }{\nu}. 
 \end{equation}
 %
-The scales used in defining $\RE_\Lambda$ loose there relevance in describing the turbulent state of the flow. The friction Reynolds number
+The scales used in defining $\RE_\Lambda$ loose their relevance in describing the turbulent state of the flow.
+%
+The friction Reynolds number
 \begin{equation}
-  \RE_\tau = \frac{u_\star\delta}{\nu} = \frac{\RE_\Lambda}{Z_\star^2}, 
+  \RE_\tau = \frac{u_\star\delta}{\nu} = \delta^+ = \frac{\RE_\Lambda}{Z_\star^2}, 
 \end{equation}
-where $\delta=u_\star/f$, gives a measure for the turbulence scale separation that is comparable to other
-wall-bounded flow geometries such as rotating or non-rotating channel, pipe, or Couette flow.
+where $\delta=u_\star/f$ and we use a superscript $'+'$ to denote normalization by inner turbulence
+scales ($u_\star, \nu$).
+%
+$\RE_\tau$ is suitable to compare the turbulence scale separation also to other wall-bounded flow geometries
+such as rotating or non-rotating channel, pipe, or Couette flow.
 %
 \par
 %
-The non-dimensionalized governing equations read as 
+The governing equations  non-dimensionalized by $G$, $f$, and $\Lambda_\mathrm{\RO}$ read as 
 \begin{subequations} 
 \begin{eqnarray}
   \frac{\partial u_i}{\partial t} &=& \frac{\p \pi}{\p x_i} - u_j \frac{\p u_i}{\p x_j} + \epsilon_{i2j} (u_j -G_j)   + \frac{1}{\RE} \frac{\p^2 u_i}{\p x_{j}^2} \\ 
@@ -368,6 +378,7 @@ In total, this yields one order of magnitude variation in terms of the scale sep
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Scaling behavior of the flow for $\RE_\tau$ up to 3000}
+\label{sec:scaling}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 The generalization of profiles to arbitrary Reynolds numbers 
@@ -415,9 +426,9 @@ Interestingly, the integrated TKE $\int_{0}^{\delta} e\mathrm{d}z$ stays constan
 while the integrated dissipation $\int_{0}^{\delta} \epsilon\mathrm{d}z$ exhibits inviscid scaling when normalized
 by the magnitude $G$ of the geostrophic wind. 
 %
-(Alternatively normalized TKE and dissipation,
+(TKE and dissipation normalized as
 $f G^{-3} \int e \mathrm{d} z$ and $u_\star^{-3} \int \epsilon\mathrm{d}z$, exhibit substantial
-dependence on $\RE$ for the variation of $u_s\tar$.)
+dependence on $\RE$ for the variation of $u_\star$.)
 %
 This indicates that the bulk dissipation is governed by the forcing $G$--irrespective of $\RE$. 
 %
@@ -457,17 +468,17 @@ production processes in the surface layer, in particular in the buffer layer.
 Velocity profiles in inner and units (Fig.~\ref{fig:profiles}a,b) are in accordance
 with previous work \citep{coleman:JFM1992,spalart:PF2008,spalart:PF2009,ansorge:BM2014,ansorge:BM2019}:
 %
-The profile of the shear-aligned streamwise velocity component are well-collapsed for the Reynolds
+The profiles of the shear-aligned streamwise velocity component are well-collapsed for the Reynolds
 numbers investigated below $z^-\approx 0.15$ (circles in Fig.~\ref{fig:profiles}a); the logarithmic
 law is appropriate for $50 < z^+ < 0.15 Re_\tau$, where $z^+ = Re_\tau z^-$.
 %
-While the profiles $U^{\alpha_\star+}(z^+)$ diverge between different $\Re$ beyond $z^-=0.15$,
+While the profiles $U^{\alpha_\star+}(z^+)$ diverge between different $\RE$ beyond $z^-=0.15$,
 the corresponding profiles $U^{\alpha_\star}(z^-)/u_\star$ agree closely,
 irrespective of $\RE$ which illustrates the
 inner--outer scale-duality in this external flow. 
 %
-It is noteworthy that also in the outer layer of the flow, $u_\star$--and not the magnitude the
-geostrophic wind speed $G$--is the governing velocity scale for inviscid, i.e. $\RE$-independent,
+It is noteworthy that also in the outer layer of the flow, $u_\star$ (not the magnitude the
+geostrophic wind speed $G$) is the governing velocity scale for inviscid, i.e. $\RE$-independent,
 normalization. \todo{WHY? cf. TKE/Dissipation normalization above}
 %
 No collapse in inner units is found for the profiles of spanwise velocity $V^{\alpha_\star+}(z^+)$;
@@ -529,9 +540,12 @@ Small deviations from the universal profile are observed for the smallest Reynol
 we attribute these to low-$\RE$ effects in the only transitionally turbulent flow ($\RE_\tau=479$). 
 %
 In contrast to the viscous stress, the total stress follows outer normalization, i.e.
-$S^+(z^-)$ is universal.
+$S^+(z^-)$ is universal; a discrepancy in the inner layer does not occur as the total stress
+is approximately constant in the viscous and buffer layer, and a rescaling of the height would have
+no effect there; above, outer scaling is appropriate for the well-established dynamics 
+in the overlap region of inner and outer layer.
 %
-This implies a mixed scaling for the turbulent stress, 
+This, however, implies a mixed scaling for the turbulent stress, 
 \begin{equation}
   S_\mathrm{turb} = \sqrt{\overline{uw}^2 + \overline{vw}^2}. 
 \end{equation} 
@@ -588,7 +602,7 @@ surface shear stress dominate.
 Moving away from the wall, to $y^+\approx 150$ (well within the logarithmic region), the structures
 are larger and more isotropic, but they are still largely aligned with the surface shear stress.
 %
-Finally in the upper part of the outer layer, around $y^+\approx 1000$, no clear visual signature of the
+In the upper part of the outer layer, around $y^+\approx 1000$, no clearly visible signature of the
 surface veering direction is found, and intense TKE structures (bright yellow)
 are organized on a large spatial scale with with weaker eddies (greenish structures) and quiescent regions
 in between.  
@@ -610,19 +624,19 @@ in between.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Towards a Universal Velocity Profile for the Turbulent Ekman Layer}
+\label{sec:profiles} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-Formulations for the outer layer that take into account the rotation, and thus deviation from the channel-flow analogy
-need to be matched to the framework of surface similarity, and it
-occurs that a smooth transition from the inner to the outer layer is not easily achieved.
+We now turn to the formulation of a general velocity profile that is fully determined by the only
+parameter of the idealized problem, namely a Reynolds number representing the scale separation or
+geometric size of the problem.
 %
-\cite{optis:BM2014}, for instance, define an ``effective geostrophic wind vector that has the same magnitude of the
-observed surface geostrophic wind and is rotated by the angle $\alpha$ [their nomenclature]'' to overcome the
-unsteady transition when coming approaching the Ekman layer from below.
+This precludes a drag law with wherewith we begin this section (\ref{sec:drag-law}).
+Based on the scaling arguments put forward in Sec.~\ref{sec:scaling}, we then develop
+a formulation of the wind vector in the Ekman layer (Sec~\ref{sec:ekman}) and separately
+for the streamwise (Sec.~\ref{sec:streamwise}) and spanwise components (Sec.~\ref{sec:spanwise})
+in the overlap and inner regions. 
 %
-While such rotation of the wind vector is \emph{a posteriori} justified by the observational data that the model outcomes are compared to,
-we believe that it is the manifestation of a mismatch between the theoretical treatment of the inner and outer layer of
-turbulent Ekman flow.
 
 
 \end{itemize}
@@ -660,10 +674,27 @@ for problems with a scale separation on the order that is relevant to geophysica
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-\subsection{Profile in the outer layer}
+\subsection{Profile in the Ekman layer}
+\label{sec:ekman}
+%
+Formulations for the outer layer that take into account the rotation
+(and thus deviation from the channel-flow analogy)
+need to be matched to the framework of surface similarity.
+%
+A smooth transition from the inner layer to the Ekman layer, where the wind is characterized by a turning
+of its mean direction, is not easily achieved. 
+%
+\cite{optis:BM2014}, for instance, define an ``effective geostrophic wind vector that has the same magnitude of the
+observed surface geostrophic wind and is rotated by the angle $\alpha$ [their nomenclature]'' to overcome the
+unsteady transition when coming approaching the Ekman layer from below.
+%
+While such rotation of the wind vector is \emph{a posteriori} justified by the observational data that the model outcomes are compared to,
+we understand this as the manifestation of a mismatch between the theoretical treatment of the inner and outer layer of
+turbulent Ekman flow.
 %
 The outer layer of Ekman flow is characterized by a turning of the wind velocity and the super-geostrophic maximum
-that is sustained by momentum convergence at the inflection point of the velocity profile. 
+that is sustained by momentum convergence at the inflection point of the velocity profile.
+%
 The super-geostrophic maximum of streamwise velocity and a secondary minimum aloft the bulk-turbulent part of
 the boundary layer are well-described by a classic Ekman spiral with adapted boundary conditions and a shift
 in reference height.
@@ -673,8 +704,8 @@ in reference height.
   \caption{} 
 \end{figure}
 
-\subsection{Stream-wise Velocity Component} 
-For the stream-wise velocity profile (that in non-rotating flows due to the geometry is always aligned with the surface shear stress),
+\subsection{Streamwise Velocity Component} 
+For the streamwise velocity profile (that in non-rotating flows due to the geometry is always aligned with the surface shear stress),
 well-established theories exist for various regimes according to their distance from the wall and the relative role of
 viscosity, turbulence and interaction with the outer region of the flow with the logarithmic law for the mean velocity as a central anchor point.
 %
@@ -685,7 +716,7 @@ viscosity, turbulence and interaction with the outer region of the flow with the
 In immediate vicinity to the surface, local turbulent mixing cannot occur for the no-slip/no-penetration boundary condition,
 and the mean velocity is described by a viscous profile of the form
 \begin{equation}
-  (U,W)^{\alpha_\star+}  = (z^+,0)  
+  (U,V)^{\alpha_\star+}  = (z^+,0)  
 \end{equation}
 where the direction of the velocity points into the exact opposite direction of the wall shear stress $\tau$. 
 In absence of roughness elements and for small roughness ($z_0^+<5$), this linear regime is known as
@@ -723,14 +754,14 @@ with the von-K\'arm\'an constant $\kappa=0.416$ and the boundary condition $C=5.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-\subsection{Span-wise velocity}
+\subsection{Spanwise velocity component}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 The background rotation and associated veering of the surface wind implies a non-zero profile for the span-wise
 velocity which challenges the conventional assumptions related to the so-called channel-flow analogy:
 %
-While the universal profiles in vicinity of the wall implies that the profile be zero or at least small with respect to the stream-wise
+While the universal profiles in vicinity of the wall implies that the profile be zero or at least small with respect to the streamwise
 component, the veering requires a value of $V_{top}=U_G\sin\alpha_\star$ in the free stream (and thus also at the top of the boundary layer if we assume
 that substantial velocity gradients are confined to the turbulent part of the flow). 
 %
@@ -749,10 +780,10 @@ Thus, the drag-law already implies three important properties of these hodograph
 \end{eqnarray} 
 \end{subequations} 
 %
-Outer scaling of the velocity profile further implies that the velocity deficity of the spanwise component $V^\alpha_star-G^\alpha_\star$
+Outer scaling of the velocity profile further implies that the velocity deficity of the spanwise component $V^{\alpha_\star}-G^{\alpha_\star}$
 be a universal function of the outer height $z^-$, i.e.  
 \begin{eqnarray}
-  V^\alpha_\star-G^\alpha_\star = f^\alpha_\star_V(z^-).  
+  V^{\alpha_\star}-G^{\alpha_\star} = f^{\alpha_\star}_V(z^-).  
 \end{eqnarray}
 %
 Interpreting the shear-aligned spanwise velocity deficit $f_{V}^{\alpha_\star}(z^-)$ as 
@@ -818,7 +849,7 @@ This is consistent with the recent finding of a second log-region in the outer r
 Below this region, the gradients in span-wise velocity are rather small and the span-wise velocity
 monotonically approaches its surface boundary condition $V(z=0)=0$.
 %
-While the stream-wise velocity follows a universal inner scaling that has acquired its universal, $Re$-independent shape for $Re_D> \mathcal{O}\left(10^3\right)$, the span-wise component that defines how the velocity vector veers when the surface is approached,
+While the streamwise velocity follows a universal inner scaling that has acquired its universal, $Re$-independent shape for $Re_D> \mathcal{O}\left(10^3\right)$, the span-wise component that defines how the velocity vector veers when the surface is approached,
 does not collapse in inner units, and there is, most importantly no sign of convergence even at the highest Reynolds numbers for
 which simulations where carried out.
 %
