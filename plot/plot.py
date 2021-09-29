@@ -270,7 +270,7 @@ if plot_evisc:
     ax2=fig.add_axes([0.06,0.11,0.43,0.87])
     ax1=fig.add_axes([0.55,0.11,0.43,0.87])
     fig2=plt.figure(figsize=(12,4.5)) 
-    ax3=fig2.add_axes([0.55,0.11,0.43,0.87])
+    ax3=fig2.add_axes([0.56,0.11,0.43,0.87])
     ax4=fig2.add_axes([0.06,0.11,0.43,0.87])
 
     for re in [500,750,1000,1300,1600]:
@@ -331,7 +331,7 @@ if plot_evisc:
         print(evisc[10],evisc2[10])
         
         norm = 1./(us*us)
-        norm_v_outer=nu/(nu*us*us*us)
+        norm_v_outer=nu/(nu*us*us)#*us)
         norm_v_inner=1./nu
 
         ax3.plot(ym, evisc2*norm_v_outer,lw=2,ls='-',label='Re={}'.format(re),c=colors[re])
@@ -401,8 +401,8 @@ if plot_evisc:
     ax3.set_xlabel(r'$z^-$')
     ax3.set_xscale('log')
     ax3.set_xlim(1e-3,2)
-    ax3.set_ylim(0,0.7)
-    ax3.set_ylabel(r'$\dfrac{\nu_E}{\nu} \dfrac{Z_\star}{\delta^+}$')
+    ax3.set_ylim(0,0.1)
+    ax3.set_ylabel(r'$\dfrac{\nu_E}{\nu} \dfrac{1}{\delta^+}$')
     
     fig.savefig('stresses.pdf',format='pdf')
     fig2.savefig('eddy_viscosity.pdf',format='pdf')

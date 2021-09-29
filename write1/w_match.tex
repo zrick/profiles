@@ -1,0 +1,45 @@
+\documentclass[a4paper,12pt]{article}
+\title{Matching the spanwise velocity}
+\author{C. Ansorge}
+\date{\today}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand{\p}{\partial} 
+\begin{document}
+
+We assume, the spanwise velocity follows a profile of the following shape:
+\begin{eqnarray}
+  w = w_1 + \alpha \log \left(\frac{z}{z_1}\right) + \beta (z-z_1) \label{eqn:w_profile}\\
+  \Rightarrow \frac{\p w}{\p z} = \frac{\alpha}{z} + \beta 
+\end{eqnarray}
+We now determine $\alpha$ and $\beta$ such that:
+\begin{equation}
+  \begin{array}{c c c c}
+    \left.\frac{\p w}{\p z}\right|_{z_1}&=& C_1 &\\ 
+    w(z_2) &=& C_2 & 
+  \end{array} 
+\end{equation}
+The lower boundary yields
+\begin{equation}
+  C_1 = \alpha/z_{1} + \beta \Leftrightarrow
+  \left\{\begin{array}{cccl}
+    \beta& =& C_1-\alpha/z_{1} & \quad \text{viz.\ (i)} \\
+    \alpha&=&z_{1}(C_1-\beta) & \quad \text{viz.\ (ii)} 
+  \end{array}\right.
+\end{equation}
+We can now substitute $\beta$ or $\alpha$ in~Eq.~(\ref{eqn:w_profile}) to yield:\\
+(i) when substituting $\beta$ 
+\begin{eqnarray}
+  w &=& w_1 + \alpha\log\left(\frac{z}{z_1}\right) + \left(C_1-\frac{\alpha}{z_1}\right)(z-z_1)  \\
+  w-w_1-C_1(z-z_1) &=& \alpha\left[\log\left(\frac{z}{z_1}\right) - \frac{z}{z_1}\right]\\
+  \Rightarrow\alpha &=&   \frac{C_2-w_1-C_1(z_2-z_1)}{\log(z_2/z_1) - z_2/z_1}
+\end{eqnarray}
+(ii) when substituting $\alpha$
+\begin{eqnarray} 
+  w &=& w_1 + z_1(C_1-\beta) \log \left(\frac{z}{z_1}\right) + \beta (z-z_1) \\
+  w-w_1-C_1z_1\log(z/z_1) &=& \beta\left[ z-z_1 \left(1+ \log\left(\frac{z}{z_1}\right)\right)\right] \\
+  \Rightarrow\beta&=& \frac{C_2-w_1-C_1z_1\log(z_2/z_1)}{ z_2-z_1 (1+ \log(z_2/z_1))}
+\end{eqnarray} 
+
+\end{document} 
