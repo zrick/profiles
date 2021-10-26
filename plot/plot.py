@@ -17,12 +17,13 @@ D2R = np.pi / 180.
 
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
+plot_ekman_ideal=True 
 plot_summary=False
-plot_evisc=True
+plot_evisc=False
 plot_profiles=True
-plot_visc_outer=False
+plot_visc_outer=True
 print_table=False
-plot_outer_log=False
+plot_outer_log=True
 plot_total_rot=False
 plot_convergence=False
 plot_re1600=False
@@ -264,6 +265,58 @@ if plot_re1600:
 
     ax1.set_xlim(1,1e4)
     ax2.set_xlim(1,1e4)
+
+if plot_ekman_ideal:
+    fig=plt.figure(figsize=(10,3.75))
+    ax1=fig.add_axes([0.06,0.11,0.41,0.87])
+    ax2=fig.add_axes([0.55,0.11,0.44,0.87])
+
+    z=np.arange(0,2*np.pi,0.02)
+    
+    sa_arr=[[+0.00, 0.4,'black', '-', 1.0],
+            [+0.12, 0.4,'red',   '-', 4.0],
+            [-0.12, 0.4,'blue',  '-', 1.0],
+            [+0.00, 1.0,'black', ':', 4.0], 
+            [+0.12, 1.0,'red',  '--', 1.0],
+            [-0.12, 1.0,'blue', '--', 1.0]
+            ]
+
+    for sa in sa_arr:
+        sek=sa[0]
+        aek=sa[1]
+        zek = z-sek
+        Uek=1-aek*np.exp(-zek)*np.cos(zek)
+        Vek=aek*np.exp(-zek)*np.sin(zek)
+        c=sa[2]
+        s=sa[3] 
+        w=sa[4]
+
+        i03=mp.geti(z,0.3*np.pi*2)
+        
+        ax1.plot(z[i03:],Uek[i03:],  c=c,ls=s,lw=w, label='a={1:4.1f},s={0:5.2f}'.format(sek,aek))
+        ax1.plot(z[:i03],Uek[:i03],  c=c,ls=s,lw=w, alpha=0.5)
+        
+        ax2.plot(Uek[i03:],Vek[i03:], c=c,ls=s,lw=w,label='a={1:4.1f} s={0:5.2f}'.format(sek,aek))
+        ax2.plot(Uek[:i03],Vek[:i03], c=c,ls=s,lw=w,alpha=0.5)
+        ax2.scatter(Uek[i03],Vek[i03],c=c)
+    lg=ax1.legend(loc='best')
+
+    ax1.plot([0.3*np.pi*2,0.3*np.pi*2],[-0.5,1.1],c='black',ls='--',lw=0.5)
+    ax1.plot([0,6.3],[1,1],c='black',ls='--',lw=0.5) 
+    
+    ax2.plot([0,1.1],[0,0],lw=0.5,ls='--',c='black')
+    ax2.plot([1,1],[-0.1,0.35],lw=0.5,ls='--',c='black')
+    ax1.set_ylim(-0.15,1.1)
+    ax1.set_xlim(0,5)
+    
+    ax2.set_xlim(0,1.1)
+    ax2.set_ylim(-0.08,0.35)
+    ax1.set_ylabel(r'$U_\mathrm{ek}/G$')
+    ax1.set_xlabel(r'$z/\delta_{ek}$')
+    ax2.set_xlabel(r'$U_\mathrm{ek}/G$')
+    ax2.set_ylabel(r'$V_\mathrm{ek}/G$') 
+    plt.savefig('ekman_ideal.pdf',format='pdf') 
+    
     
 if plot_evisc:
     fig=plt.figure(figsize=(12,4.5))
@@ -408,6 +461,16 @@ if plot_evisc:
     fig2.savefig('eddy_viscosity.pdf',format='pdf')
 
 if plot_profiles:
+
+    for re in [500,750,1000,1300,1600,2000,5000,10000,100000]:
+        us,al=sc.ustar_alpha(re)
+        dp=us*us*re*re/2
+        ym=np.array([0.2,0.3,0.4])
+        [e_u,e_w]=sc.profile_ekman(ym,us)
+        [ous,ows]=mp.rotate(e_u,e_w,al)
+        print(re,dp,us,al,e_u[1]*us,e_w[1],-ows[1],-ows[1]*us*dp)
+    quit()
+    
     fig=plt.figure(figsize=(12,4.5))
     ax1=fig.add_axes([0.06,0.11,0.43,0.87])
     ax2=fig.add_axes([0.56,0.11,0.43,0.87])
@@ -483,7 +546,7 @@ if plot_visc_outer:
     fig3=plt.figure(figsize=(6,4))
     ax3=fig3.add_axes([0.13,0.1,0.85,0.87]) 
 
-    for re in [1600,1000,500]:
+    for re in [1600,1000,750]:
         c=colors[re]
         nu=2./re**2
         us,al=sc.ustar_alpha(re)
@@ -493,22 +556,30 @@ if plot_visc_outer:
         up,wp=sc.profile_plus(yp,re)
         um,wm=sc.profile_minus(yp,re)
         f=Dataset(files[re],'r')
-        t_use = -1
+        ifinal=np.size(f['t'][:])-1
+        t_final=f['t'][ifinal]
+        i0=mp.geti(f['t'],t_final-2*np.pi)
+        t_0=f['t'][i0] 
+        print(re,'TIMES:',i0,ifinal,t_0,t_final)
+        
+
+        
             
-        u_dat=f['rU'][t_use,:]
-        w_dat=f['rW'][t_use,:]
+        u_dat=np.average(f['rU'][i0:ifinal,:],0)
+        w_dat=np.average(f['rW'][i0:ifinal,:],0) 
         y_dat=f['y'][:]
-        us_dat=f['FrictionVelocity'][t_use] 
+        us_dat=np.average(f['FrictionVelocity'][i0:ifinal])
         al_geo = np.arctan(w_dat[-1]/u_dat[-1])
-        al_sfc1 = f['FrictionAngle'][t_use]*D2R
+        al_sfc1 = np.average(f['FrictionAngle'][i0:ifinal])*D2R
         al_sfc2 = np.arctan(w_dat[1]/u_dat[1]) 
             
         [u_sfc,w_sfc] = mp.rotate(u_dat,w_dat,al_sfc1) 
         yp_dat = y_dat*us_dat/nu
         ym_dat = y_dat/us_dat
 
-        argz=    0.66*(2.*np.pi*(ym+0.12)) 
-        dampA =  8.4*us       - 150./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
+        c_argz = 0.66*2.*np.pi
+        argz=    c_argz*(ym+0.12)
+        dampA =  8.4*us       - 0./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
         z=1/us
         
         dampB= 0. 
@@ -518,27 +589,30 @@ if plot_visc_outer:
         print(ous[-1],ows[-1])
 
 
-        ax.plot(yp_dat,u_sfc/us_dat, c=c,lw=3,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
-        ax.plot(yp,up,               c=c,lw=3,ls=':')
+        ax.plot(yp_dat,u_sfc/us_dat, c=c,lw=2,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
+        ax.plot(yp,up,               c=c,lw=2,ls=':')
 
-        ax2.plot(ym,ous-ous[-1],ls='--',lw=0.5, c=c)
-        ax3.plot(ym,-ows+ows[-1],ls='--',lw=0.5,c=c)
-        
         if  re==1600 or re == 1300 :
-            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$ (data)'.format(re),alpha=0.25)
-            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls='-',alpha=1.00)
-            ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--',label=r'$Re={}$ (model)'.format(re))
-            ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':',label=r'$Re={}$ (model)'.format(re))
+            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=2,ls='-',label=r'$Re={}$ (DNS)'.format(re),alpha=0.5)
+            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=2,ls='-',alpha=0.5)
+            #ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--',label=r'$Re={}$ (model)'.format(re))
+            #ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':',label=r'$Re={}$ (model)'.format(re))
         else:
-            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=3,ls='-',label=r'$Re={}$'.format(re))
-            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=3,ls='-')
-            ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--')
-            ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':')
+            ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=1,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
+            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=1,ls='-',alpha=0.5)
+            #ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--')
+            #ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':')
+        i03=mp.geti(ym,0.3)
+        ax2.plot(ym[i03:],ous[i03:]-ous[-1],ls='--',lw=1, c=c, label=r'  (ekman)')
+        ax2.plot(ym[:i03],ous[:i03]-ous[-1],ls='--',lw=1, c=c,alpha=0.5)
+        ax2.scatter(ym[i03],ous[i03]-ous[-1],c=c)
 
+        ax3.plot(ym[i03:],-ows[i03:]+ows[-1],ls='--',lw=1,c=c)
+        ax3.plot(ym[:i03],-ows[:i03]+ows[-1],ls='--',lw=1,c=c,alpha=0.5)
+        ax3.scatter(ym[i03],-ows[i03]+ows[-1],c=c)
+        
 
-            
-
-    ulog=sc.profile_log(yp,re) 
+    ulog=sc.profile_log(yp) 
     ax.plot(yp[5:],ulog[5:],ls='--',lw=1,c='black',alpha=1.0,label=r'$U^+=\kappa^{-1}log(z^+) + C$')
     ax.plot(yp[:20],yp[:20],  ls=':',lw=1,c='black',alpha=1.0,label=r'$U^+=z^+$')
     ax.plot(yp,  ( yp -0.0003825*(yp**4) + 0.00000632 * (yp**6) ) / (1 + 0.00000632 * 0.07825 * (yp **6) ),lw=1,ls=':',c='blue',label=r'$U_{visc}$')
@@ -554,21 +628,21 @@ if plot_visc_outer:
     plt.close('all')
 
     
-    ax2.plot([0,1.5],[0,0],lw=1,c='black',ls='-') 
+    ax2.plot([0,1.5],[0,0],lw=0.5,c='black',ls='-') 
     ax2.set_xlim(0,1.5)
-    ax2.set_ylim(-3,1.3)
+    ax2.set_ylim(-1,1.2)
     ax2.set_xlabel(r'$z^-$')
-    ax2.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$')
+    ax2.set_ylabel(r'$(U^\alpha - G_{1}^\alpha)/u_\star$')
     lg2=ax2.legend(loc='best')
     lg2.get_frame().set_linewidth(0.0) 
     fig2.savefig('outer_layer_u.pdf',format='pdf')
 
 
-    ax3.plot([0,1.5],[0,0],lw=1,c='black',ls='-') 
+    ax3.plot([0,1.5],[0,0],lw=0.5,c='black',ls='-') 
     ax3.set_xlim(0,1.5)
-    ax3.set_ylim(-1.5,0.5)
+    ax3.set_ylim(-1.5,0.2)
     ax3.set_xlabel(r'$z^-$')
-    ax3.set_ylabel(r'$(U^\alpha - G^\alpha)/u_\star$')
+    ax3.set_ylabel(r'$(V^\alpha - G_{2}^\alpha)/u_\star$')
     lg3=ax3.legend(loc='best')
     lg3.get_frame().set_linewidth(0.0) 
     fig3.savefig('outer_layer_w.pdf',format='pdf')
@@ -635,9 +709,9 @@ if plot_outer_log :
     ax5=fig1.add_axes([0.11,0.455,0.18,0.43]) 
 
     fig2=plt.figure(figsize=(12,5))
-    ax3=fig2.add_axes([0.05,0.1,0.4,0.8])
+    ax3=fig2.add_axes([0.055,0.1,0.4,0.8])
     ax4=fig2.add_axes([0.55,0.1,0.4,0.8])
-    ax6=fig2.add_axes([0.26,0.185,0.18,0.37]) 
+    ax6=fig2.add_axes([0.265,0.18,0.18,0.35]) 
 
     fig3=plt.figure(figsize=(6,5))
     ax7=fig3.add_axes([0.1,0.1,0.8,0.8]) 
@@ -673,8 +747,10 @@ if plot_outer_log :
     ax8.plot([y10,y10],[0,100],c='black',lw=0.5,ls=':')
     ax8.plot([0,30],[f10,f10], c='black',lw=0.5,ls=':') 
     print(yvisc,mvisc)
+
+    colors[5000]='gray'
     
-    re_use=[500,750,1000,1300,1600,5000,10000,150000,1000000]
+    re_use=[500,750,1000,1300,1600,5000]#,10000,150000,1000000]
     for re in re_use:
         c=colors[re]
         nu=2./re**2
@@ -707,13 +783,20 @@ if plot_outer_log :
         up,wp=sc.profile_plus(yp,re)
         
         ax1.plot(yp[1:], wp[1:],        c=c,ls='-',lw=2)
-        ax2.plot(ym[1:],(wp[1:]-wp[-1]),c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re)) 
+        if re==500: 
+            ax2.plot(yp[1:], wp[1:]*us*dp,c=c,ls='-',lw=2,label=r'$Re_D={}$ (model)'.format(re))
+        else:
+            ax2.plot(yp[1:], wp[1:]*us*dp,c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re))
+        i03=mp.geti(yp,0.3*dp)
+        ax2.scatter(yp[i03],wp[i03]*us*dp,c=c)
         ax5.plot(yp[1:], wp[1:],        c=c,ls='-',lw=2) 
 
-        
-        ax3.plot(yp[1:],up[1:],         c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re))
+        if re == 500: 
+            ax3.plot(yp[1:],up[1:],         c=c,ls='-',lw=2,label=r'$Re_D={}$ (model)'.format(re))
+        else:
+            ax3.plot(yp[1:],up[1:],         c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re))
         ax4.plot(ym[1:],up[1:]-up[-1],  c=c,ls='-',lw=2,label=r'$Re_D={}$'.format(re))
-        ax6.plot(yp[1:],up[1:],         c=c,ls='-',lw=1) 
+        ax6.plot(yp[1:],up[1:],         c=c,ls='-',lw=1)
 
         i1=mp.geti(ym,0.001)
         ax1.scatter(yp[i1],wp[i1],marker='D',c=c,s=20)
@@ -722,13 +805,19 @@ if plot_outer_log :
             continue; 
         
 
-        ax1.plot(yp_dat[1:],w_sfc[1:]/us_dat,            c=c,ls='--',lw=1) 
-        ax2.plot(ym_dat[1:],(w_sfc[1:]-w_sfc[-1])/us_dat,c=c,ls='--',lw=1)
-        ax5.plot(yp_dat[:],w_sfc[:]/us_dat,            c=c,ls='--',lw=1)
+        ax1.plot(yp_dat[1:],w_sfc[1:]/us_dat,       c=c,ls='--',lw=1)
+        if re == 500:
+            ax2.plot(yp_dat[0:],w_sfc[0:]*dp,           c=c,ls='--',lw=1,label='    (DNS)')
+        else: 
+            ax2.plot(yp_dat[0:],w_sfc[0:]*dp,           c=c,ls='--',lw=1)
+        ax5.plot(yp_dat[:],w_sfc[:]/us_dat,         c=c,ls='--',lw=1)
 
-        ax3.plot(yp_dat[1:],u_sfc[1:]/us_dat,            c=c,ls='--',lw=1)
-        ax4.plot(ym_dat[1:],(u_sfc[1:]-u_sfc[-1])/us_dat,c=c,ls='--',lw=1)
-        ax6.plot(yp_dat[:],u_sfc[:]/us_dat,            c=c,ls='--',lw=1)
+        if re == 500: 
+            ax3.plot(yp_dat[1:],u_sfc[1:]/us_dat,            c=c,ls='--',lw=2,label='    (DNS)')
+        else :
+            ax3.plot(yp_dat[1:],u_sfc[1:]/us_dat,            c=c,ls='--',lw=2)
+        ax4.plot(ym_dat[1:],(u_sfc[1:]-u_sfc[-1])/us_dat,c=c,ls='--',lw=2)
+        ax6.plot(yp_dat[:],u_sfc[:]/us_dat,              c=c,ls='--',lw=2)
 
         dp_dat = us_dat*us_dat/nu
         ax7.plot(yp_dat[:20],w_sfc[:20]*dp_dat,    c=c,ls='--',lw=1,label=r'$DNS: Re_D={}$'.format(re))
@@ -739,19 +828,37 @@ if plot_outer_log :
         ax8.scatter(yp_dat[ictr],w_sfc[ictr]*dp_dat,     c=c) 
         
     ax7.plot(yp[:20],wp[:20]*us*dp,     c=c,ls='-',lw=2,label=r'$Model: Re_D={}$'.format(re),alpha=0.5)
+    ax6.plot(yp[:15],yp[:15],ls=':',lw=2,c='black',label='$z^+$')
     ax2.plot([1e-3,1e2],[0,0],lw=0.5,ls='-',c='black')
 
+    c4=-3.6e-4
+    c6=4.6e-6
+    ur=14.5# 12.78
+    ui= ( yp + c4*yp**4+c6*yp**6 ) / (1+ c6/ur*yp**6)
+    ax3.plot(yp,ui,ls='--',lw=1,c='black',label=r'$U_\mathrm{inner}^{\alpha_\star+}$')
+    ax3.plot(yp[10:],sc.profile_log(yp[10:]),ls=':',c='black',label=r'$\kappa^{-1} \log z^+$') 
+    lg3=ax3.legend(loc='upper left')
+    lg3.get_frame().set_linewidth(0.0) 
+
+    av=18.8524729
+    bv=0.2353
+    ax2.plot(yp,av* (bv*yp - 1 + np.exp(-bv*yp) ),ls='--',lw=4,c='black',label=r'$V_\mathrm{inner}^{\alpha}/G \delta^+$',alpha=0.5) 
+    print('AT 10:',bv*10,np.exp(-bv*10),av*( (bv*10) -1 + np.exp(-bv*10)))
+    lg6=ax6.legend(loc='best')
+    lg6.get_frame().set_linewidth(0.0)
+    
     ax1.set_xscale('log')
     ax1.set_xlim(1,1e3)
     ax1.set_ylim(0,5)
     ax1.set_xlabel(r'$z^+$')
     ax1.set_ylabel(r'$\left(V^{\alpha}\right)^+$')
     
+    ax2.set_xlim(1e0,2e3)
     ax2.set_xscale('log')
-    ax2.set_xlim(5e-2,2e0)
-    ax2.set_ylim(-5,0.5)
+    ax2.set_yscale('log')
+    ax2.set_ylim(3e-1,2e3)
     ax2.set_xlabel(r'$z^-$')
-    ax2.set_ylabel(r'$V^{\alpha+}-V^{\alpha+}_G$')
+    ax2.set_ylabel(r'$V^{\alpha+} \dfrac{\delta^+}{Z_\star}$') 
 
     ax5.set_xscale('linear')
     ax5.set_xlim(0,15)
@@ -765,15 +872,16 @@ if plot_outer_log :
     ax3.set_xlabel(r'$z^+$')
     ax3.set_ylabel(r'$U^{\alpha +}$') 
 
-    ax4.plot([0,2],[0,0],ls=':',lw=1,c='black') 
-    ax4.set_xlim(0,1.25)
+    ax4.plot([0,2],[0,0],ls=':',lw=1,c='black')
+    ax4.set_xscale('log')
+    ax4.set_xlim(1e-2,3)
     ax4.set_ylim(-10,2) 
     ax4.set_xlabel(r'$z^-$')
-    ax4.set_ylabel(r'$(U^{\alpha+}-G^{\alpha+})/u_\star$')
+    ax4.set_ylabel(r'$U^{\alpha+}-G^{\alpha+}$')
 
     ax6.set_xscale('linear')
-    ax6.set_xlim(0,15)
-    ax6.set_ylim(0,10)
+    ax6.set_xlim(0,14.8)
+    ax6.set_ylim(0,9.8)
     ax6.set_xlabel(r'$z^+$')
     ax6.set_ylabel(r'$U^{\alpha+}$')
 

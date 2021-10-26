@@ -189,6 +189,19 @@ class EkmanUniversalClass:
 
     def erf_transition(self,w,l,x):
         return 0.5*(sp.special.erf(w*np.log(x/l))+1)
+
+    def profile_ekman(self,ym,us_loc):
+        z=1/us_loc
+        
+        c_argz=0.66*2.*np.pi 
+        argz=    c_argz*(ym +0.12) #0.66*(2.*np.pi*(ym+0.12)) 
+        dampA =  8.4*us_loc        #- 0./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
+        #dampB= 0. 
+        e_u= (1-(dampA*np.cos(argz))*np.exp(-argz))*z  #-dampB*np.cos(argz)*np.exp(-argz)*z
+        e_w=   ( dampA*np.sin(argz))*np.exp(-argz)*z   #-dampB*np.cos(argz)*np.exp(-argz)*z
+
+        return [e_u,e_w]
+
     
     def profile_plus(self,yp,re,us=-1,al=-1):
         self.qinit()
@@ -207,20 +220,16 @@ class EkmanUniversalClass:
         u=np.zeros(len(yp))
         w=np.zeros(len(yp)) 
         
-        z=1/us_loc 
+        z=1./us_loc 
         dp_loc=re**2/(2*z**2)
         ym=np.array(yp)/dp_loc
         trans_scale=2.0
 
-        ################################################################################
-        # 2-COMPONENT OUTER REFERENCE PROFILES
-        c_argz=0.66*2.*np.pi 
-        argz=    c_argz*ym + c_argz*0.12 #0.66*(2.*np.pi*(ym+0.12)) 
-        dampA =  8.4*us_loc        - 0./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )
-        #dampB= 0. 
-        outer_u= (1-(dampA*np.cos(argz))*np.exp(-argz))*z  #-dampB*np.cos(argz)*np.exp(-argz)*z
-        outer_w=   ( dampA*np.sin(argz))*np.exp(-argz)*z   #-dampB*np.cos(argz)*np.exp(-argz)*z
-        [ous,ows]=mp.rotate(outer_u,outer_w,al_loc)
+        # Ekman profile -- geostrophic alignment
+        [ous,ows]=self.profile_ekman(ym,us_loc) 
+
+        # Shear-aligned Ekman profile
+        [ous,ows]=mp.rotate(ous,ows,al_loc)
         
         ################################################################################
         # STREAMWISE COMPONENT (shear-aligned) 
@@ -262,13 +271,15 @@ class EkmanUniversalClass:
             print('ERROR: SINGULARITY IN LINEAR SYSTEM DETECTED')
         else :
             a=(a1+a2)/2.
-        print('PARAMTERS:',a*us_loc*dp_loc,b*us_loc*dp_loc,c*us_loc*dp_loc)
+            print('PARAMETERS for RE:',re,yp[i1],':',a*us_loc*dp_loc,b*us_loc*dp_loc,c*us_loc*dp_loc)
         w[i1:] = a + b * np.log(yp[i1:]) + c*yp[i1:]
 
         # Blend inner and outer profile to eliminate discontinuous second derivative at y-=ctr
         trans_scale=2.
         wgt=self.erf_transition(trans_scale,ctr*dp_loc,yp[1:]) 
-        w[1:]= (1-wgt)*w[1:] + wgt*(-ows[1:]) 
+        w[1:]= (1-wgt)*w[1:] + wgt*(-ows[1:])
+
+        # done 
         return u,w
 
     
