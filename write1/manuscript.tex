@@ -907,7 +907,7 @@ A pure blending from the linear velocity profile into the logarithmic one is, ho
 profile overestimate the velocity in the buffer layer. We therefore introduce a higher-order compensating term into
 the linear profile before blending it into the logarithmic law:
 \begin{equation}
-  U_\text{inner}^{\alpha_\star}^+ = f_{U,\mathrm{inner}}(z^+) = \frac{ z^+ + \gamma_4 (z^+)^{4} + \gamma_6 (z^+)^{6} } { 1 + \gamma_6 /u_{ref} (z^+ )^6}, 
+  U_\text{inner}^{\alpha_\star}^+ = f_{U,\mathrm{visc}}(z^+) = \frac{ z^+ + \gamma_4 (z^+)^{4} + \gamma_6 (z^+)^{6} } { 1 + \gamma_6 /u_{ref} (z^+ )^6}, 
 \end{equation} 
 where the fourth- and sixth-order terms in the nominator are designed to fit the profile below $y^+\approx 10$ and
 the sixth-order correction in the denominator limits the growth of $u_\text{inner}$ for large $y^+$.
@@ -1010,16 +1010,16 @@ the low-$\RE$ correection suggested by \cite{spalart:JFM1989}.
 This constrains the wind veer, and it quantitatively shows that the decreasing wall friction manifest in an
 increase of $Z_\star$ exactly compensates the decrease of wind turning measured by $\sin\alpha_\star$. 
 
-If the difference across the boundary layer is constant ($C_{V0}$) across variations of $\RE$,
+If the difference across the boundary layer is constant ($C_{V0}$) vs. $\RE$,
 the averaged gradient $\partial_{z^+} V^{\alpha_\star+}$ of the spanwise velocity component
-must decrease as $1/\delta^+$ as $Re_\tau$ increases.
+must decrease as $1/\delta^+$ with increasing $Re_\tau$. 
 %
 Hence, it should--at a fixed height--be $V^{\alpha_\star} \propto \left(\delta^{+}\right)^{-1}$.
 %
 A profile that agrees with the constraints of the profile at the surface
 and exploits the dependence of $V^{\alpha_\star}$ on $\delta^+$ is 
 \begin{equation}
-  V^{\alpha_\star}\frac{\delta^+}{G} = f_{V,\mathrm{inner}}(z^+) = v_\mathrm{ref} \left( \omega_v z^+ -1 + \exp[-\omega_v z^+]\right),
+  V^{\alpha_\star}\frac{\delta^+}{G} = f_{V,\mathrm{visc}}(z^+) = v_\mathrm{ref} \left( \omega_v z^+ -1 + \exp[-\omega_v z^+]\right),
   \label{eqn:scaling_spanwise} 
 \end{equation}
 where $v_\mathrm{ref}$ controls the magnitude of the profile and $\omega_v$ sets the height at which the profile
@@ -1028,48 +1028,6 @@ transitions into an approximately linear one.
 We find excellent agreement with the DNS data for $500\le\RE_D\le1600$ below $z^+\approx 15$ with
 \[v_\mathrm{ref} = 18.85;  \quad \omega_v=0.2353\]
 (cf. Fig.~\ref{fig:inner_w}b). 
-%
-\par
-%
-Eq.~(\ref{eqn:scaling_spanwise}) establishes a universal mixed scaling for the spanwise velocity:
-%
-While it requires the vertical coordinate to be expressed in inner units,
-the velocity itself is normalized by the geostrophic wind, and becomes
-inversely proportional to the friction Reynolds number $\RE_\tau=\delta^+$ when considered at a fixed height.
-%
-In vicinity of the surface, such mixed scaling has already been identified for higher-order statistics in convective 
-flows \citep{mellado:BM2016,li:JAS2018}, where large scales leave their signatures in vicinity of the surface.
-%
-It is important to note here that, while $V$ is a first-order statistic from a statistical perspective,
-the spanwise velocity is a higher-order correction term from the view point of similarity theory and
-the channel-flow analogy that is routinely employed in the surface layer.
-%
-Further, this is consistent with the scaling for the velocity hodograph found in Eq.~(\ref{eqn:hodograph_scaling}) where
-the friction velocity also drops out.
-%
-\par
-%
-The universal scaling of $V^{\alpha_\star}/G\delta^+$ continues through the surface layer,
-and we find a very similar picture to the spanwise component with an increasing
-depth of a quasi-logarithmic layer as shown in Fig.~\ref{fig:inner_w}b.
-%
-We model this layer by a profile of the form
-%
-\begin{equation}
-  f_{V,\mathrm{log}}(z^+) = \frac{V_\mathrm{log}(z^+)}{G} \delta^+ = a_\mathrm{log} + b_\mathrm{log} \log z^+ + c_\mathrm{log} z^+
-\end{equation} 
-%
-This profile is constrained by
-\begin{align}
-  f_{V,\mathrm{log}}(z^+=10) &=& f_{V,\mathrm{inner}}(z^+=10) &=:& v_{10} \simeq 27.3\\
-  \frac{\p}{\p z^+} \left[ f_{V,\mathrm{log}}\right]_{z^+=10} &=& \frac{\p}{\p z^+}\left[ F_{V,\mathrm{inner}}\right]_{z^+=10} &=:&d_{10}\simeq 4.01 \\
-  f_{V,\mathrm{log}}(z^+=0.3\delta^+) &=& V^{\alpha_\star}_\mathrm{ek}(z^-=0.3)\delta^+&=:& v_{03} 
-\end{align}
-where $v_{03}$ is determined by $V_\mathrm{ek}(0.3)$ and $U_\mathrm{ek}(0.3)$ and depends on the Reynolds number. 
-
-
-
- 
 %
 \begin{figure}
   \begin{flushleft}
@@ -1082,6 +1040,84 @@ where $v_{03}$ is determined by $V_\mathrm{ek}(0.3)$ and $U_\mathrm{ek}(0.3)$ an
     a universal profile for the spanwise component of velocity in the inner layer. }
   \label{fig:inner_w}
 \end{figure}
+ %
+\par
+%
+For the adjacent surface layer, we find a log-like transition from the quasi-linear profile
+inner profile around $z^+=10$ to a linear profile with increasing $\RE$ (Fig.~\ref{fig:inner_w}b).
+%
+We model this transition by 
+%
+\begin{equation}
+  f_{V,\mathrm{log}}(z^+) = \frac{V_\mathrm{log}(z^+)}{G} \delta^+ = a_\mathrm{log} + b_\mathrm{log} \log z^+ + c_\mathrm{log} z^+. 
+\end{equation} 
+%
+This surface-layer profile matches the inner (viscous) scaling in vicinity of the surface to the outer
+(Ekman) scaling above $z^-=0.3$ when constrained by the viscous profile at the bottom and the
+Ekman profile at the top:
+%
+\begin{align}
+  f_{V,\mathrm{log}}(z^+=10) &=& f_{V,\mathrm{visc}}(z^+=10) &=:& v_{10} \simeq 27.3\\
+  \frac{\p}{\p z^+} \left[ f_{V,\mathrm{log}}\right]_{z^+=10} &=& \frac{\p}{\p z^+}\left[ F_{V,\mathrm{visc}}\right]_{z^+=10} &=:&d_{10}\simeq 4.01 \\
+  f_{V,\mathrm{log}}(z^+=0.3\delta^+) &=& V^{\alpha_\star}_\mathrm{ek}(z^-=0.3)\delta^+&=:& v_{03} 
+\end{align}
+where $v_{03}$ is determined by $V_\mathrm{ek}(0.3)$ and $U_\mathrm{ek}(0.3)$ and depends on $\RE$.
+%
+While the $\RE$-dependency of $a_\mathrm{log}$, $b_\mathrm{log}$, $c_\mathrm{log}$
+is small, it shows up in Fig.~\ref{fig:profiles} where the normalized profiles
+of spanwise velocity become more convex with increasing $\RE$.
+%
+We can now quantify this effect by means of the change of $c_\mathrm{log}$ versus $\RE$ which is shown in
+Fig.~\ref{fig:clog} (cf. Appendix~\ref{app:log-coefficients};
+$a_\mathrm{log}$ and $b_\mathrm{log}$ are then determined by the universal
+values of $v_{10}$ and $d_{10}$).
+%
+%
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{../plot/c_log.pdf}
+  \caption{c-log.
+    \label{fig:clog}}
+\end{figure} 
+%
+\subsubsection{Discussion}
+Eq.~(\ref{eqn:scaling_spanwise}) establishes a universal mixed scaling for the spanwise velocity
+in the viscous layer:
+%
+While it requires the vertical coordinate to be expressed in inner units,
+the velocity itself is normalized by the geostrophic wind, and becomes
+inversely proportional to the friction Reynolds number $\RE_\tau=\delta^+$
+when considered at a fixed height.
+%
+In vicinity of the surface, such mixed scaling has already been identified for higher-order statistics in convective 
+flows \citep{mellado:BM2016,li:JAS2018}, where large scales leave their signatures in vicinity of the surface.
+%
+It is important to note here that, while $V$ is a first-order statistic from a statistical perspective,
+the spanwise velocity is a higher-order correction term from the perspective of similarity theory and
+from the viewpoint of the channel-flow analogy that is routinely employed in the surface layer.
+%
+Further, this is consistent with the scaling for the velocity hodograph found in
+Eq.~(\ref{eqn:hodograph_scaling}) where the friction velocity also drops out.
+%
+\par
+%
+In the surface layer, there is not only a mixed scaling--as we had already identified
+in the viscous layer--, but we cannot find a universal function onto which the profiles
+of spanwise velocity collapse. 
+%
+This additional degree of freedom reflects the inner--outer matching problem for the
+spanwise velocity, and rather than giving a universal profile for this region,
+as is usually done, we resort here to a parametric description of the problem,
+namely in terms of the function $f_{V,\mathrm{log}}$ determined by the
+parameters $a_\mathrm{log}$, $b_\mathrm{log}$, $c_\mathrm{log}$ which can be estimated
+based on the above scaling considerations for any Reynolds number. 
+%
+We note that, once the parameter $a_\mathrm{log}$ is known, the parameters $b_\mathrm{log}$
+and $c_\mathrm{log}$ can be estimated solely based on $f_{V,\mathrm{visc}}$, i.e. using the
+value $v_{10}$ and $d_{10}$ found for the viscous region of the flow.
+%
+For the range of Reynolds number relevant to geophysical problems ($10^4\lesssim \RE_D \lesssim 10^6$),
+the variation of $c_\mathrm{log}$ is, however, rather small.
+%
 \end{subequations}
 
 
@@ -1189,6 +1225,53 @@ the eddy viscosity and an offset in $\zeta$, here we let $B=0$.
 %%   &=& e^\gzm (\sin\xi\Delta u_\text{match} + \cos\xi\Delta w_\text{match}) 
 %% \end{eqnarray}
 %% \end{subequations} 
+
+\section{Matching the spanwise velocity profiles in the inner layer}
+\label{app:log-coefficients}
+The spanwise profile in vicinity of the surface is given by
+$V/G=f_{V,\mathrm{visc}}\delta ^+$ with
+\begin{subequations}
+\begin{eqnarray}
+  f_{V,\mathrm{visc}} &=& v_\mathrm{ref}\left(\omega_v z^+ -1 + e^{-\omega_v z^+}\right)\\
+  f_{V,\mathrm{log}}   &=& a_\mathrm{log} + b_\mathrm{log} \log z^+ + c_\mathrm{log} z^+ 
+\end{eqnarray}
+\end{subequations}
+Matching the profiles and gradient $z_0=10^+$ and the value at $z_1=0.3\dlta^+$ yields
+\begin{subequations} 
+\begin{eqnarray}
+  v_\mathrm{ref} \left(\omega_v z_{0} + e^{-\omega_v z_{0}}\right)
+  & = v_{0}=& a_\mathrm{log} + b_\mathrm{log} \log z_{0} +c_\mathrm{log} z_{0}  \\
+  &   v_{1}=& a_\mathrm{log} + b_\mathrm{log} \log z_{1} +c_\mathrm{log} z_{1} \\
+  v_\mathrm{ref}\omega_z \left( 1 - e^{-\omega_z z_{0}}\right)
+  & = d_{0}=& \frac{b_\mathrm{log}}{z_{10}} + c_\mathrm{log} 
+\end{eqnarray}
+\end{subequations} 
+The gradient condition implies $b_\mathrm{log}=(d_{0} -c_\mathrm{log})z_{0}$, and yields
+\begin{subequations}
+\begin{eqnarray}
+  %v_{0}&=& a_\mathrm{log} + z_{0}\left[ (d_0-c_\mathrm{log}) \log z_{0} +c_\mathrm{log}\right]\\
+  v_0-z_0d_0\log z_0&=& a_\mathrm{log} + c_\mathrm{log} (z_0- z_0\log z_0) \\
+  %v_1 &=& a_\mathrm{log} + z_0(d_0-c_\mathrm{log})\log z_1 +  c_\mathrm{log}z_1\\ 
+  v_1-z_0d_0\log z_1 &=& a_\mathrm{log} +c_\mathrm{log} (z_1- z_0\log z_0)  \\
+  \Rightarrow c_\mathrm{log}&=& \frac{ \Delta v - z_0d_0 \log z_1/z_0}{\Delta z} 
+\end{eqnarray}
+with $\Delta z=z_1-z_0$ and $\Delta v=v_1-v_0$.
+%
+Then, the coefficient $a_\mathrm{log}$ is estimated as 
+\begin{eqnarray} 
+  a_\mathrm{log} &=& v_0-z_0d_0\log z_0 -  \frac{ \Delta v - z_0d_0 \log z_1/z_0}{\Delta z}\left[
+    z_0-z_0\log z_0 
+    \right]. 
+\end{eqnarray}
+We note that $ \log(z_1/z_0) / (z_1-z_0) \rightarrow 0$ for large $z_1$, and as $z_1=0.3\delta^+$,
+this implies that the second term in $c_\mathrm{log}$ only plays a role at low and intermediate $\RE$.
+Then, $a_\mathrm{log}$ can be estimated as 
+\begin{eqnarray}
+  a_\mathrm{log} \simeq v_0 -z_0 \left[ d_0 \log  z_0 - \frac{\Delta v}{\Delta z} ( 1- \log z_0) \right] 
+\end{eqnarray}
+for large $\RE$. 
+\end{subequations}
+
 
 \printbibliography 
 

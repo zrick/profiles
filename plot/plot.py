@@ -316,7 +316,7 @@ if plot_ekman_ideal:
     ax2.set_xlabel(r'$U_\mathrm{ek}/G$')
     ax2.set_ylabel(r'$V_\mathrm{ek}/G$') 
     plt.savefig('ekman_ideal.pdf',format='pdf') 
-    
+    plt.close('all')
     
 if plot_evisc:
     fig=plt.figure(figsize=(12,4.5))
@@ -461,20 +461,109 @@ if plot_evisc:
     fig2.savefig('eddy_viscosity.pdf',format='pdf')
 
 if plot_profiles:
+    # calculate and plot a_log
 
+    c_log = []
+    c1=[]
+    c2=[]
+    re_arr=np.arange(2.5,10,0.05)
+    re_arr=np.power(10,re_arr) 
+    for re in re_arr:
+        us,al=sc.ustar_alpha(re)
+        dp=us*us*re*re/2 
+        ym=np.array([0.3])
+        [e_u,e_w]=sc.profile_ekman(ym,us)
+        [ous,ows]=mp.rotate(e_u,e_w,al)
+        w0=27
+        d0=4.01
+        w1=-ows[0]*us*dp
+        deltav=w1-w0
+        deltaz=0.3*dp-10
+        c_log.append((deltav - 10*d0*np.log(0.03*dp)) / deltaz)
+        c1.append(deltav/deltaz)
+        c2.append(10*d0*np.log(0.03*dp)/deltaz)
+        #blog=(d0-clog)*10
+        #a_log.append(w0-blog*np.log(10) - clog*10)
+        print(re,us,al,c_log[-1],c1[-1],c2[-1])
+        
+    c_log=np.array(c_log).flatten()
+    c1=np.array(c1).flatten()
+    c2=np.array(c2).flatten() 
+    fig=plt.figure(figsize=(5,4))
+
+    ax=fig.add_axes([0.13,0.13,0.85,0.85])
+    i0=mp.geti(re_arr,4e4)
+    i1=mp.geti(re_arr,4e6)
+    ax.plot(re_arr[i0:i1],c_log[i0:i1],ls='-',lw=4,c='black',alpha=0.5)
+    ax.plot(re_arr,c_log,ls='-',lw=2,label=r'$c_\mathrm{log}$',c='black')
+    ax.plot(re_arr,c1,ls='--',lw=1,label=r'$\Delta v/ \Delta $') 
+    ax.plot(re_arr,c2,ls='--',lw=1,label=r'$z_0 d_0 log(\delta^+/z_0) / \Delta z$')
+    ax.plot(re_arr[[0,i1]],c_log[[i1,i1]],ls='--',lw=0.5,c='black')
+    ax.plot(re_arr[[0,i0]],c_log[[i0,i0]],ls='--',lw=0.5,c='black')
+    ax.plot(re_arr[[i0,i0]],c_log[[0,i0]],ls='--',lw=0.5,c='black')
+    ax.plot(re_arr[[i1,i1]],c_log[[0,i1]],ls='--',lw=0.5,c='black')
+    ax.set_xlim(re_arr[0],re_arr[-1])
+    ax.set_ylim(0,max(c_log)+0.5)
+    ax.set_xscale('log')
+    ax.set_xlabel(r'$Re_D$')
+    ax.set_ylabel(r'$a_\mathrm{log}$') 
+    lg=ax.legend(loc='best')
+    lg.get_frame().set_linewidth(0.0)
+
+    fig.savefig('c_log.pdf',format='pdf') 
+    
+    fig=plt.figure(figsize=(5,4))
+    ax=fig.add_axes([0.1,0.1,0.85,0.85])
+
+    
     for re in [500,750,1000,1300,1600,2000,5000,10000,100000]:
         us,al=sc.ustar_alpha(re)
         dp=us*us*re*re/2
-        ym=np.array([0.2,0.3,0.4])
+        yp=np.arange(dp) 
+        ym=np.array([0.2,0.3,5])
         [e_u,e_w]=sc.profile_ekman(ym,us)
         [ous,ows]=mp.rotate(e_u,e_w,al)
-        print(re,dp,us,al,e_u[1]*us,e_w[1],-ows[1],-ows[1]*us*dp)
-    quit()
-    
+        w0=27.
+        yp[0]=0.1
+        yp[1]=0.2
+        yp[2]=0.4
+        yp[3]=0.8
+        yp[4]=1.6
+        yp[5]=3.2
+        yp[6]=6 
+        d0=4.01
+        w1=-ows[1]*us*dp
+        deltav=w1-w0 
+        deltaz=0.3*dp-10 
+        clog=(deltav - 10*d0*np.log(0.03*dp)) / deltaz
+        blog=(d0-clog)*10
+        alog=w0-blog*np.log(10) - clog*10 
+        print('.... ',re,alog,blog,clog)
+
+        wlog=alog + blog*np.log(yp) + clog*yp
+        i1=mp.geti(yp,10000)
+        i0=mp.geti(yp,5) 
+        ax.plot(yp[i0:],wlog[i0:],ls='-',lw=1)
+    wsfc=18.85*(0.2353*yp/100 -1 + np.exp(-0.2353*yp/100))
+    ax.plot(yp[:i1]/100,wsfc[:i1],ls='--',c='black')
+                
+    ax.set_xscale('log')
+    ax.set_xlim(1e-2,1e5) 
+    ax.set_yscale('log')
+    plt.show()
+    plt.close('all') 
+
     fig=plt.figure(figsize=(12,4.5))
     ax1=fig.add_axes([0.06,0.11,0.43,0.87])
     ax2=fig.add_axes([0.56,0.11,0.43,0.87])
 
+    fig2=plt.figure(figsize=(5,4))
+    ax3=fig2.add_axes([0.1,0.1,0.85,0.85]) 
+
+    fig3=plt.figure(figsize=(5,4))
+    ax4=fig3.add_axes([0.1,0.1,0.85,0.85]) 
+
+    
     ylog=np.arange(1e1,1e3)
     vlog=sc.profile_log(ylog) 
     ax1.plot(ylog,sc.profile_log(ylog),lw=3,ls='-',c='black',alpha=0.5,
@@ -510,6 +599,18 @@ if plot_profiles:
         i50 = mp.geti(yp,50)
         ax1.scatter(yp[i01],up[i01],c=c,marker='o') 
         ax2.scatter(ym[i50],um[i50]-um[-1],c=c,marker='d') 
+
+        uu=np.average(f['Rxx'][:,:],0)
+        vv=np.average(f['Ryy'][:,:],0)
+        ww=np.average(f['Rzz'][:,:],0)
+        us2=us*us
+        ax3.plot(yp,uu/us2,ls='-', label='RE={}'.format(re),c=c)
+        ax3.plot(yp,vv/us2,ls='--',c=c)
+        ax3.plot(yp,ww/us2,ls=':', c=c)
+
+        ax4.plot(ym,uu/us,ls='-', label='RE={}'.format(re),c=c)
+        ax4.plot(ym,vv/us,ls='--',c=c)
+        ax4.plot(ym,ww/us,ls=':', c=c) 
         
         print(re,us,al)
     ax1.plot([1,1],[1,1],ls=':', c='white',lw=0,label=' ')
@@ -533,8 +634,27 @@ if plot_profiles:
 
     lg2=ax2.legend(loc='best')
     lg2.get_frame().set_linewidth(0.0)
-    plt.savefig('uv_innerouter.pdf',format='pdf')
+    fig.savefig('uv_innerouter.pdf',format='pdf')
+
+    ax3.set_xlabel('yp')
+    ax3.set_ylabel('Stress')
+    ax3.set_xscale('log')
+    ax3.set_xlim(1,2e3)
+    l2=ax3.legend(loc='best')
+    l2.get_frame().set_linewidth(0.0) 
+    fig2.savefig('stress_re_inner.pdf',format='pdf') 
+
+    ax4.set_xlabel('ym')
+    ax4.set_ylabel('Stress' )
+    ax4.set_xscale('log')
+    ax4.set_xlim(1e-3,2)
+    l3=ax4.legend(loc='best')
+    l3.get_frame().set_linewidth(0.0) 
+    
+    fig3.savefig('stress_re_outer.pdf',format='pdf')
+
     plt.close('all')
+    
     
 if plot_visc_outer:
     fig=plt.figure(figsize=(5,4))
@@ -748,9 +868,9 @@ if plot_outer_log :
     ax8.plot([0,30],[f10,f10], c='black',lw=0.5,ls=':') 
     print(yvisc,mvisc)
 
-    colors[5000]='gray'
+    colors[10000]='gray'
     
-    re_use=[500,750,1000,1300,1600,5000]#,10000,150000,1000000]
+    re_use=[500,750,1000,1300,1600,10000]#,10000,150000,1000000]
     for re in re_use:
         c=colors[re]
         nu=2./re**2
