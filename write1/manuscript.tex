@@ -57,7 +57,7 @@
 
 
 \date{\scriptsize Draft - Version \today}
-\title{Profiles of Wind Direction and Speed in Turbulent Ekman Flow}
+\title{Wind veer and and Speed in Turbulent Ekman Flow}
 \author{Cedrick Ansorge, Hauke Wurps}
 
 \begin{document} 
@@ -96,7 +96,7 @@ cause a slow-down of the mean wind reducing the Coriolis force thus turning the 
 in favor of the pressure gradient force. 
 %%
 Not only does the veering set the frame of reference for surface layer theory, it also has
-effects at small and large scales.
+effects at small and large scales \todo{Insert: Brown, 2005; Svensson and Holtslag, 2009}.
 %
 From a large-scale perspective, the veering of wind across the planetary boundary layer determines
 the amount of cross-isobaric mass-flux, commonly referred to as 'Ekman pumping' \citep{ekman:AMA1905},
@@ -105,9 +105,11 @@ and it is thus a key factor in the life-cycle of large-scale synoptic systems.
 % %% This shear is probably not related to Ekman-turning 
 % On the mesoscale, shear in the surface layer a crucial factor for the initiation and sustainment of strong convective events (REFERENCE?).
 % 
-At the small-scale end, the directional shear of the wind in the upper part of the surface layer
-may cause a systmatic yaw for tall wind power generation devices where blades reach into the Ekman layer,
-i.e. that part of the boundary layer where the wind starts to turn. 
+Within the atmospheric boundary layer (ABL), directional shear of the wind in
+the upper part of the surface layer may cause a systmatic yaw for tall wind power generation devices
+where blades reach into the Ekman layer, i.e. that part of the boundary layer where the wind starts to turn;
+an exact estimate of such effects is critical in the site assessments for wind farms
+\todo{References: Calaf et al., 2010 Phys Fluids; Mirocha et al., 2018 Wind Energy Science} . 
 %
 \par
 %
@@ -120,15 +122,16 @@ uniquely determine the surface drag $\tau_\SFC$ in a turbulent Ekman flow.
 In any quantitative description of the surface layer, the friction velocity $u_\star$ is the dynamic scale
 and $\alpha$ defines the alignment of the frame of reference.
 %
-Knowledge about $u_\star$ and $\alpha$ is thus a pre-requisite for any quantitative theory of the surface layer and a first
-attempt in theoretical quantification was undertaken by \citet{rossby:PPO1935} using integral relations in the boundary layer.
+Knowledge about $u_\star$ and $\alpha$ is thus a pre-requisite for any quantitative theory of the surface layer
+and a \citet{rossby:PPO1935} constrained the two parameters based on integral relations in the ABL.
 %
 Asymptotic similarity theory was later used by \citet{tennekes:JAS1973, blackadar:JAS1968},
 and--based on his seminal direct numerical simulations (DNS) of Ekman flow--,~\cite{spalart:JFM1989} suggested
 a modification to take into account effects of low to intermediate Reynolds numbers.
 Later on, constants were re-evaluated with a focus on the atmospheric boundary layer based on
 observations \citep{hogstrom:BM1988,hogstrom:BM1996}
-and numerical modelling \citep{spalart:PF2008, spalart:PF2009, ansorge:BM2014, ansorge:BM2019}. 
+and numerical modelling \citep{spalart:PF2008, spalart:PF2009, ansorge:BM2014, ansorge:BM2019}.
+\todo{Refer to Pena et al, 2010} 
 %
 \par
 %
@@ -178,6 +181,18 @@ extension of the logarithmic layer may be explained by a transfer of stress to t
 it is assumed that the shear vector $\tau(z)$ and stress vectors $(\p_zU,\p_zV)$ are aligned. 
 %
 \par
+% 
+More recently, \citet{ghannam:jas2021} treated the horizontally averaged momentum budget to show that departures from
+shear-alignment in the vicinity of the surface result in an integral of the wind veer ($\alpha_M$ in their notation)
+over the height to very high accuracy ($\int_{z_0}^{H} \sin\alpha_M$ in their notation; their Eq.~(16)).
+%
+Classic surface-layer similarity is recovered when the angle $\alpha_M$ does not depend on height, i.e., the
+wind veer is constant across the surface layer. 
+%
+If, however, the wind veer depends on height, the profiles of stress and mean velocities depart from the
+scalings implied by classic surface-layer similarity.
+%
+\par
 %
 Turbulent Ekman flow is considered here as a conceptual model of the
 homogeneous, stationary atmospheric boundary layer over a flat surface under neutral stratification. 
@@ -189,20 +204,29 @@ roughness or other physical complications encountered in the realgeophysical sys
 While, on first sight, the study of such a strongly idealized case appears as an academic problem, it contains the essence
 of surface similarity as it is used in most atmospheric models, be it conceptual or numeric ones.
 %
-For instance, effects of roughness are commonly incorporated by a linear transformation of vertical scale involving the
-roughness parameter $z_0$ and for larger roughness also a displacement height~%
-\citep{monin:1975,jacobs:AFM1988,hogstrom:BM1988}; 
-effects of stability are commonly accounted for by a linearization around the neutrally stratified profile~%
-\citep{monin:ARF1970, monin:1975, hogstrom:BM1988, hogstrom:BM1996,sakagami:BM2020}.
+More complex accounts generally refer to the homogeneous stationary problem as a base state: 
 %
-Furthermure, profiles can serve as better initial condition for numerical simulation of the flow,
+(i) Roughness is commonly incorporated by a linear transformation of vertical scale involving the
+roughness parameter $z_0$ and for larger roughness also a displacement height~%
+\citep{monin:1975,jacobs:AFM1988,hogstrom:BM1988};
+%
+(ii) Stability can be accounted for by a linearization around the neutrally stratified profile~%
+\citep{monin:ARF1970, monin:1975, hogstrom:BM1988, hogstrom:BM1996,sakagami:BM2020};
+%
+(iii) Non-stationarity in the pressure-gradient forcing can be accounted for by a linear damped-oscillator
+approach around the base state\citep{momen:jas2016}; 
+%
+(iv) Barotropic and baroclinic effects on the velocity profile require to consider 
+the height-dependence of the veer and stress misalignment \citep{momen:jas2018, ghannam:jas2021}.
+% 
+Furthermore, such a solution can serve as better initial condition for numerical simulation of the flow,
 to minimize the length of initial transient periods, or as benchmark for turbulence
 closures that can be tuned to reproduce the neutral limit case.
 %
 \par
 %
 Despite the strong simplifications implied by our choice of set-up, there is no straightforward approach to solving
-this conceptually well-defined problem.
+this well-defined problem.
 %
 Large-Eddy simulation not only needs to be tuned for the surface shear stress and veering angle, but it also
 relies on sub-grid closures that often assume alignment of the stress with gradients -- a questionable
@@ -230,13 +254,13 @@ of \say{\emph{fully developed turbulence}  believed to occur for a sufficiently 
 %
 (Already in \citeyear{moin:ARF1998}, this in fact lead \citeauthor{moin:ARF1998} to the question \emph{how high a Re is high enough}?) 
 %
-In fully developed turbulence certain statistics such as dissipation \citep{dimotakis:ARF2005} or profiles of
-mean velocity \citep{barenblatt:JFM1993} become independent of the Reynolds number when scaled appropriately while
-other statistics, such as the near-wall maximum in velocity fluctuation depend on $\RE$ \citep{baars:JFM2020a} and external
-interfaces may exert an impact on near-wall scaling \citep{dasilva:ARF2014}. 
+Certain statistics of fully developed turbulence, such as dissipation \citep{dimotakis:ARF2005} or profiles of
+mean velocity \citep{barenblatt:JFM1993}, become independent of the Reynolds number when appropriately scaled; 
+other statistics, such as the near-wall maximum in velocity fluctuation depend on $\RE$ \citep{baars:JFM2020a} and externality
+of the flow may exert an impact on near-wall scaling \citep{dasilva:ARF2014}. 
 %
 It appears that for certain statistics in Ekman flow, fully-developed turbulence is reached with the
-Reynolds numbers that became possible with the increasing capabilities of supercomputering over
+Reynolds numbers that became possible due to an increase of computing capabilities over
 the past decades.
 %
 \par
@@ -246,7 +270,8 @@ simulation across a range of Reynolds numbers to formulate both the streamwise a
 of the mean velocity vector as a function of the Reynolds number.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Problem Formulation and Numerical Approach}
+\section{Problem Form
+  ulation and Numerical Approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 We consider here incompressible, turbulent Ekman flow, that is, the turbulent flow over a flat rotating plate, as

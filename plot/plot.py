@@ -17,13 +17,13 @@ D2R = np.pi / 180.
 
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
-plot_ekman_ideal=True 
+plot_ekman_ideal=False 
 plot_summary=False
 plot_evisc=False
-plot_profiles=True
+plot_profiles=False
 plot_visc_outer=True
 print_table=False
-plot_outer_log=True
+plot_outer_log=False
 plot_total_rot=False
 plot_convergence=False
 plot_re1600=False
@@ -271,6 +271,9 @@ if plot_ekman_ideal:
     ax1=fig.add_axes([0.06,0.11,0.41,0.87])
     ax2=fig.add_axes([0.55,0.11,0.44,0.87])
 
+    fig2=plt.figure(figsize=(5,3.25))
+    ax3=fig2.add_axes([0.18,0.13,0.8,0.84]) 
+    
     z=np.arange(0,2*np.pi,0.02)
     
     sa_arr=[[+0.00, 0.4,'black', '-', 1.0],
@@ -295,27 +298,44 @@ if plot_ekman_ideal:
         
         ax1.plot(z[i03:],Uek[i03:],  c=c,ls=s,lw=w, label='a={1:4.1f},s={0:5.2f}'.format(sek,aek))
         ax1.plot(z[:i03],Uek[:i03],  c=c,ls=s,lw=w, alpha=0.5)
-        
+       
         ax2.plot(Uek[i03:],Vek[i03:], c=c,ls=s,lw=w,label='a={1:4.1f} s={0:5.2f}'.format(sek,aek))
         ax2.plot(Uek[:i03],Vek[:i03], c=c,ls=s,lw=w,alpha=0.5)
         ax2.scatter(Uek[i03],Vek[i03],c=c)
+
+        ax3.plot(Uek[i03:],Vek[i03:], c=c,ls=s,lw=w,label=r'A={1:4.1f} $z_r$={0:5.2f}'.format(sek,aek))
+        ax3.plot(Uek[:i03],Vek[:i03], c=c,ls=s,lw=w,alpha=0.5)
+        ax3.scatter(Uek[i03],Vek[i03],c=c)
+        
     lg=ax1.legend(loc='best')
+    lg2=ax3.legend(loc='best') 
 
     ax1.plot([0.3*np.pi*2,0.3*np.pi*2],[-0.5,1.1],c='black',ls='--',lw=0.5)
     ax1.plot([0,6.3],[1,1],c='black',ls='--',lw=0.5) 
     
     ax2.plot([0,1.1],[0,0],lw=0.5,ls='--',c='black')
     ax2.plot([1,1],[-0.1,0.35],lw=0.5,ls='--',c='black')
+
+    ax3.plot([0,1.1],[0,0],lw=0.5,ls='--',c='black')
+    ax3.plot([1,1],[-0.1,0.35],lw=0.5,ls='--',c='black')
+    
     ax1.set_ylim(-0.15,1.1)
     ax1.set_xlim(0,5)
+    ax1.set_ylabel(r'$U_\mathrm{ek}/G$')
+    ax1.set_xlabel(r'$z/\delta_{ek}$')
     
     ax2.set_xlim(0,1.1)
     ax2.set_ylim(-0.08,0.35)
-    ax1.set_ylabel(r'$U_\mathrm{ek}/G$')
-    ax1.set_xlabel(r'$z/\delta_{ek}$')
     ax2.set_xlabel(r'$U_\mathrm{ek}/G$')
     ax2.set_ylabel(r'$V_\mathrm{ek}/G$') 
-    plt.savefig('ekman_ideal.pdf',format='pdf') 
+
+    ax3.set_xlim(0,1.1)
+    ax3.set_ylim(-0.08,0.35)
+    ax3.set_xlabel(r'$U_\mathrm{ek}/G$')
+    ax3.set_ylabel(r'$V_\mathrm{ek}/G$') 
+
+    fig.savefig('ekman_ideal.pdf',format='pdf')
+    fig2.savefig('ekman_ideal_hod.pdf',format='pdf') 
     plt.close('all')
     
 if plot_evisc:
@@ -663,8 +683,8 @@ if plot_visc_outer:
     fig2=plt.figure(figsize=(6,4))
     ax2=fig2.add_axes([0.13,0.1,0.85,0.87]) 
 
-    fig3=plt.figure(figsize=(6,4))
-    ax3=fig3.add_axes([0.13,0.1,0.85,0.87]) 
+    fig3=plt.figure(figsize=(5,3.5))
+    ax3=fig3.add_axes([0.15,0.15,0.83,0.82]) 
 
     for re in [1600,1000,750]:
         c=colors[re]
@@ -714,12 +734,12 @@ if plot_visc_outer:
 
         if  re==1600 or re == 1300 :
             ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=2,ls='-',label=r'$Re={}$ (DNS)'.format(re),alpha=0.5)
-            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=2,ls='-',alpha=0.5)
+            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=2,ls='-',label=r'$Re={}$ (DNS)'.format(re),alpha=0.5)
             #ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--',label=r'$Re={}$ (model)'.format(re))
             #ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':',label=r'$Re={}$ (model)'.format(re))
         else:
             ax2.plot(ym_dat,(u_sfc-u_sfc[-1])/us_dat,c=c,lw=1,ls='-',label=r'$Re={}$'.format(re),alpha=0.5)
-            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=1,ls='-',alpha=0.5)
+            ax3.plot(ym_dat,(w_sfc-w_sfc[-1])/us_dat,c=c,lw=1,ls='-',alpha=0.5,label=r'$Re={}$'.format(re))
             #ax2.plot(ym,(up-up[-1]),c=c,lw=1,ls='--')
             #ax3.plot(ym,(wp-wp[-1]),c=c,lw=1,ls=':')
         i03=mp.geti(ym,0.3)
@@ -759,7 +779,7 @@ if plot_visc_outer:
 
 
     ax3.plot([0,1.5],[0,0],lw=0.5,c='black',ls='-') 
-    ax3.set_xlim(0,1.5)
+    ax3.set_xlim(0.2,1.5)
     ax3.set_ylim(-1.5,0.2)
     ax3.set_xlabel(r'$z^-$')
     ax3.set_ylabel(r'$(V^\alpha - G_{2}^\alpha)/u_\star$')
