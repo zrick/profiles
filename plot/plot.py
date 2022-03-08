@@ -18,10 +18,10 @@ D2R = np.pi / 180.
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
 plot_ekman_ideal=False 
-plot_summary=False
+plot_summary=True
 plot_evisc=False
 plot_profiles=False
-plot_visc_outer=True
+plot_visc_outer=False
 print_table=False
 plot_outer_log=False
 plot_total_rot=False
@@ -29,6 +29,7 @@ plot_convergence=False
 plot_re1600=False
 plot_les_comp=False
 plot_applications=False
+test_inner_streamwise=False
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -1077,8 +1078,11 @@ if plot_summary :
         up_loc,wp_loc=sc.profile_plus(yp_loc,re_loc)
         
         sqdp = 1.#/(deltap_loc)
-        
-        alpha_loc= re_loc/1601 % 1 
+
+        if re_loc < 1601: 
+            alpha_loc= re_loc/1601 % 1
+        else :
+            alpha_loc = 1. 
         
         match_i=0.10
         match_o=0.40
@@ -1095,7 +1099,7 @@ if plot_summary :
             al_geo = np.arctan(w_dat[-1]/u_dat[-1])
             al_sfc1 = f['FrictionAngle'][t_use]*D2R
             al_sfc2 = np.arctan(w_dat[1]/u_dat[1]) 
-            
+
             [u_geo,w_geo] = mp.rotate(u_dat,w_dat,al_geo)
             [u_sfc,w_sfc] = mp.rotate(u_dat,w_dat,al_sfc1) 
             yp_dat = y_dat*us_dat/nu_loc
@@ -1107,11 +1111,15 @@ if plot_summary :
             i_i=mp.geti(yp_dat,match_i*deltap_loc)
             ax2.scatter(yp_dat[i_i]*sqdp,(u_sfc[i_i])/us_dat,c='black')
 
+        print('RE:',  re_loc, 'u*:', us_loc, 'transparency:',alpha_loc) 
+        print('UP:', np.amin(up_loc),np.amax(up_loc),um_loc[-1]/us_loc)
+        print('WP:', np.amin(wp_loc),np.amax(wp_loc),wm_loc[-1]/us_loc)
 
-        ax2.text(yp_loc[-1]*sqdp, up_loc[-1], 'Re='+str(re_loc),c=c_loc)
+        if re_loc < 1601: 
+            ax2.text(yp_loc[-1]*0.5, (1.+(7./re_loc))*up_loc[-1], 'Re='+str(re_loc),c='black')#c_loc)
 
-        ax1.plot(ym_loc[1:], (um_loc[1:]-um_loc[-1])/us_loc, c=c_loc, lw=2,ls='-',alpha=alpha_loc)
-        ax1.plot(ym_loc[1:], (wm_loc[1:]-wm_loc[-1])/us_loc, c=c_loc, lw=2,ls='-',alpha=alpha_loc)
+        ax1.plot(ym_loc[1:], (um_loc[1:]-um_loc[-1])/us_loc, c='blue', lw=2,ls='-',alpha=alpha_loc)
+        ax1.plot(ym_loc[1:], (wm_loc[1:]-wm_loc[-1])/us_loc, c='red',  lw=2,ls='-',alpha=alpha_loc)
 
         if use_data and re_loc < 1600 : 
             ax1.plot(ym_dat[1:], (u_sfc[1:]-u_sfc[-1])/us_dat,   c=c_loc, lw=0.5,ls='--',alpha=alpha_loc)
@@ -1124,11 +1132,12 @@ if plot_summary :
         
         umr_loc,wmr_loc=mp.rotate(um_loc,-wm_loc,-al_loc) 
 
-        ax3.plot(umr_loc,wmr_loc,alpha=alpha_loc,c=c_loc)
+        ax3.plot(umr_loc,wmr_loc,alpha=alpha_loc,c='black') #c=c_loc)
     
         i_loc = mp.geti(wmr_loc,np.amax(wmr_loc))
-        ax3.text(umr_loc[i_loc],wmr_loc[i_loc],'Re='+str(re_loc),c=c_loc)
-        yp01 = 0.08 *us_loc**2 / nu_loc
+        if re_loc < 10001:
+            ax3.text(umr_loc[i_loc],wmr_loc[i_loc],'Re='+str(re_loc),c='black')#c_loc)
+            yp01 = 0.08 *us_loc**2 / nu_loc
 
         ax2.plot(yp_loc[1:]*sqdp, up_loc[1:], c='blue',lw=2,ls='-',alpha=alpha_loc)
         ax2.plot(yp_loc[1:]*sqdp, wp_loc[1:], c='red',lw=2,ls='-',alpha=alpha_loc)
@@ -1137,11 +1146,8 @@ if plot_summary :
             ax2.plot(yp_dat[1:]*sqdp, u_sfc[1:]/us_dat,ls='--',alpha=alpha_loc,lw=1,c=c_loc)
             ax2.plot(yp_dat[1:]*sqdp, w_sfc[1:]/us_dat,ls='--',alpha=alpha_loc,lw=1,c=c_loc)
 
-
-
     ax2.plot([0.01,10000],[0,0],c='black',lw=0.5,ls='-')
     ax1.plot([0,2],[0,0],ls=':',c='black',lw=1)
-
 
     ax1.set_xscale('log')
     ax1.set_xlim(2e-4,2e0 )
@@ -1674,4 +1680,38 @@ if plot_applications == True:
 
     lg=plt.legend(loc='best')
     lg.get_frame().set_linewidth(0.0) 
-    plt.savefig('turning.pdf',format='pdf') 
+    plt.savefig('turning.pdf',format='pdf')
+    plt.close('all') 
+
+if test_inner_streamwise:
+    re=2000
+    nu=2./(re*re) 
+    us,al=sc.ustar_alpha(re)
+    dp=us**2/nu
+    yp=np.arange(2000)/4.
+    [up,wp]=sc.profile_plus(yp,re)
+    ulog=sc.profile_log(yp)
+
+    c2=-.00; o2=0;
+    c3=-0.00; o3=0;
+    c4=3.1e-5; o4=0;
+    c5=-2e-7
+    a_corr=1.0
+    yp_mtc = 19 
+    uvsc=yp/(1+0.00185*yp**2)
+    corr=(0.195*yp-3.569861)*(1.+np.tanh(0.2*(yp-22)))/2. + 0.40*np.exp(-0.035*(yp-22)**2)
+    i40=mp.geti(yp,40)
+    print(uvsc[i40]+corr[i40],ulog[i40])
+    fig=plt.figure(figsize=(4,3))
+    ax=fig.add_axes([0.1,0.1,0.85,0.85])
+
+    ax.plot(yp,up,  c='red',ls='-',lw=1)
+    ax.plot(yp[i40:],ulog[i40:],c='black',ls=':',lw=1)
+    ax.plot(yp[:i40],uvsc[:i40]+corr[:i40],c='blue',ls='--',lw=1)
+    ax.set_xlim(0,8e1)
+    ax.set_ylim(-4,3.5e1) 
+
+    plt.savefig('innertest.pdf',format='pdf')
+    plt.close('all')
+
+quit() 

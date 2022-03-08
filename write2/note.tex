@@ -1,0 +1,50 @@
+\documentclass[a4paper,1pt]{amsart}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\newcommand{\RE}{\mathbf{Re}}
+
+\date{\today}
+\title{Note on Boundary condition and choice of grid} 
+\begin{document}
+\noindent By choice of the grid, it is for the first grid point ($z_1$)
+\[ z_1 = c_\delta \delta \Rightarrow z_1^{-}=c_\delta.\]
+The height argument of the log-law is, however, an inner height, and we need to use $z^+$.
+Using the relation $z^-=z^+/\RE_\tau$, we get 
+\[ z_{1}^{+} = c_\delta \RE_\tau\] 
+for the height of the first grid node in inner units.
+%
+This is a pure consequence of the construction of the grid under changing $\RE$ (namely using a constant number of grid points per $\delta$.
+%
+A similar relation holds for the rough equivalent:
+\[ \frac{z_1}{z_0} = \frac{c_\delta \delta}{z_0} = c_\delta \frac{u_\star}{f} \frac{u_\star}{c_\nu \nu} = \frac{c_\delta}{c_\nu} \RE_\tau.\]
+This underlines the role of $c_\nu$ in linking the classic inner ('+') scale and the rough inner unit ($z_0$), it is namely
+\[ \frac{z^+}{z/z_0} = c_\nu.\]
+First, this shows that--apart from iny variation in $c_\nu$--the scaling with $z_0$ is the classic inner ('+') scaling.
+%
+Second, the small variation of $c_\nu$ (estimated/tuned against the DNS results[!!!])
+across the Reynolds number (less than the alread weak variation in $u_\star$
+and orders of magnitudes less than the variation in $Re_\tau$) shows that the analogy between aerodynamically rough
+and smooth flows holds quite nice, but not exact.
+%
+In that sense, the collapse of profile for the vertical scale $z/z_0$ is to be understood as an 'approximate' inner scaling. 
+%
+It remains to be seen whether the small variation of $c_\nu$ with $\RE$ is due to technical details of the LES formulation under changing
+scale separation and different action of the SGS scheme, or whether these are an actual physical property of the flow.
+%
+It may also be that by changing $c_\nu$ we capture the inadverted effect of $z_1$ coming too close to the surface for
+some configurations. 
+%
+\par
+%
+With regards to the velocity boundary condition, we now see that
+\[U_1=U(z_1) = \frac{u_\star}{\kappa} \ln \frac{z_1}{z_0}  = \frac{u_\star}{\delta} \ln\RE_\tau - \ln\frac{c_\delta}{c_\nu}\]
+where the first term ($\ln\RE_\tau$) captures the dependency of the grid on the Reynolds number and the second term reflects the tuning parameter
+used to get a correct $u_\star$ in the LES.
+%
+\par
+%
+
+
+
+
+\end{document} 
