@@ -235,13 +235,34 @@ class EkmanUniversalClass:
         # STREAMWISE COMPONENT (shear-aligned) 
         log_law=self.profile_log(yp) # np.log(yp)/self.KAPPA + self.C   
 
-        # inner-layer (empirical profile for viscous and buffer layer) 
-        c4=-0.0003825; c6=6.32e-6; u_ref = 0.07825
-        yp_mtc = 19 
-        wgt_i = self.erf_transition(trans_scale,yp_mtc,yp[1:]) 
-        u_visc=( yp + c4*yp**4+c6*yp**6) / (1 + u_ref*c6*yp**6)
-        u[1:]=(1-wgt_i)*u_visc[1:] + wgt_i*log_law[1:]
+        # inner-layer (empirical profile for viscous and buffer layer)
+        # OLD - sixth order viscous term + blending 
+        #c4=-0.0003825; c6=6.32e-6; u_ref = 0.07825
+        #yp_mtc = 19 
+        #wgt_i = self.erf_transition(trans_scale,yp_mtc,yp[1:]) 
+        #u_visc=( yp + c4*yp**4+c6*yp**6) / (1 + u_ref*c6*yp**6)
+        #u[1:]=(1-wgt_i)*u_visc[1:] + wgt_i*log_law[1:]
 
+        # NEW - explicit viscous layer that matches the log formulation
+        delta=1; a_match=3.569861; iter=1
+        i_mtc=mp.geti(yp,40)
+        while np.abs(delta) > 1e-12 and iter<10:
+            u_visc=yp/(1+0.00185*yp**2)
+            u_visc=u_visc + (0.195*yp-a_match)*(1.+np.tanh(0.2*(yp-22)))/2.
+            u_visc=u_visc +  0.40*np.exp(-0.035*(yp-22)**2)
+            
+            delta = u_visc[i_mtc] - log_law[i_mtc]
+            a_match=a_match+delta
+            iter=iter+1
+
+        if iter >= 9:
+            print("ERROR: CONVERGENCE BETWEEN LOG AND VISCOUS LAYER COULD NOT BE ACHIEVED")
+            print("ERROR: delta:", delta )
+            quit() 
+
+        u[1:i_mtc] = u_visc[1:i_mtc]
+        u[i_mtc:]  = log_law[i_mtc:] 
+            
         # outer-layer deficit
         ctr=0.28- 2.25*np.sqrt(1./re)
         wgt_o=self.erf_transition(trans_scale,ctr,ym[1:]) #(sp.special.erf(trans_scale*np.log(ym[1:]/ctr))+1)/2 #starts at index 1! 
