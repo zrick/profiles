@@ -16,7 +16,7 @@
 !
 !-- initialization
 !-------------------------------------------------------------------------------
-         initializing_actions = 'by_user',
+         initializing_actions = 'set_1d-model_profiles',
 
          fft_method = 'temperton-algorithm',
 
@@ -50,6 +50,8 @@
          mg_cycles = 4,
          mg_switch_to_pe0_level = -1,
 
+	 cfl_factor = 0.1 
+
 
 / ! end of initialization parameter namelist
 
@@ -68,6 +70,8 @@
 
          termination_time_needed = 2400.0,
 
+	 dt_run_control = 0.01,
+	 do3d_at_begin = .T., 
          skip_time_dopr        = 0.0,
          dt_dopr               = 62832,
          averaging_interval_pr = 62832.,
