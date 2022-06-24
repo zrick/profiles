@@ -18,7 +18,7 @@ D2R = np.pi / 180.
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
 plot_ekman_ideal=False 
-plot_summary=True
+plot_summary=False
 plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
@@ -30,6 +30,7 @@ plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 test_inner_streamwise=False
+plot_profile_comparison=True
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -1714,4 +1715,13 @@ if test_inner_streamwise:
     plt.savefig('innertest.pdf',format='pdf')
     plt.close('all')
 
+
+if plot_profile_comparison:
+    ReD=1600
+    us,al=sc.ustar_alpha(ReD) 
+    ReTau=(ReD*us)**2/2.
+    print('ReD:',ReD, 'ReTau:',ReTau) 
+    ny,yp,ym = build_grid(ReTau,thick=3)
+    u_et,v_et = sc.profile_etling2002(yp,ReD) 
+    
 quit() 

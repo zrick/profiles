@@ -349,3 +349,13 @@ class EkmanUniversalClass:
         else:
             return 
 
+    def profile_etling2002(self,yp,re):
+        self.qinit()
+        us,al = self.ustar_alpha(re)  
+        ReTau=(re*us)**2 / 2.
+        u=self.profile_log(yp)
+        v = u[:]*0.
+
+        
+        
+        return u,v
