@@ -7,7 +7,6 @@
 \usepackage{graphicx}
 \usepackage[footnotesize]{caption}
 \usepackage{xcolor}
-\usepackage{dirtytalk}
 \usepackage{colortbl}
 \usepackage{booktabs} 
 
@@ -45,7 +44,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\todo}[1]{\textcolor{red}{$[$#1$]$}}
-\newcommand{\quotation}[1]{"#1"}
+\renewcommand{\quotation}[1]{"#1"}
 
 % TO BE USED IN MATH-ENVIRONMENT 
 \newcommand{\SFC}{\mathrm{sfc}}
@@ -142,7 +141,10 @@ One approach is to match the inner and outer layer at a reference height;
 \citet{etling:2002, emeis:2018}  (Sec. 21.10; Eq. 21.48) choose the Prandtl-layer height to match
 the wind speed profiles, which, however, requires to externally prescribe the veering $\alpha$ at that height. 
 A one-dimensional profile with constant veering is given by \citet[Sec. 3; Eq. 3.1-3.19]{emeis:m2007}. 
-
+%%%
+%%% ADD REFERENCE TO Klein and Maier (PAMM, 2021) for failure of matching of profile in 1D ODT-LES
+%%% ADD REFERENCE TO Lindevall and Svensson (QJRMS, 2019, vol 145)
+%%%
 \citet{gryning:BM2007} present an extension of the wind-speed profile beyond the surface layer
 using a neutral referece profile and a stability correction;
 \cite{kelly:BM2010}, based on a probabilistic representation of stratification,
@@ -167,7 +169,7 @@ truly neutral Ekman boundary layer.
 \par %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 Ekman-layer models and two-layer models of the ABL take into account rotational effects at higher altitudes,
-for instance when the wind speed needs to be evaluated at heights on the order of 100-200\,\mathrm{m},
+for instance when the wind speed needs to be evaluated at heights on the order of $100-200\,\mathrm{m}$,
 a particular concern when it comes to wind-power forecasting \citep{optis:BM2014}.
 %
 Despite rotational effects being considered, the formulation of these models for the outer layer
@@ -251,7 +253,7 @@ the geophysical range of scale separation, however, is--and it will remain so fo
 for such simulation \citep{dimotakis:ARF2005}.
 %
 Here, the routinely employed concept of Reynolds-number similarity can help. It postulates the existence
-of \say{\emph{fully developed turbulence}  believed to occur for a sufficiently large but finite Reynolds number}
+of \quotation{\emph{fully developed turbulence}  believed to occur for a sufficiently large but finite Reynolds number}
 \citep{barenblatt:PF1995}.
 %
 (Already in \citeyear{moin:ARF1998}, this in fact lead \citeauthor{moin:ARF1998} to the question \emph{how high a Re is high enough}?) 
@@ -585,7 +587,7 @@ The viscous stress
 %
 \begin{subequations}
 \begin{equation}
-  S_\mathrm{visc}= \nu \sqrt\left(\frac{\p U}{\p z}\right)^2  + \left(\frac{\p V}{\p z}\right)^2}
+  S_\mathrm{visc}= \nu \sqrt{\left(\frac{\p U}{\p z}\right)^2  + \left(\frac{\p V}{\p z}\right)^2}
 \end{equation}
 exhibits universal scaling when considered as $S_\mathrm{visc}^+(z^+)$ (Fig.~\ref{fig:stresses}a); this normalization is also appropriate in the outer layer where the viscous stress
 is, however, small. 
@@ -938,15 +940,15 @@ profile overestimate the velocity in the buffer layer.
 %
 We therefore introduce a two-step correction procedure, accounting for the smaller-than linear growth beyond $y^+\approx 5$, and assuring smooth matching with the logarithmic law at $y^+=40$:
 \begin{equation}
-  U_\text{inner}^{\alpha_\star}^+ = \frac{z^+}{1+c_1 (y^+)^2} +  (c_2 y^+ - a_\mathrm{match} )\frac{1+tanh\left[0.2(y^+-22)\right]}{2} + c_3 e^{-c_4(y^+-22)^2}. \label{eqn:u_inner} 
+  U_\text{inner}^{{\alpha_\star}^+} = \frac{z^+}{1+c_1 (y^+)^2} +  (c_2 y^+ - a_\mathrm{match} )\frac{1+tanh\left[0.2(y^+-22)\right]}{2} + c_3 e^{-c_4(y^+-22)^2}. \label{eqn:u_inner} 
 \end{equation} 
 %
 We use here
 \begin{equation*}
-  c_1 &=& 0.00185;\quad
-  c_2 &=& 0.195;\quad 
-  c_3 &=& 0.4 ; \quad
-  c_4 &=& 0.35. 
+  c_1 = 0.00185;\quad
+  c_2 = 0.195;\quad 
+  c_3 = 0.4 ; \quad
+  c_4 = 0.35. 
 \end{equation*}
 %
 The second and third terms on the right hand side vanish for $y^+\ll 22$, and $c_1=0.00185$
@@ -963,7 +965,7 @@ match this formulation to the logarithmic law employed above.
 %
 In the logarithmic region, we use the profile
 \begin{equation}
-  U_\text{log}^{\alpha_\star}^+ = \frac{1}{\kappa} \log y^+ + C 
+  {U_\text{log}^{\alpha_\star}}^+ = \frac{1}{\kappa} \log y^+ + C 
 \end{equation}
 with the von-K\'arm\'an constant $\kappa=0.416$ and the boundary condition $C=5.4605$. %  log-layer (K\'arm\'an, Prandtl, Jimenez, Marusic)
 For this logarithmic law, $a_\mathrm{match}=3.569861$ for a matching at $y^+=40$. 
@@ -1008,7 +1010,7 @@ The geometry of the flow and its drag imply the following for any hodograph:
 \begin{eqnarray} 
   V^{\alpha_\star}(z=0) &=& 0,\\ 
   \lim_{z\rightarrow\infty} V^{\alpha_\star} &=& G \sin\alpha_\star \\ 
-  \left.\partial_{z^+} V^{\alpha_\star+}}\right|_{z=0} &=& 0.  
+  \left.\partial_{z^+} V^{\alpha_\star+}\right|_{z=0} &=& 0.  
 \end{eqnarray} 
 \end{subequations} 
 %
@@ -1159,10 +1161,6 @@ value $v_{10}$ and $d_{10}$ found for the viscous region of the flow.
 For the range of Reynolds number relevant to geophysical problems ($10^4\lesssim \RE_D \lesssim 10^6$),
 the variation of $c_\mathrm{log}$ is, however, rather small.
 %
-\end{subequations}
-
-
-
 \begin{figure}
   \phantom{AAA}\textbf{(a)\hspace{0.3\textwidth}(b)\hspace{0.3\textwidth}(c)}\\
   \includegraphics[width=\textwidth]{../plot/ekman_profiles.pdf}
@@ -1174,6 +1172,8 @@ the variation of $c_\mathrm{log}$ is, however, rather small.
 \section{Comparison with other theories}
 
 \textbf{Compare} to Emeis (2002) and Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
+
+Consider Townsend ``Turbulent Shear Flow''  Chapter 7.18: p. 319 
 %
 \par%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -1229,8 +1229,8 @@ to the inner layer by letting
 %
 \begin{eqnarray}
   \begin{matrix} 
-    u(z_\text{match}) \equiv u_\text{match} &=& U_{\infty} + e^{-\gzm}} \left [ A \cos\gzm + B\sin\gzm \right] \\
-    w(z_\text{match}) \equiv w_\text{match} &=& W_{\infty} + e^{-\gzm}} \left [-A \sin\gzm + B\cos\gzm \right]
+    u(z_\text{match}) \equiv u_\text{match} &=& U_{\infty} + e^{-\gzm} \left [ A \cos\gzm + B\sin\gzm \right] \\
+    w(z_\text{match}) \equiv w_\text{match} &=& W_{\infty} + e^{-\gzm} \left [-A \sin\gzm + B\cos\gzm \right]
   \end{matrix} 
 \end{eqnarray}
 \begin{eqnarray}
@@ -1277,7 +1277,7 @@ $V/G=f_{V,\mathrm{visc}}\delta ^+$ with
   f_{V,\mathrm{log}}   &=& a_\mathrm{log} + b_\mathrm{log} \log z^+ + c_\mathrm{log} z^+ 
 \end{eqnarray}
 \end{subequations}
-Matching the profiles and gradient $z_0=10^+$ and the value at $z_1=0.3\dlta^+$ yields
+Matching the profiles and gradient $z_0=10^+$ and the value at $z_1=0.3\delta^+$ yields
 \begin{subequations} 
 \begin{eqnarray}
   v_\mathrm{ref} \left(\omega_v z_{0} + e^{-\omega_v z_{0}}\right)
@@ -1372,7 +1372,7 @@ The span-wise velocity profile in the surface layer is then estimated as
   a_1 z^+&;& z^+ \le 5\\ 
   b_1+b_2 \sqrt{z^+}&;& 5<z^+<Re_\tau/10 
   \label{eqn:w_profile_inner}
-  \end{array} \right, 
+  \end{array} \right. , 
 \end{align}
 with $b_1$ and $b_2$ estimated such that
 \begin{eqnarray}
@@ -1401,7 +1401,7 @@ $z_\text{low}<z<z_\text{up}$ such that
 \begin{align} 
   V_\text{trans}(z^-) &=& V_\text{inner}(z^+_\text{low}) + \Delta V \left(a z_{arg} + b (z_{arg})^2\right)
 \end{align}
-with $\Delta V &=& V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\text{low})$
+with $\Delta V = V_\text{outer}(z^-_\text{up})-V_\text{inner}(z^+_\text{low})$
 and  $z_{arg} = (z - z_\text{low})/(z_\text{up}-z_\text{low})$.
 It is  $a+b=1$ for $V_\text{trans}(z^-_\text{up}) = V_\text{outer}(z^-_\text{up})$, and we constrain $a$ by
 \begin{align}
@@ -1409,5 +1409,11 @@ It is  $a+b=1$ for $V_\text{trans}(z^-_\text{up}) = V_\text{outer}(z^-_\text{up}
 \end{align}
 where we find that $z^-_\text{low}=0.06$ and $z^-_\text{up}=0.13$ yield satisfactory agreement with DNS data. 
 
+\end{subequations}
 
 \end{document} 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
