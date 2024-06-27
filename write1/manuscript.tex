@@ -1,42 +1,40 @@
-\documentclass[a4paper,11pt]{amsart}
-
-\usepackage[margin=3.5cm]{geometry}
-\usepackage{lineno}
+\RequirePackage{fix-cm} 
+\documentclass[smallcondensed,final]{svjour3}
+\smartqed
+\usepackage{appendix}
 \usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[footnotesize]{caption}
+\usepackage{lineno}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{natbib}
+
+% additional packages
 \usepackage{xcolor}
 \usepackage{colortbl}
 \usepackage{booktabs} 
+\usepackage{amssymb}
+\usepackage{hyperref}
+\setcitestyle{aysep={}}
+\linenumbers 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% BIBLIOGRAPHY DETAILS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\usepackage[maxcitenames=2,style=authoryear-comp,firstinits=true,citestyle=authoryear,natbib=true,backend=bibtex]{biblatex}
-\DeclareNameAlias{sortname}{family-given}
-\renewcommand*{\multinamedelim}{\addcomma\space}
-\renewcommand*{\finalnamedelim}{~and\space}
-\setlength{\bibitemsep}{\baselineskip}
-\setlength\parindent{3em}
-\setlength\parskip{0.5em}
-\renewbibmacro{in:}{}
-
-\AtEveryBibitem{%
-  \clearfield{url}
-  \clearfield{urlday}
-  \clearfield{urlmonth}
-  \clearfield{urlyear}
-  \clearfield{issn}
-  \clearfield{month}
-%%%  \clearfield{doi}%
-  \clearfield{keywords}
-  \clearfield{note}
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+\expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+\expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+\renewenvironment{#1}%
+{\linenomath\csname old#1\endcsname}%
+{\csname oldend#1\endcsname\endlinenomath}}% 
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+\patchAmsMathEnvironmentForLineno{#1}%
+\patchAmsMathEnvironmentForLineno{#1*}}%
+\AtBeginDocument{%
+\patchBothAmsMathEnvironmentsForLineno{equation}%
+\patchBothAmsMathEnvironmentsForLineno{align}%
+\patchBothAmsMathEnvironmentsForLineno{flalign}%
+\patchBothAmsMathEnvironmentsForLineno{alignat}%
+\patchBothAmsMathEnvironmentsForLineno{gather}%
+\patchBothAmsMathEnvironmentsForLineno{multline}%
 }
-
-\bibliography{ansorge}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,7 +51,14 @@
 \newcommand{\RO}{\mathrm{Ro}}  
 \newcommand{\RE}{\mathrm{Re}}
 \newcommand{\LR}{\Lambda_\RO} 
+\newcommand{\DOI}[1]{\href{https://dx.doi.org/#1}{#1}}
 
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  citecolor=.,
+  linkcolor=.
+}
 
 \date{\scriptsize Draft - Version \today}
 \title{Profiles of Wind Veer and Wind Speed in Turbulent Ekman Flow}
@@ -88,7 +93,7 @@
 %
 \section{Introduction}
 
-Wind veer away from its geostrophic direction is
+The Coriolis force bends the path of motion on a rotating sphere and establishes geostrophic equilibrium when in balance with a pressure gradient force. Wind veer away from the wind direction in geostrophic equilibrium is
 (i) due to direct frictional effects in the very vicinity of the surface and
 (ii) due to turbulence which exerts indirect frictional effects; these effects
 cause a slow-down of the mean wind reducing the Coriolis force thus turning the wind
@@ -104,10 +109,10 @@ the amount of cross-isobaric mass-flux, commonly referred to as 'Ekman pumping' 
 and it is thus a key factor in the life-cycle of large-scale synoptic systems.
 %
 % %% This shear is probably not related to Ekman-turning 
-% On the mesoscale, shear in the surface layer a crucial factor for the initiation and sustainment of strong convective events (REFERENCE?).
+% On the meso-scale, shear in the surface layer a crucial factor for the initiation and sustained strong convective events (REFERENCE?).
 % 
 Within the atmospheric boundary layer (ABL), directional shear of the wind in
-the upper part of the surface layer may cause a systmatic yaw for tall wind power generation devices
+the upper part of the surface layer may cause a systematic yaw for tall wind power generation devices
 where blades reach into the Ekman layer, i.e. that part of the boundary layer where the wind starts to turn;
 an exact estimate of such effects is critical in the site assessments for wind farms
 \citep{calaf:PF2010, mirocha:WES2018}. 
@@ -117,39 +122,36 @@ an exact estimate of such effects is critical in the site assessments for wind f
 In the planetary boundary layer, wind veer is characterized by the surface veering angle $\alpha$
 defined as the angle between the negative surface shear stress $\tau_\SFC$ and the geostrophic wind.
 %
-Surface veering $\alpha$ and geostrophic drag $Z\equiv u_\star/G$, where $u_\star\equiv\sqrt{\nu|\tau_\SFC|}$,
+Surface veering $\alpha$ and geostrophic drag $Z\equiv u_\star/G$, where the friction velocity $u_\star\equiv\sqrt{|\tau_\SFC|/\rho}$,
 uniquely determine the surface drag $\tau_\SFC$ in a turbulent Ekman flow. 
 %
 In any quantitative description of the surface layer, the friction velocity $u_\star$ is the dynamic scale
 and $\alpha$ defines the alignment of the frame of reference.
 %
-Knowledge about $u_\star$ and $\alpha$ is thus a pre-requisite for any quantitative theory of the surface layer, 
+Knowledge about $u_\star$ and $\alpha$ is thus a prerequisite for any quantitative theory of the surface layer, 
 and \citet{rossby:PPO1935} constrained the two parameters based on integral relations in the ABL.
 %
-Asymptotic similarity theory was later used by \citet{tennekes:JAS1973, blackadar:JAS1968},
+Asymptotic similarity theory was later used by \cite{tennekes:JAS1973, blackadar:JAS1968},
 and--based on his seminal direct numerical simulations (DNS) of Ekman flow--,~\cite{spalart:JFM1989} suggested
 a modification to take into account effects of low to intermediate Reynolds numbers.
-Later on, constants were re-evaluated with a focus on the atmospheric boundary layer based on
+Later on, constants were re-evaluated with a focus on the ABL based on
 observations \citep{hogstrom:BM1988,hogstrom:BM1996}
 and numerical modelling \citep{spalart:PF2008, spalart:PF2009, ansorge:BM2014, ansorge:BM2019}.
-\todo{Refer to Pena et al, 2010} 
 %
 \par
 %
 Attempts were also undertaken to obtain profiles of the wind speed: 
 One approach is to match the inner and outer layer at a reference height;
-\citet{etling:2002, emeis:2018}  (Sec. 21.10; Eq. 21.48) choose the Prandtl-layer height to match
-the wind speed profiles, which, however, requires to externally prescribe the veering $\alpha$ at that height. 
+\cite{etling:2002, emeis:2018}  (Sec. 21.10; Eq. 21.48) choose the Prandtl-layer height $z_\text{Prandtl}$ to match
+the wind speed profiles, which, however, requires external prescription of $\alpha(z_\text{prandtl})$, the veering at that height. 
 A one-dimensional profile with constant veering is given by \citet[Sec. 3; Eq. 3.1-3.19]{emeis:m2007}. 
 %%%
-%%% ADD REFERENCE TO Klein and Maier (PAMM, 2021) for failure of matching of profile in 1D ODT-LES
-%%% ADD REFERENCE TO Lindevall and Svensson (QJRMS, 2019, vol 145)
-%%%
+
 \citet{gryning:BM2007} present an extension of the wind-speed profile beyond the surface layer
-using a neutral referece profile and a stability correction;
+using a neutral reference profile and a stability correction;
 \cite{kelly:BM2010}, based on a probabilistic representation of stratification,
-develop a model for the long-term mean windspeed
-in the atmospheric boundary layer and compare this with observation at different sites; 
+develop a model for the long-term mean wind speed
+in the ABL and compare this with observation at different sites; 
 \cite{kelly:WE2016} demonstrate the effect of such improved model for wind-energy applications.
 %
 In consideration of the large scale separation in geophysical flow, the rotation of the wind in the
@@ -157,6 +159,13 @@ surface layer is often assumed negligible, and above investigations merely focus
 that means, the veering of the wind with height is not described and there is little knowledge on the
 profile of the span-wise velocity component and the precise shape of the hodograph in the limit of a
 truly neutral Ekman boundary layer.
+%
+A climatology of wind turning in the ABL is given by \cite{lindvall:QJR2019} 
+%
+\cite{klein:PAM2021a} use a statistical turbulence modelling approach that yields a two-component velocity profile,
+but they also find that the exact representation of turning is challenging.
+%%%
+
 %
 %%% \par  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% % No discussion of higher-order moments at this stage
@@ -168,27 +177,29 @@ truly neutral Ekman boundary layer.
 %
 \par %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-Ekman-layer models and two-layer models of the ABL take into account rotational effects at higher altitudes,
+Ekman-layer models are roughly based on Ekman's seminal \citeyear{ekman:AMA1905} paper in combinations with
+additional assumptions, such as a prescribed profile shape for eddy viscosity \cite{ellison:QJR1955} and two-layer models of the ABL take into account rotational effects at higher altitudes,
 for instance when the wind speed needs to be evaluated at heights on the order of $100-200\,\mathrm{m}$,
 a particular concern when it comes to wind-power forecasting \citep{optis:BM2014}.
 %
 Despite rotational effects being considered, the formulation of these models for the outer layer
 and analysis of their performance primarily focuses on wind speed.
 % 
-Still, in \citeyear{jiang:JAS2018}, \citeauthor{jiang:JAS2018}
-recognized that the outer part of the Ekman boundary layer receives less attention in comparison
-with the surface layer and commence in studying the neutral problem by Large-Eddy simulation (LES).
+Still, in \citeyear{jiang:JAS2018}, \citeauthor{jiang:JAS2018} recognized that the outer
+part of the Ekman boundary layer receives less attention in comparison with the surface layer
+and study the neutral problem by Large-Eddy simulation (LES).
 %
-They focus on the wind speed and find an extended logarithmic layer when considering the wind speed instead of
-the shear-aligned component, and they eventually demonstrate by means of an analytical model that this vertical
-extension of the logarithmic layer may be explained by a transfer of stress to the spanwise velocity component where
-it is assumed that the shear vector $\tau(z)$ and stress vectors $(\p_zU,\p_zV)$ are aligned. 
+They focus on the wind speed and find an extended logarithmic layer when considering the wind
+speed instead of the shear-aligned component, and they eventually demonstrate by means of
+an analytical model that this vertical extension of the logarithmic layer may be explained
+by a transfer of stress to the span-wise velocity component where it is assumed that the shear
+vector $\tau(z)$ and stress vectors $(\p_zU,\p_zV)$ are aligned. 
 %
 \par
 % 
-More recently, \citet{ghannam:QJR2021} treated the horizontally averaged momentum budget to show that departures from
-shear-alignment in the vicinity of the surface result in an integral of the wind veer ($\alpha_M$ in their notation)
-over the height to very high accuracy ($\int_{z_0}^{H} \sin\alpha_M$ in their notation; their Eq.~(16)).
+More recently, \citet{ghannam:QJR2021} treated the horizontally averaged momentum budget to show
+that departures from shear-alignment in the vicinity of the surface result in an integral of
+the wind veer ($\alpha_M$ in their notation) over the height to very high accuracy ($\int_{z_0}^{H} \sin\alpha_M$ in their notation; their Eq.~(16)).
 %
 Classic surface-layer similarity is recovered when the angle $\alpha_M$ does not depend on height, i.e., the
 wind veer is constant across the surface layer. 
@@ -199,11 +210,11 @@ scalings implied by classic surface-layer similarity.
 \par
 %
 Turbulent Ekman flow is considered here as a conceptual model of the
-homogeneous, stationary atmospheric boundary layer over a flat surface under neutral stratification. 
+homogeneous, stationary ABL over a flat surface under neutral stratification. 
 %
 Universal profiles of the wind vector for turbulent Ekman flow not only are a well-described limit
 for theoretical exploration or higher-order approaches taking into account possible effects of stratification,
-roughness or other physical complications encountered in the realgeophysical system.
+roughness or other physical complications encountered in the real geophysical system.
 %
 While, on first sight, the study of such a strongly idealized case appears as an academic problem, it contains the essence
 of surface similarity as it is used in most atmospheric models, be it conceptual or numeric ones.
@@ -233,8 +244,9 @@ Despite the strong simplifications implied by our choice of set-up, there is no 
 this well-defined problem.
 %
 Large-Eddy simulation not only needs to be tuned for the surface shear stress and veering angle, but it also
-relies on sub-grid closures that often assume alignment of the stress with gradients -- a questionable
-pre-requisite when the wind rotates with height.
+relies on sub-grid closures that commonly assume alignment of the turbulent stress with gradients.
+%
+This pre-requisite is not fulfilled when the wind rotates with height.
 %
 \citet{esau:EFM2004} investigated the representation of the Ekman boundary layer by dynamical subgrid closures
 and \cite{zikanov:JFM2003} proposed a closure for the wind profile using a linearized representation of the eddy viscosity.
@@ -243,7 +255,7 @@ Despite advances in analysis of this simplified set-up \citep{jiang:JAS2018},
 there is yet insufficient understanding for a quantitative generalization of the results to
 arbitrary external forcing (manifest in variation of the Reynolds number) -- and indeed the fundamental
 questions pertaining to such relatively simple dynamics of turbulence are not reflected in the
-research foci of LES for the ABL over the past 50 years \citep{stoll:BM2020}. 
+research on LES for the ABL over the past 50 years \citep{stoll:BM2020}. 
 %
 \par
 % 
@@ -253,7 +265,7 @@ the geophysical range of scale separation, however, is--and it will remain so fo
 for such simulation \citep{dimotakis:ARF2005}.
 %
 Here, the routinely employed concept of Reynolds-number similarity can help. It postulates the existence
-of \quotation{\emph{fully developed turbulence}  believed to occur for a sufficiently large but finite Reynolds number}
+of \emph{fully developed turbulence}  believed to occur for a sufficiently large but finite Reynolds number
 \citep{barenblatt:PF1995}.
 %
 (Already in \citeyear{moin:ARF1998}, this in fact lead \citeauthor{moin:ARF1998} to the question \emph{how high a Re is high enough}?) 
@@ -277,8 +289,7 @@ of the mean velocity vector as a function of the Reynolds number.
 \section{Problem Formulation and Numerical Approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-We consider here incompressible, turbulent Ekman flow, that is, the turbulent flow over a flat rotating plate, as
-a physical model for the truly neutral atmospheric boundary layer (ABL).
+We consider here incompressible, turbulent Ekman flow, that is, the turbulent flow over a flat rotating plate, as a physical model for the truly neutral ABL.
 %
 The f-plane approximation is applied such that rotation only acts on horizontal velocity components;
 we thus neglect rotational effects on the horizontal components of velocity and dynamical effects
@@ -312,13 +323,13 @@ the surface veering angle $\alpha_\star$ is the angle between $\underline{\tau}$
 \end{equation}
 \end{subequations}
 Analogously, we denote the height-local veering of the wind
-$\alpha(z)= \sphericalangle \left( \underline{G},\underline{U}(z)\right)$. 
+$\alpha(z)= \sphericalangle \left( \underline{G},\underline{U}(z)\right)$, where $\underline{G}=(G_1,G_2,0)$ is the geostrophic wind vector.
 %
 \par
 %
 We consider the incompressible Navier--Stokes equations for the three velocity components on the f-plane in a framework
-that is governed by the physical parameters
-(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_2^2}$ (where $\mathbf{G}=(G_1,G_2,0)$ is the geostrophic wind vector),
+that is governed by % the physical parameters
+(i)   geostrophic wind magnitude $G=\sqrt{G_1^2+G_2^2}$,
 (ii)  Coriolis parameter $f$ (representing the angular rotation), and
 (iii) kinematic viscosity $\nu$.
 %
@@ -336,17 +347,15 @@ governing the problem reads as
   \RE_\Lambda=\frac{G \LR }{\nu}. 
 \end{equation}
 %
-The scales used in defining $\RE_\Lambda$ loose their relevance in describing the turbulent state of the flow.
+The scales used in defining $\RE_\Lambda$ are of limited relevance for description of the turbulent flow state.
 %
-The friction Reynolds number
+The turbulence scale separation in a wall-bounded flow is commonly characterized by the friction Reynolds number
+\citep{jimenez:ARF2014}:
 \begin{equation}
   \RE_\tau = \frac{u_\star\delta}{\nu} = \delta^+ = \frac{\RE_\Lambda}{Z_\star^2}, 
 \end{equation}
 where $\delta=u_\star/f$ and we use a superscript $'+'$ to denote normalization by inner turbulence
 scales ($u_\star, \nu$).
-%
-$\RE_\tau$ is suitable to compare the turbulence scale separation also to other wall-bounded flow geometries
-such as rotating or non-rotating channel, pipe, or Couette flow.
 %
 Another common measure of scale separation is the Reynolds number defined by the laminar Ekman layer
 thickness $D=\sqrt{2\nu/f}$, 
@@ -364,10 +373,9 @@ The governing equations  non-dimensionalized by $G$, $f$, and $\Lambda_\mathrm{\
   \frac{\partial u_j}{\partial x_j} &=& 0,   
 \end{eqnarray} 
 \end{subequations}
-where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, and $g_j=G_j/G$ are non-dimensionalized components
-geostrophic wind (with $g_{1}^2+g_{2}^2=1$ by construction).
+where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, $g_j=G_j/G$ are non-dimensionalized components geostrophic wind (with $g_{1}^2+g_{2}^2=1$ by construction), and $\epsilon$ is the Levi--Civita tensor.
 %
-These equations are solved inside a bounded cube of size $L_x \times L_y \times L_z$ with periodic boundary conditions in the lateral directions $Oxy$, a no-slip--no-penetration boundary at $z=0$, and
+These equations are solved inside a bounded cube of size $L_x \times L_y \times L_z$ with periodic boundary conditions in the lateral (streamwise and spanwise) directions, a no-slip--no-penetration boundary at $z=0$, and
 a no-penetration, free-slip boundary at $z=L_z$.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -393,24 +401,35 @@ by new simulations at higher Reynolds numbers up to $\RE_\Lambda=1.28\times10^6$
 In total, this yields one order of magnitude variation in terms of the scale separation in the boundary layer.
 %
 \begin{table}
-  \caption{Direct numerical simulation datasets used in this
-    work \label{tab:sim-setup}}
-  \begin{tabular}{c r r c c c c c}
+  \caption{\label{tab:sim-setup} Direct numerical simulation data sets used in this work. $Re_\Lambda$ and $Re_D$ refer to the Reynolds number defined in terms of the Rossby radius $\Lambda$ and Ekman-layer thickness $D$ respectively. $L_{xy}$ is the domain size in the stream- and span-wise direction. The grid is given by the number of grid points in the stream-wise ($N_x$), span-wise ($N_y$) and vertical ($N_z$) directions respectively. The resolution in the span-wise and stream-wise directions are given as $\Delta x^+$ and $\Delta y^+$. The grid in the vertical is stretched, and  resolution at the wall is given by $\Delta z^+$.}
+  \centering\begin{tabular}{r r r c c c c c}
     \toprule 
     $\RE_\Lambda$ & $\RE_D$ & $L_{xy}/\Lambda$ & $N_x\times N_y\times N_z$ & $\Delta x^+$ & $\Delta y^+$ & $\left.\Delta z^+\right|_{z=0}$ \\ 
     \midrule
     \rowcolor{gray!30}
-       $125\,000$ &    $500$& 1.08 & $2048\times2048\times192$&4.1& 4.1& 1.05\\
+       $125\,000$ &    $500$& 1.08 & $2048\times2048\times192$&4.1& 4.1& 1.05 \\
     \rowcolor{gray!30}
-       $281\,250$ & $   750$& 1.08 & $3072\times3072\times384$&5.6&11.2& 1.60\\
+       $281\,250$ & $   750$& 1.08 & $3072\times3072\times384$&5.6& 5.6& 1.60 \\ 
     \rowcolor{gray!30}
-       $500\,000$ & $1\,000$& 1.08 & $3072\times6144\times512$&9.3& 4.7& 1.14\\
-    \midrule
+       $500\,000$ & $1\,000$& 1.08 & $3072\times6144\times512$&9.3& 4.7& 1.14\\ 
        $845\,000$ & $1\,300$& 0.54 & $2560\times5120\times640$&8.9& 4.5& 0.99\\
 
-    $1\,280\,000$ & $1\,600$& 0.54 & $3860\times7680\times960$&8.6& 4.3& 1.00\\ 
+    $1\,280\,000$ & $1\,600$& 0.54 & $3860\times7680\times960$&8.6& 4.3& 1.00\\
     \bottomrule 
-  \end{tabular} 
+  \end{tabular}
+
+ \caption{\label{tab:data} DOIs and reference to the openly accesible data set at refubium repository} 
+  \centering\begin{tabular}{r r r }
+    \toprule
+    $\RE_D$ & DOI & Reference \\
+    \midrule
+    \rowcolor{gray!30} 500& \DOI{10.17169/refubium-42505} & \cite{ansorge:2024c}\\
+    \rowcolor{gray!30} 1000& \DOI{10.17169/refubium-42507}& \cite{ansorge:2024a}\\
+    
+    1300& \DOI{10.17169/refubium-42508} & \cite{ansorge:2024}  \\
+    1600& \DOI{10.17169/refubium-42509} & \cite{ansorge:2024b} \\
+    \bottomrule 
+  \end{tabular}
 \end{table}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -480,13 +499,13 @@ production processes in the surface layer, in particular in the buffer layer.
     friction Reynolds number  $\RE_\tau$,
     friction velocity $u_\star$,
     surface veering angle $\alpha_\star$,
-    normalized boundary layer depth $\delta_{95}/\delta$
-    inner normalization of vertically integrated TKE,
+    normalized boundary layer depth $\delta_{95}/\delta$, 
+    inner normalization of vertically integrated TKE, 
     outer normalization of vertically integrated dissipation.
     \label{tab:bulk_results}}
-  \begin{tabular}{r r r r r r r }
-    \toprule
-    Re & $\delta^+=\RE_\tau$& $u_\star$ & $\alpha_\star$ & $\delta_{95}/\delta$ & $f u_\star^{-3}\int_{0}^{\delta} e \mathrm{d} z $ & $ G^{-3}\int_{0}^{\delta} \epsilon \mathrm{d}z$\\
+  \centering\begin{tabular}{r r r r r r r }
+      \toprule
+      Re & $\delta^+=\RE_\tau$& $u_\star$ & $\alpha_\star$ & $\delta_{95}/\delta$ & $f u_\star^{-3}\int_{0}^{\delta} e \mathrm{d} z $ & $ G^{-3}\int_{0}^{\delta} \epsilon \mathrm{d}z$\\
       \midrule 
       \rowcolor{gray!30} 
       500 & 479 & 0.0619& 25.5 & 0.66& 0.88& 1.31 \\
@@ -498,13 +517,13 @@ production processes in the surface layer, in particular in the buffer layer.
       1300& 2122& 0.0501& 17.9 & 0.59& 0.85& 1.24 \\
       1600& 2978& 0.0482& 17.2 & 0.61& 0.91& 1.21 \\ 
       \bottomrule
-    \end{tabular}
+  \end{tabular}
 \end{table} 
 %
 \par
 %
-Velocity profiles in inner and outer units (Fig.~\ref{fig:profiles}a,b) are in accordance
-with previous work \citep{coleman:JFM1992,spalart:PF2008,spalart:PF2009,ansorge:BM2014,ansorge:BM2019}:
+Velocity profiles in inner units ($U^+(z^+)$, Fig.~\ref{fig:profiles}a)and outer units ($U^-(z^-)$, Fig.~\ref{fig:profiles}b)
+are in accordance with previous work \citep{coleman:JFM1992,spalart:PF2008,spalart:PF2009,ansorge:BM2014,ansorge:BM2019}:
 %
 The profiles of the shear-aligned streamwise velocity component are well-collapsed for $\RE_D>500$
 below $z^-\approx 0.15$ (circles in Fig.~\ref{fig:profiles}a); the case with $\RE_D=500$ is only transitionally
@@ -519,13 +538,12 @@ This illustrates the inner--outer scale-duality in this external flow with inner
 appropriate in the inner layer and outer scaling in the outer layer. 
 %
 Also in the outer layer of the flow, $u_\star$ (and not the magnitude of the
-geostrophic wind $G$) governs the inviscid, i.e. $\RE$-independent,
-normalization.
+geostrophic wind $G$) governs the inviscid normalization, i.e. a scaling independent of the Reynolds-number.
 %\todo{WHY? cf. TKE/Dissipation normalization above}
 %
 \par
 %
-No collapse in inner units is found for the profiles of spanwise velocity $V^{\alpha_\star+}(z^+)$;
+No collapse in inner units is found for the profiles of spanwise velocity $V^{\alpha_\star+}(z^+)$. 
 %
 When normalized in outer units, the deficit profiles of spanwise velocity
 $(V^{\alpha_\star}(z^-)-G_{2}^{\alpha})/u_\star$
@@ -563,12 +581,10 @@ an integral relation.
 \end{figure}
 
 \begin{figure}
-  \begin{flushleft} 
-    \textbf{a)}\hspace{0.47\textwidth} \textbf{b)}\\
-    \includegraphics[width=\textwidth]{../plot/stresses.pdf}
-    \textbf{c)}\hspace{0.47\textwidth} \textbf{d)}\\    
-    \includegraphics[width=\textwidth]{../plot/eddy_viscosity.pdf}\\
-  \end{flushleft} 
+  \textbf{a)}\hspace{0.47\textwidth} \textbf{b)}\\
+  \includegraphics[width=\textwidth]{../plot/stresses.pdf}
+  \textbf{c)}\hspace{0.47\textwidth} \textbf{d)}\\    
+  \includegraphics[width=\textwidth]{../plot/eddy_viscosity.pdf}\\
   \caption{
     \textbf{a-b)} Profiles of
     the turbulent stress $S_\mathrm{turb}^+$ (dashed), 
@@ -578,8 +594,8 @@ an integral relation.
     \textbf{c-d)} Normalized eddy viscosity $\nu_E$ (solid) plotted versus
     inner \textbf{(c)} and outer height \textbf{(d)}.
     Different colors are for different Reynolds numbers (cf. Tab.~\ref{tab:sim-setup}).
-    Circles in \textbf{(a)} and \textbf{(b)} denote the height
-    $z^-=0.15$, diamonds in \textbf{(c)} and \textbf{(d)} are for $z^+=50$
+    Circles in \textbf{(a)} and \textbf{(c)} denote the height
+    $z^-=0.15$, diamonds in \textbf{(b)} and \textbf{(d)} are for $z^+=50$
     as in Fig.~\ref{fig:profiles}.
     \label{fig:stresses}}  
 \end{figure} 
@@ -685,7 +701,7 @@ are larger and more isotropic, but they are still largely aligned with the surfa
 %
 In the upper part of the outer layer, around $y^+\approx 1000$, no clear signature of the
 surface veering direction is found, and intense TKE structures (bright yellow)
-are organized on a large spatial scale with with weaker eddies (greenish structures) and quiescent regions
+are organized on a large spatial scale with weaker eddies (greenish structures) and quiescent regions
 in between.  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -697,11 +713,11 @@ We now turn to the formulation of a general velocity profile that is fully deter
 parameter of the idealized problem, namely a Reynolds number representing the scale separation or
 geometric size of the problem.
 %
-This precludes a drag law wherewith we begin this section (\ref{sec:drag-law}).
-Based on the scaling arguments put forward in Sec.~\ref{sec:scaling}, we then develop
-a formulation of the wind vector in the Ekman layer (Sec~\ref{sec:ekman}) and separately
-for the streamwise (Sec.~\ref{sec:streamwise}) and spanwise (Sec.~\ref{sec:spanwise}) components
-in the overlap and inner regions. 
+This precludes, first, a drag law wherewith we begin this section (\ref{sec:drag-law}).
+Based on the scaling arguments put forward in Sec.~\ref{sec:scaling}, we then develop, second,
+a formulation of the wind vector in the Ekman layer (Sec~\ref{sec:ekman}). Finally, we come up
+with a separate formulation of the, third, stream-wise and, fourth, span-wise velocity components in the
+overlap and inner regions of the flow. 
 %
 % 
 \subsection{Drag-Law}
@@ -731,6 +747,7 @@ We also find that the solution of the transient equation involved in estimation 
 $Re_D$ is approximated reasonably by the formulation
 \begin{equation}
   Z_\star= 4\log(\mathbf{Re}_D))-8
+  \label{eqn:zstar}
 \end{equation}
 which quantifies the 'weak' dependence of $u_\star$ on the Reynolds number as an approximately logarithmic one, at least
 for problems with a scale separation on the order that is relevant to geophysical problems ($Re_D<10^{8}$).  
@@ -747,8 +764,8 @@ need to be matched to the framework of surface similarity.
 A smooth transition from the inner layer to the Ekman layer, where the wind is characterized by a turning
 of its mean direction, is not easily achieved. 
 %
-\cite{optis:BM2014}, for instance, define an ``effective geostrophic wind vector that has the same magnitude of the
-observed surface geostrophic wind and is rotated by the angle $\alpha$ [their nomenclature]'' to overcome the
+\cite{optis:BM2014}, for instance, define an \emph{``effective geostrophic wind vector that has the same magnitude of the
+observed surface geostrophic wind and is rotated by the angle $\alpha$ [their nomenclature]''} to overcome the
 unsteady transition when approaching the Ekman layer from below.
 %
 Such rotation of the wind vector is \emph{a posteriori} justified by the observational data that the model outcomes are compared to.
@@ -758,8 +775,8 @@ mismatch in the theoretical treatment of the inner and outer layer in this rotat
 %
 \par
 %
-The text-book solution for Ekman flow makes use of the physical boundary conditions (BCs) for the atmospheric
-boundary layer (no-slip at the bottom and geostrophic wind in the free atmosphere) and a constant eddy
+The text-book solution for Ekman flow makes use of the physical boundary conditions (BCs) for
+the~ABL (no-slip at the bottom and geostrophic wind in the free atmosphere) and a constant eddy
 viscosity.
 %
 Specifying the boundary conditions at top and bottom eliminates one mode of the analytical solution, and
@@ -790,11 +807,11 @@ Based on the derivation in App.~\ref{app:ekman_solution}, this profile is given 
       \sin z_\mathrm{ek}
       \end{array}\right)  + b_\mathrm{ek}\left(\begin{array}{r}
         \sin z_\mathrm{ek} \\ \cos z_\mathrm{ek}
-        \end{array}\right)\right]\\
-    z_\mathrm{ek} &=& \delta_\mathrm{ek} (y^- -s_\mathrm{ek}). 
+        \end{array}\right)\right]. 
   \end{eqnarray}
 \end{subequations}
-%
+with  $z_\mathrm{ek} = \delta_\mathrm{ek} (y^- -s_\mathrm{ek})$.
+% 
 The right-hand-side consists of two modes with magnitude $a_\mathrm{ek}$ and $b_\mathrm{ek}$
 shifted by $\pi/2$ with respect to each other. 
 %
@@ -1047,7 +1064,7 @@ However, we cannot assume $V=0$ if a smooth matching between the inner and outer
 In this context, we first realize that the velocity deficit $(V^{\alpha_\star}-G^{\alpha_\star})/u_\star$
 approaches a $\RE$-independent constant around $C_{V0}=Z_\star \sin\alpha=6.1$ at the surface; deviations from
 this constant are only found for the lowest Reynolds numbers which is in accordance with
-the low-$\RE$ correection suggested by \cite{spalart:JFM1989}.
+the low-$\RE$ correction suggested by \cite{spalart:JFM1989}.
 %
 This constrains the wind veer, and it quantitatively shows that the decreasing wall friction manifest in an
 increase of $Z_\star$ exactly compensates the decrease of wind turning measured by $\sin\alpha_\star$. 
@@ -1105,6 +1122,11 @@ Ekman profile at the top:
 \end{align}
 where $v_{03}$ is determined by $V_\mathrm{ek}(0.3)$ and $U_\mathrm{ek}(0.3)$ and depends on $\RE$.
 %
+Given the Ekman formulation of the velocity profile introduced in Sec.~\ref{sec:ekman},
+one may express $v_{03}$ using the Ekman profile introduced in Sec.~\ref{sec:ekman} together
+with the approximation for $u_\star(Re)$ found in Eq.~(\ref{eqn:zstar}). 
+% 
+%
 While the $\RE$-dependency of $a_\mathrm{log}$, $b_\mathrm{log}$, $c_\mathrm{log}$
 is small, it shows up in Fig.~\ref{fig:profiles} where the normalized profiles
 of spanwise velocity become more convex with increasing $\RE$.
@@ -1122,7 +1144,7 @@ values of $v_{10}$ and $d_{10}$).
 \end{figure} 
 %
 \section{Discussion}
-\subsection{} 
+\subsection{Implications for surface-layer scaling} 
 Eq.~(\ref{eqn:scaling_spanwise}) establishes a universal mixed scaling for the spanwise velocity
 in the viscous layer:
 %
@@ -1169,10 +1191,13 @@ the variation of $c_\mathrm{log}$ is, however, rather small.
   \label{fig:hodograph} 
 \end{figure} 
 
-\section{Comparison with other theories}
+\subsection{Comparison with other theories}
 
 \textbf{Compare} to Emeis (2002) and Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
 
+\textbf{Compare} to van Driest scaling 
+
+\textbf{Remember} of interpretation in the context of eddy viscosity (Fig.~\ref{fig:stresses}) 
 Consider Townsend ``Turbulent Shear Flow''  Chapter 7.18: p. 319 
 %
 \par%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1194,6 +1219,10 @@ Applications:
 \item initial condition for LES/DNS to eliminate/minimize inertial oscillation in Benchmark simulations
 \item
 \end{itemize} 
+
+\bibliographystyle{spbasic_updated} 
+\bibliography{ansorge}
+
 
 \appendix
 
@@ -1314,8 +1343,6 @@ for large $\RE$.
 \end{subequations}
 
 
-\printbibliography 
-
 \appendix
 \section{Old Stuff}
 \todo{OLD FROM HERE} 
@@ -1410,6 +1437,7 @@ It is  $a+b=1$ for $V_\text{trans}(z^-_\text{up}) = V_\text{outer}(z^-_\text{up}
 where we find that $z^-_\text{low}=0.06$ and $z^-_\text{up}=0.13$ yield satisfactory agreement with DNS data. 
 
 \end{subequations}
+
 
 \end{document} 
 

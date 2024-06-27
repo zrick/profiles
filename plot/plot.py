@@ -1,4 +1,4 @@
-#!/opt/local/bin/python
+#!/usr/bin/python3
 import my_pylib as mp 
 import numpy as np
 import scipy.interpolate as spip
@@ -23,14 +23,15 @@ plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
 print_table=False
-plot_outer_log=False
-plot_total_rot=False
+plot_outer_log=True
 plot_convergence=False
 plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 test_inner_streamwise=False
 plot_profile_comparison=True
+plot_vandriest=False
+plot_total_rot=False
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -46,7 +47,7 @@ colors = {400 : 'gray',
           300000:'black',
           1000000:'black'} 
 
-base='/Users/zrick/WORK/research_projects/SIM_NEUTRAL/netcdf/' 
+base='/home/cedria87/WORK/RESEARCH/SIM_NEUTRAL/netcdf/' 
 
 files = { 400: base+'avg_flw_ri0.0_re400.0_1024x384x1024.nc',
           500: base+'avg_flw_ri0.0_re500.0_2048x192x2048.nc',
@@ -56,13 +57,56 @@ files = { 400: base+'avg_flw_ri0.0_re400.0_1024x384x1024.nc',
           1301:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120.nc',
           1600:base+'avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc' } 
 
+
+def etling_us(z0,zp,al):
+    # universal parameter lz = lambda_z * 1/sqrt(2)
+    lz=np.sqrt(2)*sc.KAPPA / np.log(zp/z0)
+    us = lz*np.sin(np.pi/4.-al)
+    
+    # checking solution
+    #print('SOLUTION: {1:8.6f}, {2:8.6f} {3:8.6f}'.format(0,us,cos_al,al/np.pi*180) )
+    #print(us/kappa*np.log(zp/z0)*np.cos(al_0))
+    #print(G*(1-np.sqrt(2)*np.sin(al_0)*np.cos(pi4-al_0)))
+    #print(us/kappa*np.log(zp/z0)*np.sin(al_0))
+    #print(G*np.sqrt(2)*np.sin(al_0)*np.sin(pi4-al_0))
+    #print(us/G,al/np.pi*180) 
+    return us 
+
+
+def etling_profile(yp,ret,et_al,gamma_p=0.1):
+    kappa=sc.KAPPA
+    off_A=sc.C 
+
+    et_al = et_al * D2R 
+    
+    ny,yp,ym=build_grid(ret,thick=3)
+    i_01 =mp.geti(yp,gamma_p*ret)
+    zp = gamma_p*ret
+    surface_factor=np.exp(kappa*off_A) 
+    z0 = zp / (surface_factor*gamma_p*ret)
+    et_us = etling_us(z0,zp,et_al) 
+
+    d_ek_m = np.sqrt(2*kappa*gamma_p)
+    d_ek_p = d_ek_m * ret
+
+    # profiles
+    z_tilde = (yp - gamma_p*reTau ) / d_ek_p
+    z_arg=z_tilde[1:]+np.pi/4-et_al
+    damp = np.exp(-z_tilde[1:])
+    etling_pr_up=1./sc.KAPPA*np.log(yp[1:]*surface_factor)*np.cos(et_al) 
+    etling_pr_vp=1./sc.KAPPA*np.log(yp[1:]*surface_factor)*np.sin(et_al)
+    etling_ek_up=(1-damp*np.sqrt(2)*np.sin(et_al)*np.cos(z_arg))/et_us
+    etling_ek_vp=damp*np.sqrt(2)*np.sin(et_al)*np.sin(z_arg)/et_us
+    
+    return etling_ek_up,etling_ek_vp 
+
 sc=EkmanUniversalClass() # yp_ref,up_ref,wp_ref,deltap_ref,us_ref,al_ref*D2R-geo_rotate,plot=False)
 
 if use_data: 
     re_ref=1600
     nu_ref=2./(re_ref**2)
 
-    ncf='/Users/zrick/WORK/research_projects/SIM_NEUTRAL/netcdf/avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc' 
+    ncf='/home/cedria87/WORK/RESEARCH/SIM_NEUTRAL/netcdf/avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc' 
     nch=Dataset(ncf,'r')
     
     t_start=9.7
@@ -109,7 +153,7 @@ if plot_re1600:
     
     print(t_dat[-1]-t_dat[0]) 
 
-    file_name = '/Users/zrick/WORK/research_projects/SIM_NEUTRAL/netcdf/avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc'
+    file_name = '/home/cedria87/WORK/RESEARCH/SIM_NEUTRAL/netcdf/avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc'
     f=Dataset(file_name,'r')
     y=f['y'][:]
     ny=len(y)
@@ -128,7 +172,6 @@ if plot_re1600:
 
     al = f['FrictionAngle'][:]
     us = f['FrictionVelocity'][:]
-
     Uavg=np.average(U,0)
     Wavg=np.average(W,0)
     Udsh=(U-Uavg)/np.average(us) 
@@ -575,9 +618,9 @@ if plot_profiles:
     plt.show()
     plt.close('all') 
 
-    fig=plt.figure(figsize=(12,4.5))
-    ax1=fig.add_axes([0.06,0.11,0.43,0.87])
-    ax2=fig.add_axes([0.56,0.11,0.43,0.87])
+    fig1=plt.figure(figsize=(12,4.5))
+    ax1=fig1.add_axes([0.06,0.11,0.43,0.87])
+    ax2=fig1.add_axes([0.56,0.11,0.43,0.87])
 
     fig2=plt.figure(figsize=(5,4))
     ax3=fig2.add_axes([0.1,0.1,0.85,0.85]) 
@@ -635,9 +678,9 @@ if plot_profiles:
         ax4.plot(ym,ww/us,ls=':', c=c) 
         
         print(re,us,al)
-    ax1.plot([1,1],[1,1],ls=':', c='white',lw=0,label=' ')
-    ax1.plot([1,1],[1,1],ls='-', lw=2,c='gray',label=r'$U^\alpha$')
-    ax1.plot([1,1],[1,1],ls='--',lw=2,c='gray',label=r'$V^\alpha$')
+    #ax1.plot([1,1],[1,1],ls=':', c='white',lw=0,label=' ')
+    #ax1.plot([1,1],[1,1],ls='-', lw=2,c='gray',label=r'$U^\alpha$')
+    #ax1.plot([1,1],[1,1],ls='--',lw=2,c='gray',label=r'$V^\alpha$')
         
     ax1.set_xscale('log')
     ax1.set_xlim(1,2e3) 
@@ -655,8 +698,9 @@ if plot_profiles:
     ax2.set_ylabel(r'$(U^\alpha-G_{1}^\alpha)/u_\star, (V^\alpha-G_{2}^{\alpha}/u_\star$') 
 
     lg2=ax2.legend(loc='best')
-    lg2.get_frame().set_linewidth(0.0)
-    fig.savefig('uv_innerouter.pdf',format='pdf')
+    lg2.get_frame().set_linewidth(0.0) 
+    fig1.show()
+    fig1.savefig('uv_innerouter.pdf',format='pdf')
 
     ax3.set_xlabel('yp')
     ax3.set_ylabel('Stress')
@@ -1054,6 +1098,7 @@ if plot_outer_log :
     
     fig1.savefig('w_profile.pdf',format='pdf')
     fig2.savefig('u_profile.pdf',format='pdf')
+    plt.show()
     fig3.savefig('w_viscous.pdf',format='pdf')
     fig4.savefig('w_log.pdf',format='pdf') 
 
@@ -1716,12 +1761,352 @@ if test_inner_streamwise:
     plt.close('all')
 
 
-if plot_profile_comparison:
-    ReD=1600
-    us,al=sc.ustar_alpha(ReD) 
-    ReTau=(ReD*us)**2/2.
-    print('ReD:',ReD, 'ReTau:',ReTau) 
-    ny,yp,ym = build_grid(ReTau,thick=3)
-    u_et,v_et = sc.profile_etling2002(yp,ReD) 
     
-quit() 
+if plot_profile_comparison:
+    # comparison for etling profile
+    
+    ReD_arr=[500, 1000, 1600,10000,40000] 
+    ReD_col={500: 'blue',
+             1000:'orange',
+             1600:'red',
+             10000:'gray',
+             40000:'black' }
+    
+
+    
+    fig=plt.figure(figsize=(5,3))
+    figm=plt.figure(figsize=(5,3)) 
+    ax=fig.add_axes([0.12,0.15,.85,0.78]) 
+    axm=figm.add_axes([0.12,0.15,.85,0.78]) 
+    gamma_p=0.1
+    
+    for re in ReD_arr:
+        us,al=sc.ustar_alpha(re)
+        reTau = (re*us)**2/2.
+        print(re,reTau,us,al/np.pi*180)
+        ny,yp,ym=build_grid(reTau,thick=3)
+        i_gamma=mp.geti(yp,gamma_p*reTau)
+        print('I01:',i_gamma,yp[i_gamma],reTau)
+
+        ym[0] = 0.1*ym[1] 
+        
+        al=al/np.pi*180
+        eek_u,eek_v = etling_profile(yp,reTau,al,gamma_p=gamma_p)
+        up,vp=sc.profile_plus(yp,re)
+        sc_dct=np.arctan2(up,vp)/np.pi*180-90 
+        et_dct=np.arctan2(eek_u,eek_v)/np.pi*180 -90
+        et_dct[:i_gamma] = et_dct[i_gamma]
+        et_dct[0] = et_dct[1]
+        sc_dct[0] = 0. 
+        ax.plot(ym[1:],et_dct/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
+        ax.plot(ym,(-sc_dct+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
+        axm.plot(ym,us*np.sqrt(up*up+vp*vp),ls='--',c=ReD_col[re])
+        eek_u[:i_gamma] = 1/sc.KAPPA *np.log(yp[:i_gamma]*np.exp(sc.KAPPA*sc.C))*np.cos(al*D2R)
+        eek_v[:i_gamma] = 1/sc.KAPPA *np.log(yp[:i_gamma]*np.exp(sc.KAPPA*sc.C))*np.sin(al*D2R)
+        m=np.sqrt(eek_u**2+eek_v**2)
+        axm.plot(ym[1:],m/m[-1],ls='-',c=ReD_col[re],label=r'$Re_D={}; u_\star={}G$'.format(re,int(us*1000)/1000.))
+    lg=plt.legend()
+    lg.get_frame().set_linewidth(0.0)
+    ax.set_xlabel(r'$z^-$')
+    ax.set_ylabel(r'relative veer $\alpha/\alpha_0 [1]$')
+    ax.set_xscale('log')
+    ax.set_xlim(1e-3,2)
+    ax.arrow(0.2,0.35,0,0.45,lw=1.0,head_width=0.03,color='gray')
+    ax.arrow(0.2,0.8,0,-0.42,lw=1.0,head_width=0.03,color='gray')
+    ax.annotate('Error',(0.21,0.5),color='gray',rotation=90 )
+    ax.annotate('DNS data',(0.040,0.36),  rotation=-30 )
+    ax.annotate('2-layer model',(0.3,0.35),rotation=-70 ) 
+    fig.suptitle('Matching at $z_{prandtl}=0.10\delta$',fontsize=10)
+    fig.savefig('etling_direction_0.pdf',format='pdf')
+
+    axm.set_xscale('log')
+    axm.set_xlim(1e-4,2)
+    axm.set_xlabel(r'$z^-=y/\delta$')
+    axm.set_ylabel(r'$|\mathbf{U}(z)|$')
+    axm.set_ylim(0,1.10) 
+    lg=plt.legend()  
+    figm.suptitle('Matching at $z_{prandtl}=0.10\delta$',fontsize=10)
+    figm.savefig('etling_magnitude_0.pdf',format='pdf') 
+        
+    
+    fig= plt.figure(figsize=(5,3))
+    figm=plt.figure(figsize=(5,3))
+    ax= fig.add_axes([0.12,0.15,.85,0.78])
+    axm=figm.add_axes([0.12,0.15,.85,0.78]) 
+    gamma_p=0.05
+    
+    for re in ReD_arr:
+        us,al=sc.ustar_alpha(re)
+        reTau = (re*us)**2/2.
+        print(re,reTau,us,al/np.pi*180)
+        ny,yp,ym=build_grid(reTau,thick=3)
+        i_gamma=mp.geti(yp,gamma_p*reTau)
+        print('I01:',i_gamma,yp[i_gamma],reTau)
+
+        ym[0] = 0.1*ym[1] 
+        
+        al=al/np.pi*180
+        eek_u,eek_v = etling_profile(yp,reTau,al,gamma_p=gamma_p)
+        up,vp=sc.profile_plus(yp,re)
+        sc_dct=np.arctan2(up,vp)/np.pi*180-90 
+        et_dct=np.arctan2(eek_u,eek_v)/np.pi*180 -90
+        et_dct[:i_gamma] = et_dct[i_gamma]
+        et_dct[0] = et_dct[1]
+        sc_dct[0] = 0. 
+        ax.plot(ym[1:],et_dct/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
+        ax.plot(ym,(-sc_dct+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
+        axm.plot(ym,us*np.sqrt(up*up+vp*vp)  ,ls='--',c=ReD_col[re])
+        eek_u[:i_gamma] = 1/sc.KAPPA *np.log(yp[1:i_gamma+1]*np.exp(sc.KAPPA*sc.C))*np.cos(al*D2R)
+        eek_v[:i_gamma] = 1/sc.KAPPA *np.log(yp[1:i_gamma+1]*np.exp(sc.KAPPA*sc.C))*np.sin(al*D2R)
+        m=np.sqrt(eek_u**2+eek_v**2)
+        m=m/m[-1]
+        axm.plot(ym[1:],m,ls='-',c=ReD_col[re])
+    lg=plt.legend()
+    lg.get_frame().set_linewidth(0.0)
+    ax.set_xlabel(r'$z^-$')
+    ax.set_ylabel(r'relative veer $\alpha/\alpha_0 [1]$')
+    ax.set_xscale('log')
+    ax.set_xlim(1e-3,2)
+    ax.arrow(0.060,0.57,0,0.41,lw=1.0,head_width=0.005,color='gray',overhang=0.3)
+    ax.arrow(0.060,0.98,0,-0.41,lw=1.0,head_width=0.005,color='gray',overhang=0.3)
+    ax.annotate('Error',(0.062,0.80),color='gray',rotation=90 )
+    ax.annotate('DNS data',(0.040,0.36),  rotation=-30 )
+    ax.annotate('2-layer model',(0.19,0.35),rotation=-70 )
+
+    axm.set_xscale('log')
+    axm.set_xlim(1e-4,2)
+    axm.set_xlabel(r'$y^-=z/\delta$')
+    axm.set_ylabel(r'$|\mathbf{U}(z)|$')
+    axm.set_ylim(0,1.10) 
+    lg=plt.legend()  
+    fig.suptitle('Matching @ $z_{prandtl}=0.05\delta$',fontsize=9) 
+    fig.savefig('etling_direction_1.pdf',format='pdf')
+
+    
+    figm.suptitle('Matching @ $z_{prandtl}=0.05\delta$',fontsize=9) 
+    figm.savefig('etling_magnitude_1.pdf',format='pdf') 
+        
+    fig=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.12,0.15,0.85,0.84]) 
+
+    re=1600
+    us1,al1=sc.ustar_alpha(re) 
+    reTau1=(re*us1)**2/2.
+    ny,yp,ym = build_grid(reTau1,thick=3)
+    u1,v1=sc.profile_minus(ym,re)    
+
+    re=np.amin(ReD_arr) 
+    us0,al0=sc.ustar_alpha(re) 
+    reTau0=(re*us0)**2/2.
+    u0,v0=sc.profile_minus(ym,re)
+
+    m0=np.sqrt(u0*u0+v0*v0)
+    m1=np.sqrt(u1*u1+v1*v1) 
+    ax.fill_between(ym[1:],m0[1:],m1[1:],color='gray',alpha=0.25)
+
+    for re in ReD_arr[0:3]:
+        us,al=sc.ustar_alpha(re) 
+        reTau=(re*us)**2/2.
+        ny,yp,ym = build_grid(reTau,thick=3)
+        up,vp=sc.profile_plus(yp,re)
+        print('ReD:',re, 'ReTau:',reTau,ny,yp[0],yp[1],yp[-1]/reTau) 
+
+        mag = np.sqrt(up*up + vp*vp)
+        ax.plot(yp[1:]/reTau,mag[1:]*us,label=r'$Re_D={}$'.format(re),c=ReD_col[re])
+
+
+    
+        
+    ax.set_xscale('log')
+    ax.set_xlim(1e-5,2e0)
+    lg=ax.legend()
+    lg.get_frame().set_linewidth(0.0) 
+    ax.set_xlabel(r'$z/\delta$')
+    ax.set_ylabel(r'$|\mathbf{U}(z)|/G$')
+    ax.arrow(0.05,.5,-0.02,+0.45,color='gray')
+
+    ax.annotate(r'$Re$',(0.048,0.55),color='gray')
+    ax.annotate(r'DNS',(0.008,0.35),color='gray',rotation=45)
+
+    plt.savefig('magnitude_0.pdf',format='pdf') 
+
+    
+    for re in ReD_arr[3:]:
+        us,al=sc.ustar_alpha(re) 
+        reTau=(re*us)**2/2.
+        ny,yp,ym = build_grid(reTau,thick=3)
+        up,vp=sc.profile_plus(yp,re)  
+        print('ReD:',re, 'ReTau:',reTau,ny,yp[0],yp[1],yp[-1]/reTau) 
+
+        mag = np.sqrt(up*up + vp*vp)
+        ax.plot(yp[1:]/reTau,mag[1:]*us,label=r'$Re_D={}$'.format(re),c=ReD_col[re])
+
+        
+    re=np.amax(ReD_arr)
+    us0,al0=sc.ustar_alpha(re) 
+    reTau0=(re*us0)**2/2.
+    ny,yp,ym = build_grid(reTau0,thick=3)
+    u0,v0=sc.profile_minus(ym,re)
+
+    re=1e4
+    us1,al1=sc.ustar_alpha(re) 
+    reTau1=(re*us1)**2/2.
+    u1,v1=sc.profile_minus(ym,re)    
+
+
+    m0=np.sqrt(u0*u0+v0*v0)
+    m1=np.sqrt(u1*u1+v1*v1) 
+    ax.fill_between(ym[1:],m0[1:],m1[1:],color='red',alpha=0.25)
+    
+
+    ax.annotate(r'atmosphere',(2e-5,0.18),color='red',rotation=30) 
+    plt.savefig('magnitude_1.pdf',format='pdf')
+
+    ax.annotate(r'$\frac{dU_{log}}{d(log z)} =\frac{u_\star}{\kappa} \propto \frac{1}{log(Re_D)}$',(2e-5,0.65) )
+    plt.savefig('magnitude_2.pdf',format='pdf')
+    plt.close('all') 
+
+    fig=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.12,0.16,0.85,0.82])
+
+    for re in ReD_arr:
+        us,al=sc.ustar_alpha(re) 
+        reTau=(re*us)**2/2.
+        ny,yp,ym = build_grid(reTau,thick=3)
+        up,vp=sc.profile_plus(yp,re)  
+        print('ReD:',re, 'ReTau:',reTau,ny,yp[0],yp[1],yp[-1]/reTau) 
+        
+        mag = np.sqrt(up*up + vp*vp)
+        ax.plot(yp[1:],mag[1:],label=r'$Re_D={}$'.format(re),c=ReD_col[re])
+        i_01=mp.geti(yp,0.1*reTau)
+        ax.scatter(yp[i_01],mag[i_01],c='black')
+    uv_log=sc.profile_log(yp)
+    print(uv_log.shape) 
+    ax.plot(yp[1:],uv_log[1:],ls='--',lw=1.0,c='gray',label=r'$\kappa^{-1}log(z^+)$') 
+    ax.set_xscale('log')
+    ax.set_xlabel('$z^+$')
+    ax.set_ylabel('$|\mathbf{U}^+(z^+)|$')
+    ax.set_xlim(1e0,1e6)
+    lg=ax.legend() 
+    plt.savefig('magnitude_inner.pdf',format='pdf')
+    plt.close('all')
+
+  
+ 
+    fig=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.12,0.16,0.86,0.82]) 
+
+    for re in ReD_arr:
+        us,al=sc.ustar_alpha(re) 
+        reTau=(re*us)**2/2.
+        ny,yp,ym = build_grid(reTau,thick=3)
+        up,vp=sc.profile_plus(yp,re)  
+        print('ReD:',re, 'ReTau:',reTau,ny,yp[0],yp[1],yp[-1]/reTau) 
+        
+        dct= (np.arctan2(up,-vp) - np.pi/2)/D2R
+        ax.plot(yp[1:],dct[1:]-dct[0]-90,label=r'$Re_D={}$'.format(re),c=ReD_col[re])
+        i_01=mp.geti(yp,0.1*reTau)
+        ax.scatter(yp[i_01],dct[i_01],c='black')
+    uv_log=sc.profile_log(yp)
+    u_ek = 1. - np.cos(yp/100)*np.exp(-yp/100)
+    v_ek =      np.sin(yp/100)*np.exp(-yp/100) 
+    dct_ek =(np.arctan2(u_ek,v_ek)+np.pi/2)/D2R 
+    ax.plot(yp[1:],dct_ek[1:]-135,ls='--',lw=1,c='gray',label='laminar Ekman')
+    ax.set_xscale('log')
+    ax.set_xlabel(r'$z^+$')
+    ax.set_ylabel(r'$\alpha(z^+)$') 
+    ax.set_xlim(1e0,1e6)
+    ax.arrow(5,15,2e5,-10,lw=1.5,head_width=4,head_length=16000,color='gray',overhang=0)
+    ax.annotate(r'$Re$', (5.,11.5),color='gray' )
+    lg=ax.legend() 
+    plt.savefig('direction_inner.pdf',format='pdf')
+    plt.close('all') 
+ 
+
+    fig=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.12,0.16,0.86,0.82]) 
+
+    for re in ReD_arr:
+        us,al=sc.ustar_alpha(re) 
+        reTau=(re*us)**2/2.
+        ny,yp,ym = build_grid(reTau,thick=3)
+        up,vp=sc.profile_plus(yp,re)  
+        print('ReD:',re, 'ReTau:',reTau,ny,yp[0],yp[1],yp[-1]/reTau) 
+        
+        dct= (np.arctan2(up,-vp) - np.pi/2)/D2R
+        ax.plot(ym[1:],dct[1:]-dct[-1],label=r'$Re_D={}$'.format(re),c=ReD_col[re])
+        i_01=mp.geti(yp,0.1*reTau)
+        ax.scatter(ym[i_01],dct[i_01]-dct[-1],c='black')
+    uv_log=sc.profile_log(yp)
+    d_ek=2*np.pi
+    u_ek = 1. - np.cos(d_ek*ym)*np.exp(-d_ek*ym)
+    v_ek =      np.sin(d_ek*ym)*np.exp(-d_ek*ym) 
+    dct_ek =(np.arctan2(u_ek,v_ek)+np.pi/2)/D2R 
+    ax.plot(ym[1:],dct_ek[1:]-dct_ek[-1],ls='--',lw=1,c='gray',label='laminar Ekman')
+    ax.plot([1e-4,2e0],[0,0],ls='-',c='black',lw=0.5) 
+    ax.set_xscale('log')
+    ax.set_xlabel(r'$z^-=z/\delta$')
+    ax.set_ylabel(r'$\alpha(z^-)-\alpha_{GEO}$') 
+    ax.set_xlim(1e-4,2e0)
+    ax.set_ylim(-20,1)
+    ax.arrow(0.05,-18,-.01,12,lw=.60,head_width=.01,head_length=0.4,color='gray')
+    ax.annotate(r'$Re$', (0.025,-8),color='gray' )
+    lg=ax.legend() 
+    plt.savefig('direction_outer.pdf',format='pdf')
+    plt.close('all')
+
+
+
+if plot_vandriest:
+    KAPPA = sc.KAPPA
+    ASTAR=28.7
+    fig=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.12,0.16,0.8,0.82])
+
+
+    zp = np.arange(0,1.0001e3,0.1)
+    lam = zp*0+1
+    turb = 1. / (KAPPA * zp )
+    turb_corrected = 2./(1+np.sqrt(1+ (4*KAPPA**2 * zp**2 )* (1.0-np.exp(-zp/ASTAR) )**2 ))
+    ax.plot(zp,turb_corrected,label='van Driest 1956')
+    ax.plot(zp,lam,label='laminar')
+    ax.plot(zp[15:],turb[15:],label='turbulent')
+    leg=plt.legend(loc='best')
+    ax.set_xlim(0,1e2)
+    ax.set_xlabel(r'$y^+$')
+    ax.set_ylabel(r'$\partial u^+ / \partial y^+$')
+
+    plt.savefig('vanDriest_gradients.png',format='png')
+    plt.close('all')
+
+    fig=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.12,0.16,0.8,0.82])
+
+    C0=5.52
+
+    u =np.zeros(len(zp)) 
+    for i in range(len(zp)-1):
+        u[i+1] = u[i] + 0.5*(turb_corrected[i] + turb_corrected[i+1]) * (zp[i+1]-zp[i])
+    
+    lam = zp
+    log=1./sc.KAPPA*np.log(zp)+sc.C
+    print(log)
+
+    yp=np.arange(2e3)/2.
+    u_mod1,w_mod1= sc.profile_plus(yp,1e6)
+    u_mod2,w_mod2= sc.profile_plus(yp,1e3)
+    ax.plot(zp,u,label='van Driest 1956') 
+    ax.plot(zp[:200],lam[:200],'--',lw=1,label='laminar')
+    ax.plot(zp[100:],log[100:],lw=1,label='log')
+    ax.plot(yp,u_mod1,lw=1,ls='--',label='model (re=1e6)' )
+    #ax.plot(yp,u_mod2,lw=1,ls='-',label='model (re=1e3)' )
+
+    ax.set_xscale('log') 
+    ax.set_xlim(1,1e3)
+    ax.set_ylim(1,15)
+    leg=plt.legend(loc='best')
+    
+    plt.savefig('vanDriest_profile.png',format='png',dpi=600)
+    plt.close('all') 
+    
+    print(zp)

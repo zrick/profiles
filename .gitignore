@@ -7,3 +7,5 @@ plot/__pycache__/
 *blg
 *log
 *~
+*.nc
+palm_hawk

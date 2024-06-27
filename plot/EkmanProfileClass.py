@@ -9,7 +9,7 @@ def build_grid(trgt,thick=1) :
     dyloc=1             #grid resolution at wall
     ny=1
     yloc=dyloc
-    while yloc < thick*trgt:
+    while yloc-dyloc < thick*trgt:
         dyloc*=vert_stretch 
         yloc+=dyloc
         ny+=1
@@ -73,9 +73,12 @@ class EkmanUniversalClass:
 
         self.LIMIT_INNER=50
         self.LIMIT_OUTER=0.10
-        
-        self.KAPPA=0.416 # k
-        self.C = 5.4605 # C
+        # Old Values from estimate routine (see below) 
+        # self.KAPPA= 0.446 #0.416 # k
+        # self.C =    5.98 #5.4605 # C
+        # Values from Jonathan (20230601; ReD=1000; Fit 38+ -> 0.12-)
+        self.KAPPA= 0.416 #0.416 # k
+        self.C =    5.4605 #5.98 # C
         self.A = Complex(4.79823,-5.56645)
         self.C5= Complex(-57.7728,19.5046)
         self.initialized=True
@@ -152,7 +155,7 @@ class EkmanUniversalClass:
         Ar=self.A.r 
         k=self.KAPPA 
         C5=self.C5.r
-        k=0.416
+        #k=0.416
         z=10
 
         #Ai=Ai+0.285
@@ -192,7 +195,7 @@ class EkmanUniversalClass:
 
     def profile_ekman(self,ym,us_loc):
         z=1/us_loc
-        
+        # z~ = (z-z_r) / D_E = (z  + 0.12 \delta ) / ( 0.66 * 2*pi *delta)
         c_argz=0.66*2.*np.pi 
         argz=    c_argz*(ym +0.12) #0.66*(2.*np.pi*(ym+0.12)) 
         dampA =  8.4*us_loc        #- 0./re #np.exp(zdum) * ( dU_mtc*np.cos(zdum) + dW_mtc*np.sin(zdum) )

@@ -1,0 +1,102 @@
+\documentclass[a4paper,10pt]{amsart}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx} 
+
+\author{Cedrick Ansorge}
+\date{\today}
+\title{Notes on Etling velocity profile for Ekman/Prandtl layer} 
+\begin{document}
+\maketitle
+
+
+\newcommand{\eqnref}[1]{Eq.~(\ref{eqn:#1})}
+\section{Basic velocity profiles} 
+\subsection{Velocity profile in the Prandtl layer} 
+\begin{align}
+  u_p(z) = \frac{u_\star}{\kappa} log \frac{z^+}{z_{0}^{+}}
+\end{align}
+In coordinates of the geostrophic wind (for a veering angle of $\alpha_0=\alpha(z=0)$
+\begin{align}
+  u_p(z) =\frac{u_\star}{\kappa } \log\frac{z^+}{z_{0}^{+}}\begin{pmatrix}\cos\alpha_0\\\sin\alpha_0\end{pmatrix} 
+\end{align}
+
+\subsection{Velocity profile in the Ekman layer}
+\begin{align}
+  \begin{pmatrix} u_\text{ek} \\ v_\text{ek}\end{pmatrix}(z) = G\sqrt{2}\sin\alpha_0
+  \begin{pmatrix}\frac{1}{\sqrt{2}\sin\alpha_0}- &e^{-\tilde{z}} \cos (\tilde{z} +\frac{\pi}{4} - \alpha_0) \\ 
+                                                 &e^{-\tilde{z}} \sin (\tilde{z} +\frac{\pi}{4} - \alpha_0)
+  \end{pmatrix} 
+\end{align}
+with the scaled Ekman height
+\[\tilde{z} = \frac{z-z_P}{D}, \]
+where $z_P$ is the Prandtl layer thickness (here assumed as 10\% of the BL thicknes)
+and $D$ the Ekman layer thickness. For D, there exists a matching based on the constant diffusivity within the Prandtl layer 
+\begin{align}
+  D = \sqrt{2\frac{K_m}{f}}  = \sqrt{2\frac{\kappa u_\star z_p}{f}} = \sqrt{2\kappa\delta z_p}  
+\end{align}
+with $\delta=u_\star/f$. Using $z_p=0.1\delta$, we obtain
+\[D=\sqrt{0.2\kappa}\delta\approx 0.3\delta\] 
+
+\section{Matching point}
+The profiles shall be matched at the upper end of the Prandtl layer ($z=z_P$). Given the geostrophic
+wind, Prandtl layer height $z_p$ and height offset (in the case of a rough surface, the roughness height; for aerodynamically smooth surfaces a scaled version of the profile offset parameter), the profiles can be matched to yields the remaining parameters $u_\star$ and $\alpha_0$.
+
+\begin{subequations} 
+\begin{align}
+  \frac{u_\star}{\kappa} \log \frac{z_{P}}{z_{0}} \cos\alpha_0 &=& G\sqrt{2}\sin\alpha_0 \left[\frac{1}{\sqrt{2}\sin\alpha_0} - e^{-\tilde{z}} \cos\phi \right]  \\
+  \frac{u_\star}{\kappa} \log \frac{z_{P}}{z_{0}} \sin\alpha_0 &=& G \sqrt{2} \sin\alpha_0 e^{-\tilde{z}}\sin\phi  
+\end{align}
+\end{subequations}
+where -- utilizing the condition $z=z_P$, it is  $\phi=\pi/4-\alpha_0$. We can then eliminate $\sin\alpha_0$ from the equation for the span-wise component to obtain
+\begin{subequations} 
+  \begin{align}
+    \cos\alpha_0 &=& \frac{G}{u_\star}\sqrt{2}\lambda_z&\sin\alpha_0&\left[\frac{1}{\sqrt{2}\sin\alpha_0} - \cos\phi \right]  \label{eqn:alpha_estimator}\\
+    \frac{u_\star}{G}   &=& \sqrt{2}\lambda_z &&\sin\phi \label{eqn:ustar_estimator}
+  \end{align}
+\end{subequations}
+where
+\[\lambda_z = \frac{\kappa}{\log\frac{z_P}{z_0}}.\]
+Next, we rewrite \eqnref{alpha_estimator} using \eqnref{ustar_estimator} as
+\begin{subequations} 
+\begin{align}
+  \cos\alpha_0 = \sqrt{2}\lambda_z\frac{G}{u_\star} \left(\frac{1}{\sqrt{2}\sin\phi}- \frac{\sin\alpha_0\cos\phi}{\sin\phi}\right) \\
+  \sin\phi\cos\alpha_0 + \cos\phi\sin\alpha_0=\frac{1}{\sqrt{2}}
+\end{align}
+The LHS of the latter equation can be rewritten as
+\[\sin(\phi+\alpha_0) = \sin(\pi/4)\] 
+such that the equation holds for any $\alpha_0$. Thus, $\alpha_0$ becomes a parameter of the solution, and we can simply write
+\begin{align}
+  \frac{u_\star}{G} = \frac{\sqrt{2}\kappa}{\log(z_P/z_0)} \sin\left(\frac{\pi}{4}-\alpha_0\right) 
+\end{align} 
+\end{subequations}
+
+\subsection{Relation to the Reynolds number}
+In a smooth flow, the scaling parameter of the logarithmic height is
+\[\frac{1}{\kappa}\log z^+ + A =\frac{1}{\kappa}\left[ \log z^+ - ( -\kappa A)\right]  = \frac{1}{\kappa}\left[\log z^+ - \log(e^{-\kappa A})\right] = \log(z^+/z_{0}^+) \]
+where $z_{0}^+ = e^{-\kappa A}\approx 1/8$.
+This implies that $z_P/z_0=z_{P}^{+}/z_{0}^+ = e^{\kappa A} z_{P}^{+} = e^{\kappa A} \gamma_P Re_\tau$. Hence, the ratio $z_P/z_0$ implicitly defines the Reynolds number $Re_\tau$ as
+\begin{align}
+  Re_\tau = \frac{z_P}{z_0} \frac{1}{e^{\kappa A} \gamma_P} \sim Re_\tau.
+\end{align}
+
+\subsection{Linearization for $\alpha_0$ in the trigonometric terms} 
+Based on a first guess for $u_\star$ and $\alpha_0$, we can then estimate $u_\star/G$  from \eqnref{ustar_estimator} and $\alpha_0$ from \eqnref{alpha_estimator} and iterate this procedure
+to arrive at a solution for $\alpha_0$ and $u_\star$. 
+
+A fist guess may be obtained from a linearized version of the equations in the trigonometric terms.
+It is 
+\begin{subequations}
+  \begin{align} 
+    \sin\phi &=& \sin(\pi/4-\alpha_0) \approx \sin(\pi/4) - \cos(\pi/4) \alpha_0 &=& \frac{1}{\sqrt{2}} (1-\alpha_0) \\
+    \cos\phi &=& \cos(\pi/4-\alpha_0) \approx \cos(\pi/4) + \sin(\pi/4) \alpha_0 &=& \frac{1}{\sqrt{2}} (1+\alpha_0) \\ 
+    \sin\alpha_0 &\approx& \sin(0) + \alpha_0 &=& \alpha_0.  
+  \end{align}
+\end{subequations}
+We thus obtain
+\begin{align}
+  -1 &=& \frac{G\lambda_z}{u_\star}
+         \left[\frac{1}{\alpha_0} -(1-\alpha_0)  \right] \\ 
+  \Rightarrow 0 &=& \alpha_0 + \frac{G\lambda_z}{u_\star} \left[ 1- (\alpha_0-\alpha_0^{2})\right] 
+\end{align} 
+\end{document}

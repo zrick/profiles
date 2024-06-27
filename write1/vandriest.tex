@@ -1,0 +1,57 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+\newcommand{\p}{\partial} 
+
+\title{van Driest's model for wall scaling} 
+
+
+
+\begin{document}
+
+We identify the total shear stress $\tau$ as
+\begin{equation}
+  \tau = \underbrace{\mu \frac{\p \overline{u}}{\p y}}_\text{viscous stress} - \underbrace{\rho \overline{u^\prime v^\prime}\vphantom{\frac{\p \overline{u}}{\p y}}}_\text{Reynolds' stress}, 
+\end{equation}
+where $y$ is distance from the wall, $\mu$ dynamic viscosity ($\nu=\mu/\rho$) and $\rho$ is density. 
+Next, observe that the amplitude of motion due to oscillation of an infinite plate decays as $\exp\left[-y/A\right]$. Hence, we use for the damping of fluid oscillation due to a fixed wall, the model
+\begin{equation}
+  1- e^{-\tilde{y}},
+\end{equation}
+where $\tilde{y}=y/A$. Now, we express the stress, according to Prandtl
+\begin{subequations} 
+\begin{eqnarray}
+  \frac{\tau}{\rho} &=& \nu \frac{\p \overline{u}}{\p y} +  r \sqrt{\overline{u^{\prime2}}} \sqrt{\overline{v^{\prime2}}}  \\
+       &=& \nu \frac{\p \overline{u}}{\p y} + r l_1 l_2 \left(\frac{\p \overline{u}}{\p y} \right)^2 \\
+       &=& \nu \frac{\p \overline{u}}{\p y} + \kappa^2 y^2 \left(\frac{\p \overline{u}}{\p y} \right)^2, 
+\end{eqnarray}
+\end{subequations}
+where $\kappa$ is the von-K\'arm\'an constant and $l$ Prandtl's mixing length. This model is well-known to hold appropriately in fully developed turbulent flow.
+
+\par
+
+Near a wall, however, the turbulence is not fully developed, but damped by the presence of that very wall such that the prefactor $1-e^{-\tilde{y}}$ can be taken into account in Reynolds' stres term:
+\begin{eqnarray}
+  \label{eqn:stress_model_dimensional}
+  \frac{\tau}{\rho} &=& \nu \frac{\p \overline{u}}{\p y} + \kappa^2 l^2 \left(1- e^{-\tilde{y}}\right)^2\left(\frac{\p \overline{u}}{\p y}\right)^2
+\end{eqnarray} 
+Non-dimensionalize Eq.~(\ref{eqn:stress_model_dimensional}) using $u_\star=\sqrt{\tau_\text{wall}/{\rho}}$ and the wall unit $y_+=\nu/\sqrt{\tau_\text{wall}/\rho}$:
+\begin{eqnarray}
+  \tau^+ \left( = \frac{\tau}{\tau_\text{wall}} \right) = \frac{\p u^+}{\p y^+} + \kappa^2 y^{+2} \left(1- e^{-\widetilde{y^+}}\right)^2 \left(\frac{\p u^+}{\p y^+} \right)^2
+\end{eqnarray}
+
+In the constant-flux layer, it is $\tau=\tau_\text{Wall}$, such that
+\begin{eqnarray}
+  0 &=&  \frac{\p u^+}{\p y^+} + \kappa^2 y^{+2} \left(1- e^{-\widetilde{y^+}}\right)^2 \left(\frac{\p u^+}{\p y^+} \right)^2 - 1 \\ 
+  0 &=&  \left(\frac{\p u^+}{\p y} \right)^2 + \frac{1}{\kappa^2 y^{+2}\left(1-e^{-\widetilde{y^+}}\right)^2} \left(\frac{\p u^+}{\p y^+} -1\right)
+\end{eqnarray}
+and we solve for $\p_{y^+}u^+$ to obtain 
+\begin{eqnarray} 
+  \frac{\p u^+}{\p y^+} = \frac{2}{1+\sqrt{1+4 \kappa^2 y^{+2}\left(1-e^{-\widetilde{y^+}}\right)}} 
+\end{eqnarray}
+
+\end{document}
