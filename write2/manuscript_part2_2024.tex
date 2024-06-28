@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt]{article}
+\documentclass[draft,a4paper,11pt]{article}
 
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{booktabs} 
@@ -82,16 +82,24 @@ The content is structured as follows. Section \ref{universal_profile} provides a
 \section{A Universal Velocity Profile for the Turbulent Ekman Layer}
 \label{universal_profile}
 
-In this chapter, we introduce the universal velocity profile for the turbulent Ekman layer developed in part I. 
+In this chapter, we introduce the velocity profile for the turbulent Ekman layer developed in part I. 
 %Definitions
 We align the coordinate Ox with the surface stress, Oz points normal to the surface and normal to Ox, and Oy in the span-wise direction, normal to Oxz.
 %The mean velocity profiles for all $\RE$ exhibit a dual scaling nature: in proximity to the lower boundary, the velocity profiles collapse when scaled using
-In proximity to the lower boundary, the boundary layer scales in viscous (inner) units, denoted by the index ``$+$'' ($z^+ = zu_\star/\nu$, $U^+=U/u_\star$, where $U$ is the velocity component in x-direction). From the top perspective, the profiles converge when scaled using outer units, denoted by the index ``$-$'' ($z^-=z/\delta$, $U^-=U/G$, with $\delta=u_\star/f$ representing the boundary layer height). 
-At the lower boundary, the x-axis of the inner units aligns with the shear stress, while the x-axis of the outer units aligns with the geostrophic wind. The angle between both axes is denoted as $\alpha_\star$, the surface veer of the wind across the boundary layer.
+In proximity to the lower boundary, the boundary layer scales in viscous (inner) units, denoted by the index ``$+$'' ($z^+ = zu_\star/\nu$, $U^+=U/u_\star$, where $U$ is the velocity component in x-direction and $u_\star = \sqrt{\nu \p_z U}$ the friction velocity). From the top perspective, the profiles converge when scaled using outer units, denoted by the index ``$-$'' ($z^-=z/\delta$, $U^-=U/G$, where $\delta=u_\star/f$ is the boundary-layer depth scale, $f$ the Coriolis parameter and $G$ the geostrophic wind speed). 
+At the lower boundary, the x-axis of the inner units aligns with the shear stress, while the x-axis of the outer units aligns with the geostrophic wind. The angle between both axes is denoted as $\alpha_\star$, the surface veer of the wind across the boundary layer. 
+%
+Profiles of the velocity components are studied in three different layers reflecting the change of dominant balance when moving away from the surface. These are
+(i) the Ekman layer denoted $(\cdot)_\text{Ek}$ (Sec.~\ref{sec:ekmanlayer}), 
+(ii) the viscous sub-layer, denoted by an index $(\cdot)_\text{visc}$, 
+and (iii) the logarithmic layer denoted by $(\cdot)_\text{log}$
+We match $U_\text{visc}$ and $U_\text{log}$ according to their respective formulations and combine them to $U_\text{inner}$ (Sec.~\ref{sec:innerlayer}).
+Inner and outer profiles are then matched by a weighting transfer function based on the error function. 
+%The span-wise component of the velocity is separated into two layers, namely the inner layer $V_\text{inner}$, and the Ekman layer $V_{EK}$. 
 
 % \subsection{Drag-Law}
 
-The surface stress is linked to the geostrophic wind via the geostrophic drag $Z\equiv u_\star/G$ and the angle between the shear stress and the geostrophic wind $\alpha_\star$. These two parameters form the basis of the boundary-layer scaling and are  estimated using the semi-empirical drag-law introduced by \cite{spalart1989theoretical}, which describes them as functions of only the Reynolds number:
+The geostrophic drag, i.e. normalized friction $Z\equiv u_\star/G$, and $\alpha_\star$ form the basis of the boundary-layer scaling, and they are estimated using the semi-empirical drag-law introduced by \cite{spalart1989theoretical}, which describes them as functions of only the Reynolds number:
 \begin{subequations}\label{eqn:drag}
 	\begin{align}
 		\frac{G}{u_\star}\cos\phi^\star &= \frac{1}{\kappa}\log Re_\tau + C - A_r, \\
@@ -104,10 +112,9 @@ where we use $\kappa = 0.416$, $A_r = 4.80$, $A_i = -5.57$, $C = 5.4605$, $C_5 =
 
 % \subsection{Total profile}
 
-Profiles of the velocity components are studied in three different layers reflecting the change of dominant balance when moving away from the surface. These are (i) the viscous sub-layer, denoted by an index $_\text{visc}$ (ii) the logarithmic layer denoted by $_\text{log}$, and (iii) the Ekman layer denoted $_\text{Ek}$. We match $U_{visc}$ and $U_{log}$ according to their respective formulations and combine them to $U_{inner}$. The span-wise component of the velocity is separated into two layers, namely the inner layer $V_{inner}$, and the Ekman layer $V_{EK}$. 
 
 \subsection{Ekman layer}
-
+\label{sec:ekmanlayer}
 The outer layer of the ABL is characterized by a triadic balance between turbulent flux, pressure gradient and the Coriolis; the vertical change of the Coriolis force causes a pronounced height dependence of the wind direction resulting in the Ekman spiral \citep{ekman:AMA1905}. The classic solution employs Ekman dynamics down to the surface---and thus also in the surface layer, where this is a rather poor representation of turbulent mixing. Here, we model the surface layer by a lower boundary condition for the Ekman spiral determined from DNS:
 \begin{subequations}
   \begin{align}
@@ -118,6 +125,7 @@ The outer layer of the ABL is characterized by a triadic balance between turbule
 where the x-axis is aligned with the geostrophic wind and $A = 8.4u_\star$, $\tilde{z} = (z-z_r)/D_E$, $z_r = 0.12\delta$, and $D_E = 3\delta/4\pi\approx 0.24\delta$. The transition from the logarithmic layer to the Ekman layer is located at $z^{-}=0.28- 2.25 Re_{D}^{-1/2}$ with a transition scale of $\sigma_T=2$ for the stream-wise velocity.
 
 \subsection{Inner and viscous layers}
+\label{sec:innerlayer}
 
 In the viscous sublayer, the shear-aligned velocity $U^{\alpha_\star}$ is described by the law of the wall $U^{\alpha_\star+} = z^+$ and the span-wise velocity $V^{\alpha_\star}$ is zero by choice of the reference frame 
 (the index $\alpha_\star$ indicates the alignment with the direction of the shear stress). Around $z^+=5$, the velocity begins to deviate from linearity, and the buffer layer forms the transition from the viscous to the  logarithmic layer. From the surface up to the buffer layer, the stream-wise velocity is described by
@@ -153,7 +161,7 @@ span-wise velocity component. We  hence use
 \end{subequations}
 with $v_\text{ref} = 18.85$ and $w_v = 0.2353$ leads to excellent agreement with the DNS data. The coefficients $a_\text{log}, b_\text{log}$, and $c_\text{log}$ are determined by (i)-(ii) a smooth transition to $V_\text{visc}$ at $z^+=10$, and (iii) the condition $V_\text{log}(z^-=0.3) = V_\text{EK}(z^-=0.3) =: v_{03}$ (cf. Part I). For the Reynolds-number dependency of the Ekman-layer profiles, $V_\text{Ek}(z^-=0.3)$ depends on $Re$, such that the coefficients exhibit a weak dependence on $Re$. 
 
-\subsection{Blending of inner and outer profiles, synopsis}
+\subsection{Transition from inner to outer profiles, synopsis}
 
 A smooth transition between consecutive layers is achieved using a transfer function:
 \begin{align}\label{eqn:error}
@@ -199,8 +207,6 @@ $z^+\approx5$. In between $5 \lesssim z^+ \lesssim 30$, we find the buffer layer
 
 \subsection{Settings}
 
-An incompressible, turbulent Ekman flow over a hydrodynamically smooth surface is simulated for three different Reynolds numbers $Re_D = 10^3;1.5\times 10^5;10^6$, hereafter $Re1$, $Re2$, and $Re3$, respectively. The input parameters are given in table \ref{simulation_parameters}.
-
 \begin{table*}
 	\centering
 	\caption{Parameters of the simulated cases. $f$, $\nu$, and $G$ are input parameters and define the Reynolds numbers $Re_D$ and $Re_\tau$, while $u_\star$, $\alpha_\star$, and $\delta = u_\star/f$ are resulting properties of the flow}
@@ -215,8 +221,9 @@ An incompressible, turbulent Ekman flow over a hydrodynamically smooth surface i
 	\end{tabular}
 	\label{simulation_parameters}
 \end{table*}
-
-The domain is rotating around the z-axis with an angular velocity corresponding to the Coriolis parameter $f=10^{-4}s^{-1}$. The stratification of the flow is truly neutral, i.e., the potential temperature is constant for the whole domain. Nevertheless, the boundary layer height is not growing infinitely but results from a balance between shear production and rotational suppression of turbulence. At the upper boundary, sufficiently far aloft of the boundary-layer height, a no-penetration boundary condition is used and the horizontal components of the wind are geostrophic, which is a Dirichlet-type boundary condition. At the bottom, a constant-flux layer is assumed and Monin--Obukhov similarity theory (MOST) is used to calculate the surface momentum fluxes. The Navier-Stokes equations are integrated using a 3rd-order low-storage Runge-Kutta method. For scalar advection a 5th-order Wicker--Skamarock scheme is employed. The Poisson equation is solved using a direct fast Fourier transform (FFT). In LES, the turbulent transport on the subgrid scale (SGS) needs to be modeled by a dedicated model, the SGS model. We use two different SGS models to check whether the subgrid closure significantly influences the LES solution: a 1.5-order closure after \cite{deardorff1980stratocumulus} and a dynamic closure after \cite{heinz2008realizability}. For most of the simulations, the 1.5-order closure is used, since the dynamic closure needs more computational resources, but the simulations with $\Delta^-=200^{-1}$ are repeated using the dynamic closure.  A description of the LES model is given by \cite{maronga2020overview}.
+An incompressible, turbulent Ekman flow over a hydrodynamically smooth surface is simulated using the Parallel Large Eddy Simulation model (PALM, \citealp{maronga2020overview}). We study three different Reynolds numbers Re$_D = 10^3;1.5\times 10^5;10^6$, hereafter Re1, Re2, and Re3, respectively (Tab.~\ref{simulation_parameters}).
+%
+The domain is rotating around the z-axis with an angular velocity corresponding to the Coriolis parameter $f=10^{-4}s^{-1}$. The stratification of the flow is truly neutral, i.e., the potential temperature is constant across the whole domain. A constant boundary layer height on the order of $\delta=u_\star/f$ forms due to the balance between shear production and rotational suppression of turbulence. At the upper boundary, the flow is non-turbulent. Hence, a no-penetration boundary condition is used for the vertical velocity component while the horizontal components are prescribed according to geostrophic balance--a Dirichlet-type boundary condition. At the bottom, a constant-flux layer is assumed and Monin--Obukhov similarity theory (MOST) is used to calculate the surface momentum fluxes. The Navier-Stokes equations are integrated using a 3$^\text{rd}$-order low-storage Runge--Kutta method. For scalar advection a 5$^\text{th}$-order Wicker--Skamarock scheme is employed. The Poisson equation is solved using a direct fast Fourier transform (FFT). In LES, the turbulent transport on the subgrid scale (SGS) needs to be modeled by an SGS closure model. We use two kinds of SGS closures to assess their impact on the LES solution: a 1.5-order closure after \cite{deardorff1980stratocumulus} and a dynamic closure after \cite{heinz2008realizability}. For most of the simulations, the 1.5-order closure is used, since the dynamic closure needs more computational resources, but the simulations with $\Delta^-=200^{-1}$ are repeated using the dynamic closure.  
 
 \begin{table*}
 	\centering
@@ -239,48 +246,48 @@ To study the effect of resolution on the simulations, four different grid resolu
 
 The flow is initialized with wind speed profiles based on a one-dimensional model with a Reynolds-average based turbulence parametrization. At the beginning of the simulation, random perturbations are imposed on the velocity field to trigger turbulence. The resulting imbalance between pressure force and Coriolis force results in an inertial oscillation of the period $T_{io}=2\pi/f$, where a part of the flow's mean kinetic energy oscillates between U- and V-component. The oscillation decays over time and would eventually vanish for large time. In order to obtain profiles in statistical equilibrium of the flow, we use a spin-up time of 1.5 $T_{io}$ and perform a horizontal domain average over 2 $T_{io}$.
 
-In part I of this publication, the DNS of $Re_D\leq1\,600$ is carried out for a horizontal domain size of $(0.54\Lambda_{Ro})^2$ - $(1.08\Lambda_{Ro})^2$, where $\Lambda_{Ro}=G/f$ is the Rossby radius. For these Reynolds numbers, $u_\star/G$ is around 0.05 so $L_x \approx 10 \delta$ However, $u_\star/G$ decreases with increasing Reynolds number and is around 0.02 for $Re_D=10^6$. A domain size of half the Rossby radius would then extend to $L_x\approx 25\delta$. Such a large domain would imply immense computational costs. \cite{spalart2008direct} used a horizontal domain of $L_x = 2\delta$, arguing that this length allows the resolution of the largest outer-layer eddies according to \cite{csanady1967resistance}. During a sensitivity test of the domain size we observed that simulations with domain sizes $L\geq 4\delta$ often tend to accumulate turbulence kinetic energy in the upper half of the the boundary layer. This TKE increases over several inertial oscillations with energy mostly on the scale of the domain size. Such a development was not observed in the DNS. We could successfully avoid such a behaviour by using a domain of size $L \approx 3\delta$ in combination with a shifted periodic boundary condition in y-direction, as described by \cite{munters2016shifted}. Although for the Ekman flow the direction of the mean flow is only aligned with the x-direction of the grid near the surface, a shift of the boundary condition by $L/3$ significantly helped to suppress the accumulation of TKE in the upper half of the boundary layer.
+In part I of this publication, the DNS of $Re_D\leq1\,600$ is carried out for a horizontal domain size of $(0.54\Lambda_{Ro})^2$ - $(1.08\Lambda_{Ro})^2$, where $\Lambda_{Ro}=G/f$ is the Rossby radius. For these Reynolds numbers, $Z\approx 0.05$, such that $L_x \approx 10 \delta$. However, $Z$ decreases logarithmically with increasing Reynolds number and it is $Z\approx 0.02$ for $Re_D=10^6$. A domain size of half the Rossby radius would then extend to $L_x\approx 25\delta$. Such a large domain would imply immense computational cost. \cite{spalart2008direct} used a horizontal domain of $L_x = 2\delta$, arguing that this length allows the resolution of the largest outer-layer eddies according to \cite{csanady1967resistance}. During a sensitivity test of the domain size we observed that simulations with domain sizes $L\geq 4\delta$ often tend to accumulate turbulence kinetic energy in the upper half of the the boundary layer. This TKE increases over several inertial oscillations with energy mostly on the scale of the domain size. Such a development was not observed in the DNS. We could successfully avoid such a behaviour by using a domain of size $L \approx 3\delta$ in combination with a shifted periodic boundary condition in y-direction, as described by \cite{munters2016shifted}. Although for the Ekman flow the direction of the mean flow is only aligned with the x-direction of the grid near the surface, a shift of the boundary condition by $L/3$ significantly helped to suppress the accumulation of TKE in the upper half of the boundary layer.
 
 \subsection{Viscosity and roughness length}
 
-In LES, one postulates that a sufficient part of the largest eddies is resolved so as to represent the dominant non-linear effects of turbulent mixing \citep{pope2004ten}. Below these resolved scales, turbulence is modeled as a more or less isotropically acting diffusive agent by a closure model (dynamic, Deardorff, see above). Thus, molecular friction is not considered directly, but only by virtue of a turbulence model linking the resolved and dissipative scales. In their seminal works on the spectral energy transfer in homogeneous isotropic turbulence, Kolmogorov and Obukhov (\cite{kolmogorov1941dissipation},\cite{obukhov1941distribution}) showed that the energy transfer rate across the spectrum is in fact a constant. This implies that the transfer rate across the cut-off scale in LES does not depend on the magnitude of the viscous scale, presupposed that (i) the cut-off scale of the LES is well within the inertial range and (ii) the LES turbulence is approximately isotropic and homogeneous at the smallest resolved scales. Consequently, SGS-models of LES do not necessarily require explicit information about the actual viscosity of the fluid or other viscous parameters.
+In LES, one postulates that a sufficient part of the largest eddies is resolved so as to represent the dominant non-linear effects of turbulent mixing \citep{pope2004ten}. Below these resolved scales, turbulence is modeled as a more or less isotropically acting diffusive agent by a closure model (dynamic, Deardorff, see above). Thus, molecular friction is not considered directly, but only by virtue of a turbulence model linking the resolved and dissipative scales. In their seminal works on the spectral energy transfer in homogeneous isotropic turbulence, \cite{kolmogorov1941dissipation} and \cite{obukhov1941distribution} showed that the energy transfer rate across the spectrum is in fact constant provided that both dissipation and production terms can be neglected. This implies that the transfer rate across the cut-off scale in LES does not depend on the magnitude of the viscous scale, presupposed that (i) the cut-off scale of the LES is well within the inertial range and (ii) the LES turbulence is approximately isotropic and homogeneous at the smallest resolved scales. Consequently, SGS-models of LES do not necessarily require explicit information about the actual viscosity of the fluid or other viscous parameters.
 
-In LES at low $\RE$ or very high resolution the subgrid eddy viscosities may fall far below the molecular viscosity of air. In the context of PALM's Deardorff closure, it is $K_m = c_0 \Delta \sqrt{e}$, where $c_0 = 0.1$ \citep{deardorff1980stratocumulus}, $\Delta$ is the grid size and $e$ is the SGS-TKE, calculated by a prognostic equation. Hence, very low $e$ as well as fine resolution can lead to $K_m<\nu$. When this is the case, $\nu$ cannot be ignored anymore, and we let $K_m = c_0 \Delta \sqrt{e} + \nu$. The governing equation of the velocity components in PALM reads
+In LES at low $\RE$ or very high resolution the subgrid eddy viscosities may fall far below the molecular viscosity of air. In the context of PALM's Deardorff closure, it is $K_m = c_0 \Delta \sqrt{e}$, where $c_0 = 0.1$ \citep{deardorff1980stratocumulus}, $\Delta$ is the grid size and $e$ is the SGS-TKE, calculated by a prognostic equation. Hence, very low $e$ as well as fine resolution can lead to $K_m<\nu$. When this is the case, $\nu$ cannot be ignored anymore, and we let $K_m = c_0 \Delta \sqrt{e} + \nu$. Hence, (absent stratification) the governing equation of for momentum in our version of PALM is
 \begin{align}\label{gov_palm}
-  \frac{\partial u_i}{\partial t} = - \frac{\partial u_i u_j}{\partial x_j} -\epsilon_{ijk}f_ju_k + \epsilon_{i3j} f_3 u_{g,j} - \frac{1}{\rho_0}\frac{\partial\pi^*}{\partial x_i} + \frac{\partial}{\partial x_j}\left( K_m\left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i} \right)\right)
+  \frac{\partial u_i}{\partial t} = - \frac{\partial u_i u_j}{\partial x_j} -\epsilon_{ijk}f_ju_k + \epsilon_{i3j} f_3 u_{g,j} - \frac{1}{\rho_0}\frac{\partial\pi^*}{\partial x_i} + \frac{\partial}{\partial x_j}\left( K_m\left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i} \right)\right).
 \end{align}
-for a neutrally stratified flow. In the limit of either very well resolved simulations or very low $\RE$ (or both), $K_m \rightarrow \nu$, so the last term on the right hand side of eq. (\ref{gov_palm}) becomes $\nu\frac{\partial^2u_i}{\partial x_j^2}$, which complies with the Navier-Stokes equations for an incompressible fluid.
+In the limit of either well-resolved simulations or low $\RE$ (or both), $K_m \rightarrow \nu$, so the last term on the right hand side of eq. (\ref{gov_palm}) becomes $\nu\frac{\partial^2u_i}{\partial x_j^2}$, which complies with the Navier-Stokes equations for an incompressible fluid underlying our reference solution from DNS.
 
 \label{low-bound}
 
-In contrast to the interior closure of the LES where the direct effect of $\nu$ is of small relevance compared to the eddy viscosity---at least for high $\RE$---, this is not true for the viscid effects at the bottom boundary. Here, a constant flux layer is usually assumed below the first grid point and the Monin--Obukhov similarity theory is used to compute the friction velocity and the stresses at the first half grid point (where the horizontal velocities are located on the Arakawa-C staggered grid):
+In contrast to the interior closure of the LES where the direct effect of $\nu$ is of small relevance compared to the eddy viscosity---at least for high $\RE$---, this is not true for the viscid effects at the bottom boundary:  A constant flux layer is assumed in between the first grid point and the lowermost half point (on the Arakawa-C staggered grid) to estimate friction velocity and surface stresses by MOST: 
 \begin{align}\label{most}
   u_\star = \frac{\kappa(U^2+V^2)^{0.5}}{\ln\left(z/z_0\right)},\\
-  -\overline{u''w''}_0 = \frac{\kappa Uu_\star}{\ln\left(z/z_0\right)}.
+  -\overline{u''w''}_0 = \frac{\kappa Uu_\star}{\ln\left(z/z_0\right)}, 
 \end{align}
-In these expressions, viscosity enters indirectly by virtue of the roughness length $z_0$ when considering the law of the wall for a smooth surface:
+where double dashes refer to the unresolved, i.e. SGS-parameterized, fluctuations. In these expressions, viscosity enters indirectly by virtue of the roughness length $z_0$ when considering the law of the wall for a smooth surface:
 \begin{align}
   u^+ = \frac{1}{\kappa}\ln(z^+) + C^+ = \frac{1}{\kappa}\ln\left(\frac{z^+}{z_0^+}\right).
 \end{align}
-This leads to the expression
-\begin{align}
-	z_0^+ = z_0\frac{u_\star}{\nu} = \exp\left(-\kappa C^+\right),
-\end{align}
-and for an aerodynamically smooth flow, $z_0^+ = 0.1031$ (using the same values as in eq. \ref{eqn:log-law}). This is known to be the minimal roughness length of a turbulent boundary layer (see e.g. \cite{kraus2008grundlagen}). The roughness length in SI-units 
+%This leads to the expression
+%\begin{align}
+%	z_0^+ = z_0\frac{u_\star}{\nu} = \exp\left(-\kappa C^+\right),
+%\end{align}
+For aerodynamically smooth flow, it is $z_0^+ = 0.1031$ based on Eq.~\ref{eqn:log-law}. (This is known to be the minimal roughness length of a turbulent boundary layer; see e.g. \citealp{kraus2008grundlagen}.) Hence,
 \begin{align}
 	z_0 = z_0^+\frac{\nu}{u_\star}\approx 0.1\frac{\nu}{u_\star}
 \end{align}
-hence depends on the viscosity of the fluid, which means that---given fixed surface properties---the choice of $z_0$ implies a particular value for the viscosity $\nu$.
+depends on the viscosity $\nu$ of the fluid. In other words, given fixed surface properties, a choice for $z_0$ implies a particular value for the viscosity $\nu$.
 
-When using MOST for the surface fluxes it is assumed that the height of the first grid point lies inside of the logarithmic layer. Again, the limit of low $\RE$ and high resolution requires adaptations to this boundary condition. In the case of very fine resolution, the first grid point might fall into the buffer layer or even the viscous layer of the flow, so the equations of MOST are no longer adequate to calculate the local stress. To avoid that, we follow the recommendation of \cite{kawai2012wall} to use the horizontal velocity from a higher layer $z_{sl}$ to compute the mean stress in the constant flux layer. Furthermore, we adopt the boundary condition suggested by \cite{maronga2020improved} and use the domain averaged velocities:
+When using MOST for the surface fluxes it is assumed that the height of the first grid point lies inside of the logarithmic layer. Again, the limit of low $\RE$ and high resolution requires adaptations to this boundary condition. In the case of very fine resolution, the first grid point might fall into the buffer layer or even the viscous layer of the flow, so the equations of MOST are no longer adequate to calculate the local stress. To avoid that, we follow the recommendation of \cite{kawai2012wall} and use the horizontal velocity from a higher layer $z_{sl}$ to compute the mean stress in the constant flux layer. Further, we adopt the boundary condition suggested by \cite{maronga2020improved} and use domain averaged velocities for the estimation $u_\star$:
 \begin{align}\label{us_mean}
-  u_{*,mean} = \frac{\kappa<u_h(z_{sl})>}{\ln(z_{sl}/z_0)},
+  u_\star \approx u_{*,mean} = \frac{\kappa<u_h(z_{sl})>}{\ln(z_{sl}/z_0)},
 \end{align}
-where $u_h= \sqrt{u^2+v^2}$ and angle brackets refer to the horizontal average over the entire domain. The mean stress is then used as a boundary condition at the first grid point ($z=z_1$). It is distributed locally to the stresses in x- and y-direction via
+where $u_h= \sqrt{u^2+v^2}$ and angle brackets refer to the horizontal average over the entire domain. The mean stress is then used as a boundary condition at the first grid point ($z=z_1$). It is distributed locally to the unresolved stresses in x- and y-direction via
 \begin{align}
-  \overline{u'w'}_0(x,y,z_1) = -u_{*,mean}^2 \frac{u(x,y,z_1)}{\sqrt{<u>^2(z_1)+<v>^2(z_1)}},
+  \overline{u''w''}_0(x,y,z_1) = -u_{*,mean}^2 \frac{u(x,y,z_1)}{\sqrt{<u>^2(z_1)+<v>^2(z_1)}},
 \end{align}
-and accordingly for $\overline{v'w'}_0$. This way, the domain average of the stress components yield the total stress of eq. \ref{us_mean} ($u_{*,mean}^2 = \sqrt{<\overline{u'w'}_0>^2+<\overline{v'w'}_0>^2}$). As reference height we use $z_{sl}^- \approx 0.1$ (depending on the height of the closest grid level). By using this higher reference height for the boundary condition we solve two problems: First, the reference height is inside of the logarithmic layer, second, we use a velocity from a region where the flow is much better resolved than close to the surface.
+and accordingly for $\overline{v''w''}_0$. This way, the domain average of the stress components yield the total stress of eq. \ref{us_mean} ($u_{*,mean}^2 = \sqrt{<\overline{u''w''}_0>^2+<\overline{v''w''}_0>^2}$). For the reference height we use the grid level closest to $z_{sl}^- \approx 0.1$. This alleviates two problems: First, $z_{sl}$ is within log-layer. Second, the flow at $z=z_{sl}$ is better resolved than closer to the surface.
 
 \section{Results and Discussion}
 \label{results}
