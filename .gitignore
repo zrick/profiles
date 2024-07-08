@@ -11,3 +11,4 @@ plot/__pycache__/
 *.fdb_latexmk
 *.fls
 palm_hawk
+write2/*.pdf
