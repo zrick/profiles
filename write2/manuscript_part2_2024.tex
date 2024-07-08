@@ -1,4 +1,4 @@
-\documentclass[draft,a4paper,11pt]{article}
+\documentclass[a4paper,11pt]{article}
 
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{booktabs} 
@@ -294,7 +294,7 @@ and accordingly for $\overline{v''w''}_0$. This way, the domain average of the s
 
 In this chapter, we compare the results from the LES to the theoretical bulk parameters (\ref{bulk}) and velocity profiles (\ref{vel_profiles}) and discuss the dynamics of the turbulent flow in LES.
 
-\subsection{Bulk parameters}
+\subsection{Geostrophic drag and surface wind veer}
 \label{bulk}
 
 \begin{table*}
@@ -374,11 +374,9 @@ which is estimated here by linear regression of the mean velocity in x-direction
 For finer resolution, $\kappa_{LES}$ decreases with increasing Re for the range of scale separation investigated here. ReX\_100 yields a value around $0.53$ (which is outside the range agreed on by atmospheric observation and laboratory measurements), the finer resolution yields values around $0.46$ for Re1\_200 and around $0.44$ for Re2\_200 and Re3\_200, which is in excellenet agreement with DNS data and laboratory measurements. The dynamic subgrid closure yields lower values for $\kappa_{LES}$: in Re1\_dyn we even see $\kappa_{LES}=0.39$, while Re2\_dyn and Re3\_dyn yield $0.42$ and $0.43$, respectively. Close to the bottom, the K\'arm\'an measure is heavily influenced by the proximity of the wall and rather a function of the vertical index than of the physical distance from the wall. In accordance with \cite{maronga2014monin} and \cite{maronga2017formulation}, the kinks in the K\'arm\'an measure diminish around the seventh grid point for all simulations. Above, the curve smoothens and approaches the expected value of $\kappa$.  
 
 \begin{figure}[ht]
-  \centerline{
-	\includegraphics[width=\textwidth]{figures_2024/d3y_2pc_ww_3Re_0.079.png}
-}
-  \caption{Two-point correlation of w-component in y-direction at $z^-\approx 0.08$. The horizontal line is at $B_{ww}=0.3$}
-  \label{2pc_008}
+  \centerline{\includegraphics[width=\textwidth]{figures_2024/d3y_2pc_ww_3Re_0.079.png}}
+  \caption{Two-point correlation of w-component in y-direction at $z^-\approx 0.08$. The horizontal line at $B_{ww}=0.3$ is indicative of the average size of turbulent structures in the flow.}
+  \label{fig:2pc_008}
 \end{figure}
 
 The resolution near the surface is critical for an LES with isotropic grid spacing. \todo{Missing transition from resolution to two-point correlation!} The two-point correlation is defined as 
@@ -386,17 +384,15 @@ The resolution near the surface is critical for an LES with isotropic grid spaci
   B_{xx}\left(x^*\right) = \langle u\left(x-x^*\right)u\left(x\right)\rangle/\sigma_u^2,
 \end{align}
 and it supports the above findings \todo{which findings?}. 
-For an LES with isotropic grid and periodic horizontal boundaries, the turbulent structures of the velocity's w-component in the y-direction indicate how well the flow is resolved \citep{wurps2020grid}. Fig.\,\ref{2pc_008} shows the two-point correlation $B_{ww}(y^*)$ at a height of $z^-\approx 0.08$, which is right inside of the logarithmic layer. We define the average size of a structure in the flow $\sigma$ as the distance where the two-point correlation drops to 0.3 (horizontal line in figure). The number of cells by which the average structure is resolved is equal to $\sigma/\Delta$. All $\RE$ show a similar behaviour: the average size of the structure decreases with finer resolution and seems to approach a limit. The structure size of ReX\_150 and ReX\_200 are very close together, which indicates beginning convergence. Furthermore, the number of cells by which the structures are resolved exceed 4 from the resolution of ReX\_150 on. This corresponds to the resolution from which on a logarithmic layer with a constant $\kappa$ can be seen. It also fits to the rule of thumb given in \cite{wurps2020grid}, that in a sufficiently resolved part of an LES the average structures of the w-component in y-direction should be resolved by at least 4 cells. The dynamic closure shows structures that are slightly smaller than the structures of $ReX\_200$, which is caused by a tendency to lower eddy-viscosities and, hence, a weaker coupling of neighboring grid cells.
+For an LES with isotropic grid and periodic horizontal boundaries, the turbulent structures of the vertical velocity component in the y-direction (spanwise near the surface) indicate how well the flow is resolved \citep{wurps2020grid}. Fig.\,\ref{fig:2pc_008} shows the two-point correlation $B_{ww}(y^*)$ at a height of $z^-\approx 0.08$, right inside the logarithmic layer. We define the average size of a structure in the flow $\sigma$ as the separation at which the two-point correlation drops to 0.3 (horizontal line in Fig.~\ref{fig:2pc_008}). The number of cells by which the average structure is resolved is equal to $\sigma/\Delta$. All cases show a similar behaviour, irrespective of the Reynolds number: the average size of the structure decreases with finer resolution and approaches a limit. The structure size of cases ReX\_150 and ReX\_200 agrees very well, which indicates beginning convergence. Furthermore, the number of cells by which the structures are resolved exceed 4 from the resolution of ReX\_150 on. This corresponds to the resolution from which on a logarithmic layer with a constant $\kappa$ can be seen. It also fits to the rule of thumb given in \cite{wurps2020grid}, that in a sufficiently resolved part of an LES the average structures of the w-component in y-direction should be resolved by at least 4 cells. The dynamic closure shows structures that are slightly smaller than the structures of $ReX\_200$, which is caused by a tendency to lower eddy-viscosities and, hence, a weaker coupling of neighboring grid cells.
 
 \begin{figure}[ht]
-  \centerline{
-	\includegraphics[width=\textwidth]{figures_2024/d3y_2pc_ww_3Re_4.png}
-}
+  \centerline{\includegraphics[width=\textwidth]{figures_2024/d3y_2pc_ww_3Re_4.png}}
   \caption{Two-point correlation of w-component in y-direction at the 8th grid point above the surface}
-  \label{2pc_4}
+  \label{fig:2pc_4}
 \end{figure}
 
-Figure \ref{2pc_4} shows $B_{ww}(y^*)$ at the 8th grid point above the bottom. Therefore, the corresponding heights differ between the simulations, that is $z^-=0.16, 0.08, 0.053, 0.04, 0.04$ for $ReX\_50$, $ReX\_100$, $ReX\_150$, $ReX\_200$, $ReX\_dyn$, respectively. For $Re1$, the curves almost collapse perfectly while for $Re2$ and $Re3$ we see slightly larger structures for $ReX\_50$ and slightly smaller structures for $ReX\_dyn$. This means that even 8 points above the lower boundary the smallest size of the turbulent structures rather depends on the grid cell size than on the actual height above the ground. According to the above findings and \cite{maronga2014monin}, the flow should start to be well resolved from here on (above the seventh grid point). And indeed, the number of resolving cells is very close to 4 for $Re1$ and between 3 and 4 for $Re2$ and $Re3$, which is close to the recommended 4 cells.
+Figure \ref{fig:2pc_4} shows $B_{ww}(y^*)$ at the 8th grid point above the bottom. Therefore, the corresponding heights differ between the simulations, that is $z^-=0.16, 0.08, 0.053, 0.04, 0.04$ for $ReX\_50$, $ReX\_100$, $ReX\_150$, $ReX\_200$, $ReX\_dyn$, respectively. For $Re1$, the curves almost collapse perfectly while for $Re2$ and $Re3$ we see slightly larger structures for $ReX\_50$ and slightly smaller structures for $ReX\_dyn$. This means that even 8 points above the lower boundary the smallest size of the turbulent structures rather depends on the grid cell size than on the actual height above the ground. According to the above findings and \cite{maronga2014monin}, the flow should start to be well resolved from here on (above the seventh grid point). And indeed, the number of resolving cells is very close to 4 for $Re1$ and between 3 and 4 for $Re2$ and $Re3$, which is close to the recommended 4 cells.
 
 %
 \subsection{Logarithmic layer span-wise velocity}
@@ -406,10 +402,10 @@ Figure \ref{2pc_4} shows $B_{ww}(y^*)$ at the 8th grid point above the bottom. T
 	\includegraphics[width=\textwidth]{figures_2024/d3y_3Re_v_outer_lin.png}
 }
   \caption{Span-wise velocity component in outer scaling}
-  \label{3Re_v_lin}
+  \label{fig:3Re_v_lin}
 \end{figure}
 
-Figure \ref{3Re_v_lin} shows the span-wise velocity component in the lower part of the boundary layer. \todo{if we keep $V(z=\Delta)$ in the conclusion, add this here}. In the lowest part of $Re1$ ($z^-\lessapprox 0.05$), a part of the viscous layer is visible, where the velocity is slightly underestimated by the the LES. Above, the simulations $Re1\_200$ and $Re1\_dyn$ are very close to the theoretical curve. Lower resolution leads to an overestimation of the velocity in the logarithmic layer, which is consistent with a lack of large eddies that translates in a lack of mixing and thus a reduced turbulence level and increased velocity gradients. Around $z^-=0.25$, while blending into the Ekman layer, the curves cross each other and the coarse simulations begin to underestimate the velocity. For the higher $Re$ all simulations overestimate the velocity in the logarithmic layer, while coarser resolution leads to a higher velocity and finer resolution leads to a lower velocity and better agreement with the theoretical curve. Again, we see a crossing of the curves, between $z^-=0.2$ and $z^-=0.25$. A possible explanation of the fast increase and the steeper course of the coarser simulations is that the layers are coupled via less cells.
+Figure \ref{fig:3Re_v_lin} shows the span-wise velocity component in the lower part of the boundary layer. \todo{if we keep $V(z=\Delta)$ in the conclusion, add this here}. In the lowest part of $Re1$ ($z^-\lessapprox 0.05$), a part of the viscous layer is visible, where the velocity is slightly underestimated by the the LES. Above, the simulations $Re1\_200$ and $Re1\_dyn$ are very close to the theoretical curve. Lower resolution leads to an overestimation of the velocity in the logarithmic layer, which is consistent with a lack of large eddies that translates in a lack of mixing and thus a reduced turbulence level and increased velocity gradients. Around $z^-=0.25$, while blending into the Ekman layer, the curves cross each other and the coarse simulations begin to underestimate the velocity. For the higher $Re$ all simulations overestimate the velocity in the logarithmic layer, while coarser resolution leads to a higher velocity and finer resolution leads to a lower velocity and better agreement with the theoretical curve. Again, we see a crossing of the curves, between $z^-=0.2$ and $z^-=0.25$. A possible explanation of the fast increase and the steeper course of the coarser simulations is that the layers are coupled via less cells.
 
 \subsection{Ekman layer}
 
