@@ -8,4 +8,6 @@ plot/__pycache__/
 *log
 *~
 *.nc
+*.fdb_latexmk
+*.fls
 palm_hawk
