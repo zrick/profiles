@@ -15,6 +15,7 @@
 \usepackage{booktabs} 
 \usepackage{amssymb}
 \usepackage{hyperref}
+\usepackage{caption}
 \setcitestyle{aysep={}}
 \linenumbers 
 
@@ -1115,6 +1116,7 @@ We model this transition by
 %
 \begin{equation}
   f_{V,\mathrm{log}}(z^+) = \frac{V_\mathrm{log}(z^+)}{G} \delta^+ = a_\mathrm{log} + b_\mathrm{log} \log z^+ + c_\mathrm{log} z^+. 
+  \label{eqn:abc_log}
 \end{equation} 
 %
 This surface-layer profile matches the inner (viscous) scaling in vicinity of the surface to the outer
@@ -1144,9 +1146,11 @@ values of $v_{10}$ and $d_{10}$).
 %
 %
 \begin{figure}
-  \includegraphics[width=0.5\textwidth]{../plot/c_log.pdf}
-  \caption{c-log.
-    \label{fig:clog}}
+  \centerline{\includegraphics[width=0.5\textwidth]{../plot/c_log.pdf}}
+  \caption{Coefficients $a_\text{log}$, $b_\text{log}$ and $c_\log$ (cf. Eq.~\ref{eqn:abc_log}) as a function of 
+    the viscous Reynolds number $Re_D$. The approximate range of scale separation relevant for atmospheric application 
+    is found in between the dotted lines, where $a_\text{log}\simeq 0$ and $c_\text{log})\simeq 0.4$ }
+  \label{fig:clog}
 \end{figure} 
 %
 \section{Discussion}
@@ -1188,6 +1192,37 @@ value $v_{10}$ and $d_{10}$ found for the viscous region of the flow.
 %
 For the range of Reynolds number relevant to geophysical problems ($10^4\lesssim \RE_D \lesssim 10^6$),
 the variation of $c_\mathrm{log}$ is, however, rather small.
+
+\subsection{Comparison with other theories}
+
+An alternative approach that considers viscous effects close to the surface is the van-Driest scaling \citep{vandriest:JOT1956}, 
+where an exponential damping of Prandtl's mixing length is considered near the wall to yield 
+\begin{align}
+  \frac{\p u^+}{\p y^+} = \frac{2}{ 1+ \sqrt{1+\left(2\kappa y^+\right)^2 (1-\exp\left[-y^+\right])}};
+\end{align}
+the spanwise component is zero as no rotational effects are considered. 
+%
+Comparing our proposed formulation for the stream-wise velocity in the inner layer to  \citeauthor{vandriest:JOT1956}'s formulation 
+yields later convergence of the velocity onto the logarithmic profile while, over all, it serves as an excellent model of the streamwise 
+velocity component:
+% 
+Notable deviations (on the order of few percent) only occur in the region $10 < z^+ < 30$, 
+where the velocity transitions from the linear to the logarithmic profile. 
+\begin{figure}
+  \centerline{\includegraphics[width=0.66\textwidth]{../plot/vanDriest_profile.png}}
+  \caption{Near-wall velocity profile according to the 
+    van-Driest scaling (blue, solid) in comparison with 
+    the present model (red, dashed), 
+    the viscous law of the wall (orange dashed), and 
+    the logarithmic law (green, solid)} 
+  \label{fig:vanDriest}
+\end{figure}  
+
+
+\textbf{Compare} to Emeis (2002) and Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
+
+\textbf{Remember} of interpretation in the context of eddy viscosity (Fig.~\ref{fig:stresses}) 
+Consider Townsend ``Turbulent Shear Flow''  Chapter 7.18: p. 319 
 %
 \begin{figure}
   \phantom{AAA}\textbf{(a)\hspace{0.3\textwidth}(b)\hspace{0.3\textwidth}(c)}\\
@@ -1197,14 +1232,6 @@ the variation of $c_\mathrm{log}$ is, however, rather small.
   \label{fig:hodograph} 
 \end{figure} 
 
-\subsection{Comparison with other theories}
-
-\textbf{Compare} to Emeis (2002) and Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
-
-\textbf{Compare} to van Driest scaling 
-
-\textbf{Remember} of interpretation in the context of eddy viscosity (Fig.~\ref{fig:stresses}) 
-Consider Townsend ``Turbulent Shear Flow''  Chapter 7.18: p. 319 
 %
 \par%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

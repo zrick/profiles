@@ -23,14 +23,14 @@ plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
 print_table=False
-plot_outer_log=True
+plot_outer_log=False
 plot_convergence=False
 plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 test_inner_streamwise=False
-plot_profile_comparison=True
-plot_vandriest=False
+plot_profile_comparison=False
+plot_vandriest=True
 plot_total_rot=False
 
 colors = {400 : 'gray',
@@ -2059,7 +2059,7 @@ if plot_profile_comparison:
 
 if plot_vandriest:
     KAPPA = sc.KAPPA
-    ASTAR=28.7
+    ASTAR=26.8
     fig=plt.figure(figsize=(5,3))
     ax=fig.add_axes([0.12,0.16,0.8,0.82])
 
@@ -2082,7 +2082,7 @@ if plot_vandriest:
     fig=plt.figure(figsize=(5,3))
     ax=fig.add_axes([0.12,0.16,0.8,0.82])
 
-    C0=5.52
+    C0=5.42
 
     u =np.zeros(len(zp)) 
     for i in range(len(zp)-1):
@@ -2103,7 +2103,7 @@ if plot_vandriest:
 
     ax.set_xscale('log') 
     ax.set_xlim(1,1e3)
-    ax.set_ylim(1,15)
+    ax.set_ylim(1,20)
     leg=plt.legend(loc='best')
     
     plt.savefig('vanDriest_profile.png',format='png',dpi=600)
