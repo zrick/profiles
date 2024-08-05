@@ -1,4 +1,3 @@
-\RequirePackage{fix-cm} 
 \documentclass[smallcondensed,final]{svjour3}
 \smartqed
 \usepackage{appendix}
@@ -7,7 +6,7 @@
 \usepackage{lineno}
 \usepackage{array}
 \usepackage{longtable}
-\usepackage{natbib}
+\usepackage[authoryear]{natbib}
 
 % additional packages
 \usepackage{xcolor}
@@ -15,7 +14,6 @@
 \usepackage{booktabs} 
 \usepackage{amssymb}
 \usepackage{hyperref}
-\usepackage{caption}
 \setcitestyle{aysep={}}
 \linenumbers 
 
@@ -61,14 +59,19 @@
   linkcolor=.
 }
 
-\date{\scriptsize Draft - Version \today}
-\title{Profiles of Wind Veer and Wind Speed in Turbulent Ekman Flow}
-\author{Cedrick Ansorge, Hauke Wurps}
+\date{\scriptsize Submitted \today}
+\title{Wind Veer and Speed in Turbulent Ekman Flow - Part 1: Scaling analysis and universal profile model}
+\titlerunning{}
+\author{Cedrick Ansorge$^1$ and Hauke Wurps$^2$}
+\authorrunning{C Ansorge and H Wurps}
+\institute{$^{1}$\,FU Berlin, Institut f\"ur Meteorologie, Carl-Heinrich-Becker-Weg 6--10, 12165 Berlin {cedrick@posteo.de}\\
+  $^{2}$\,Uni Oldenburg 
+  }
 
 \begin{document} 
-
+%
 \maketitle
-
+%
 \begin{abstract}
   The profiles of wind speed and direction in turbulent Ekman flow
   are formulated based on asymptotic theory and data from direct numerical simulation. 
@@ -130,7 +133,7 @@ In any quantitative description of the surface layer, the friction velocity $u_\
 and $\alpha$ defines the alignment of the frame of reference.
 %
 Knowledge about $u_\star$ and $\alpha$ is thus a prerequisite for any quantitative theory of the surface layer, 
-and \citet{rossby:PPO1935} constrained the two parameters based on integral relations in the ABL.
+and \citet{rossby:PIP1935} constrained the two parameters based on integral relations in the ABL.
 %
 Asymptotic similarity theory was later used by \cite{tennekes:JAS1973, blackadar:JAS1968},
 and--based on his seminal direct numerical simulations (DNS) of Ekman flow--,~\cite{spalart:JFM1989} suggested
@@ -351,7 +354,7 @@ governing the problem reads as
 The scales used in defining $\RE_\Lambda$ are of limited relevance for description of the turbulent flow state.
 %
 The turbulence scale separation in a wall-bounded flow is commonly characterized by the friction Reynolds number
-\citep{jimenez:ARF2014}:
+\citep{jimenez:ARF2012}:
 \begin{equation}
   \RE_\tau = \frac{u_\star\delta}{\nu} = \delta^+ = \frac{\RE_\Lambda}{Z_\star^2}, 
 \end{equation}
@@ -380,7 +383,7 @@ The governing equations  non-dimensionalized by $G$, $f$, and $\Lambda_\mathrm{\
   \frac{\partial u_j}{\partial x_j} &=& 0,   
 \end{eqnarray} 
 \end{subequations}
-where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimensional pressure, $g_j=G_j/G$ are non-dimensionalized components geostrophic wind (with $g_{1}^2+g_{2}^2=1$ by construction), and $\epsilon$ is the Levi--Civita tensor.
+where $u_i=U_i/G$ are the non-dimensional components velocity, $\pi$ is non-dimen\-sio\-nal pressure, $g_j=G_j/G$ are non-dimensionalized components geostrophic wind (with $g_{1}^2+g_{2}^2=1$ by construction), and $\epsilon$ is the Levi--Civita tensor.
 %
 These equations are solved inside a bounded cube of size $L_x \times L_y \times L_z$ with periodic boundary conditions in the lateral (streamwise and spanwise) directions, a no-slip--no-penetration boundary at $z=0$, and
 a no-penetration, free-slip boundary at $z=L_z$.
@@ -550,7 +553,7 @@ geostrophic wind $G$) governs the inviscid normalization, i.e. a scaling indepen
 %
 \par
 %
-No collapse in inner units is found for the profiles of spanwise velocity $V^{\alpha_\star+}(z^+)$. 
+No collapse is found for the profiles of spanwise velocity when considered in inner units, $V^{\alpha_\star+}(z^+)$. 
 %
 When normalized in outer units, the deficit profiles of spanwise velocity
 $(V^{\alpha_\star}(z^-)-G_{2}^{\alpha})/u_\star$
@@ -1147,9 +1150,11 @@ values of $v_{10}$ and $d_{10}$).
 %
 \begin{figure}
   \centerline{\includegraphics[width=0.5\textwidth]{../plot/c_log.pdf}}
-  \caption{Coefficients $a_\text{log}$, $b_\text{log}$ and $c_\log$ (cf. Eq.~\ref{eqn:abc_log}) as a function of 
+  \caption{Coefficients $a_\text{log}$, $b_\text{log}$ and $c_\text{log}$ 
+    (cf. Eq.~\ref{eqn:abc_log}) 
+    as a function of 
     the viscous Reynolds number $Re_D$. The approximate range of scale separation relevant for atmospheric application 
-    is found in between the dotted lines, where $a_\text{log}\simeq 0$ and $c_\text{log})\simeq 0.4$ }
+    is found in between the dotted lines, where $a_\text{log}\simeq 0$ and $c_\text{log}\simeq 0.4$ }
   \label{fig:clog}
 \end{figure} 
 %
@@ -1255,7 +1260,6 @@ Applications:
 
 \bibliographystyle{spbasic_updated} 
 \bibliography{ansorge}
-
 
 \appendix
 
