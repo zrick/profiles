@@ -1207,7 +1207,7 @@ where an exponential damping of Prandtl's mixing length is considered near the w
 \end{align}
 the spanwise component is zero as no rotational effects are considered. 
 %
-Comparing our proposed formulation for the stream-wise velocity in the inner layer to  \citeauthor{vandriest:JOT1956}'s formulation 
+Comparing our proposed formulation (Fig.~\ref{fig:vanDriest}) for the stream-wise velocity in the inner layer to  \citeauthor{vandriest:JOT1956}'s formulation 
 yields later convergence of the velocity onto the logarithmic profile while, over all, it serves as an excellent model of the streamwise 
 velocity component:
 % 
@@ -1223,7 +1223,18 @@ where the velocity transitions from the linear to the logarithmic profile.
   \label{fig:vanDriest}
 \end{figure}  
 
+For the higher layers of the ABL, the Ekman spiral is the simplest model available. When employed across the entirety of the ABL, the spiral is flattened, corresponding to a reduction of the veering angle both at the surface and throughout the ABL. We, however, find that a modified version of the Ekman spiral explicitly taking into account the surface boundary condition, is a consistent model and yields excellent 
+agreement with the velocity profiles from DNS (Sec.~\ref{sec:ekman}). 
 
+Given a surface veering, a formulation for the velocity profile in the logartihmic and Ekman layer can be obtained following the arguments by \cite{etling:2008}, cf. \cite{emeis:2018}. This simple model is compared to our DNS data and theoretical profiles in Fig.~\ref{fig:etling}. 
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{../plot/etling_direction_1.pdf} 
+  \includegraphics[width=0.5\textwidth]{../plot/etling_magnitude_1.pdf}
+  \caption{}
+  \label{fig:etling} 
+\end{figure}
+outlined in 
 \textbf{Compare} to Emeis (2002) and Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
 
 \textbf{Remember} of interpretation in the context of eddy viscosity (Fig.~\ref{fig:stresses}) 
