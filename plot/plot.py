@@ -23,14 +23,14 @@ plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
 print_table=False
-plot_outer_log=False
+plot_outer_log=True
 plot_convergence=False
 plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 test_inner_streamwise=False
 plot_profile_comparison=False
-plot_vandriest=True
+plot_vandriest=False
 plot_total_rot=False
 
 colors = {400 : 'gray',
@@ -1800,11 +1800,11 @@ if plot_profile_comparison:
         sc_dct[0] = 0. 
         ax.plot(ym[1:],et_dct/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
         ax.plot(ym,(-sc_dct+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
-        axm.plot(ym,us*np.sqrt(up*up+vp*vp),ls='--',c=ReD_col[re])
+        axm.plot(yp,np.sqrt(up*up+vp*vp),ls='--',c=ReD_col[re])
         eek_u[:i_gamma] = 1/sc.KAPPA *np.log(yp[:i_gamma]*np.exp(sc.KAPPA*sc.C))*np.cos(al*D2R)
         eek_v[:i_gamma] = 1/sc.KAPPA *np.log(yp[:i_gamma]*np.exp(sc.KAPPA*sc.C))*np.sin(al*D2R)
         m=np.sqrt(eek_u**2+eek_v**2)
-        axm.plot(ym[1:],m/m[-1],ls='-',c=ReD_col[re],label=r'$Re_D={}; u_\star={}G$'.format(re,int(us*1000)/1000.))
+        axm.plot(yp[1:],m,ls='-',c=ReD_col[re],label=r'$Re_D={}; u_\star={}G$'.format(re,int(us*1000)/1000.))
     lg=plt.legend()
     lg.get_frame().set_linewidth(0.0)
     ax.set_xlabel(r'$z^-$')
@@ -1855,12 +1855,12 @@ if plot_profile_comparison:
         sc_dct[0] = 0. 
         ax.plot(ym[1:],et_dct/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
         ax.plot(ym,(-sc_dct+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
-        axm.plot(ym,us*np.sqrt(up*up+vp*vp)  ,ls='--',c=ReD_col[re])
+        axm.plot(yp,np.sqrt(up*up+vp*vp)  ,ls='--',c=ReD_col[re])
         eek_u[:i_gamma] = 1/sc.KAPPA *np.log(yp[1:i_gamma+1]*np.exp(sc.KAPPA*sc.C))*np.cos(al*D2R)
         eek_v[:i_gamma] = 1/sc.KAPPA *np.log(yp[1:i_gamma+1]*np.exp(sc.KAPPA*sc.C))*np.sin(al*D2R)
         m=np.sqrt(eek_u**2+eek_v**2)
-        m=m/m[-1]
-        axm.plot(ym[1:],m,ls='-',c=ReD_col[re])
+        #m=m/m[-1]
+        axm.plot(yp[1:],m,ls='-',c=ReD_col[re])
     lg=plt.legend()
     lg.get_frame().set_linewidth(0.0)
     ax.set_xlabel(r'$z^-$')
