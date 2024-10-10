@@ -1,0 +1,463 @@
+\documentclass[smallcondensed,draft]{svjour3}
+
+\usepackage{lmodern}
+%\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+%\usepackage{caption}
+\usepackage[authoryear]{natbib}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+\usepackage{adjustbox}
+
+\newcommand{\p}{\partial}
+\newcommand{\gzm}{{\xi}}%{\gamma z_\text{match}}}
+\newcommand{\todo}[1]{\textcolor{red}{$[$#1$]$}}
+\newcommand{\RE}{\mathbf{Re}}
+
+\hyphenation{Ol-den-burg}
+\hyphenation{non-sta-tio-na-ri-ty}
+\DeclareRobustCommand\sampleline[1]{%
+  \tikz\draw[#1] (0,0) (0,\the\dimexpr\fontdimen22\textfont2\relax)
+  -- (2em,\the\dimexpr\fontdimen22\textfont2\relax);%
+}
+
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+\pdfsuppresswarningpagegroup=1
+
+\author{Hauke Wurps $^{1}$ and Cedrick Ansorge $^{2}$}
+\authorrunning{H. Wurps and C. Ansorge}
+
+\institute{$^{1}$ Uni Oldenburg \newline 
+$^{2}$ FU Berlin, Institut f\"ur Meteorologie, Carl-Heinrich-Becker-Weg 6--10, 12165 Berlin \email{cedrick@posteo.de}}
+
+\date{Submitted \today}
+\title{Wind veer in Turbulent Ekman Flow - Part 2: Extrapolation to atmospheric scale separation}
+\titlerunning{A Universal veering profile for Ekman flow - Part 2}
+
+\begin{document} 
+
+\maketitle
+
+\begin{abstract}
+  % Introduction % Theoretical profile
+  The atmospheric boundary layer is characterized by a logarithmic increase of the wind speed in the surface layer and a turning of the wind vector aloft. The simplest canonical configuration featuring both \emph{a logarithmic layer and the wind turning} is Ekman flow. A formulation of the mean velocity profile was derived from scaling considerations and calibrated using direct numerical simulation in part I of this work. Here, we explore the extrapolation to atmospheric Reynolds number (Re) using large-eddy simulation (LES).
+  % Case desription and setup
+  Theoretical profiles of the wind vector are compared to the theoretical reference at intermediate Re, which necessitates consideration of viscous effects % [not required in abstract] (usually neglected in LES) a
+  along with modifications to the standard bottom boundary condition.
+  % Results and Discussion
+  Analysis of the grid convergence for higher resolution unveils a convergence of LES data towards the theoretical profiles for intermediate and high Re. The LES thus confirm that (i) the spanwise velocity scales as $\left.Re_\tau\right.^{-1}$, where $Re_\tau$ is the friction Reynolds number, and (ii) one third of the wind veer is confined to the surface layer.
+  % [this level of detail is not needed in the abstract] (the lowest 10\,\% of the boundary layer) 
+  % Conclusions
+  Such agreement of the theoretical formulation and LES data raises confidence in the underlying scaling assumptions and thus reinforces the utility of the theoretical profiles as a reference for intermediate and a quasi-reference for both idealized simulation and field observation.
+%
+
+
+\keywords{Large-Eddy Simulation $\cdot$ Scale separation $\cdot$ Ekman layer $\cdot$ Prandtl layer $\cdot$ Hodograph}
+\end{abstract}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\section{Introduction}
+
+The interaction of atmospheric boundary layer  (ABL) flow with its lower boundary condition, the surface, is a defining property of the ABL \citep{stull:1988}. Relevant aspects of the interaction with the boundary not only include its heterogeneity \citep{avissar:MWR1989,giorgi:RG1997,claussen:BM1991,garratt:BM1990} and roughness \citep{monin:ARF1970,brutsaert:WRR1975,raupach:AMR1991,kostelecky:JFM2024}, but also a wind veer in favor of the pressure gradient force when the surface is approached \citep{ekman:AMA1905}. 
+
+Large-Eddy Simulation (LES) is widely used to study the turbulent flow in the atmospheric boundary layer (ABL) for a wide range of applications \citep{stoll2020large}. This includes the simulation of wind turbines and wind farm wakes, their interactions within wind farm clusters \citep{porte2011large,mehta2014large,breton2017survey}. Furthermore, LES is applied in complex environments like mountainous or urban areas \citep{stoll2020large,garcia2018predictive} and to investigate the dispersion of pollution \citep{han2018large}. These applications typically focus on the lower segment of the ABL on the rotating earth, known as the Prandtl or surface layer. In this layer, the vertical wind speed profile commonly exhibits a logarithmic increase, followed by a prominent change of wind direction within the Ekman layer above. Accurate characterization of how wind speed and direction vary with height is of great importance for wind-power forecasting and projection \citep{optis2014moving}.
+
+The simplest representation of the ABL taking into account rotation and the quasi non-turbulent, free atmosphere aloft is Ekman flow. It is a horizontally homogeneous, statistically stationary boundary-layer flow over a rotating flat surface. Here we consider the problem under neutral stratification, where density effects on the flow due to temperature fluctuations are absent. This turbulent flow configuration features the key characteristics of the real ABL, a logarithmic layer and the Ekman spiral; in immediate vicinity of the surface, viscous forces dominate (\emph{viscous sublayer}). The stationary ABL-height is set by the interplay between turbulent growth due to the shear instability \citep{lilly1966instability} and rotational suppression of turbulence due to the Coriolis effect. The system's statistical equilibrium is characterized by a single parameter, the Reynolds number $\RE$, signifying the scale separation between the largest and smallest scales of the problem. The largest scales are given by shear-induced eddies constrained by the boundary-layer height, while the smallest scales reside within the dissipative range, where strong viscous forces suppress turbulence. The dimensional mean solution of the turbulent Ekman layer is influenced by three parameters: the geostrophic wind $G$, the Coriolis parameter $f$, and the kinematic viscosity $\nu$. These three parameters define the Reynolds number $Re_D = GD/\nu$. Using $D=\sqrt{2\nu/f}$, the Ekman layer depth of a laminar flow, we write
+%
+\begin{align}\label{red}
+ Re_D = \sqrt{2}\frac{G}{\sqrt{\nu f}}
+\end{align}
+%
+The mean solutions of the velocity components are functions of only the Reynolds number and the height above the ground $z$: $u(\RE_D,z)$, $v(\RE_D,z)$ (see e.g. \cite{csanady1967resistance}).
+
+Part I of this publication, presents a framework to predict wind direction and speed across the turbulent Ekman flow, drawing from the works of \cite{csanady1967resistance}, \cite{tennekes1973logarithmic}, and \cite{spalart1989theoretical}. As \cite{spalart1989theoretical}, we use $G$, $f$, and $\nu$ to derive the friction velocity $u_\star$ and the angle $\alpha_\star$ between geostrophic wind and shear stress at the wall. While earlier descriptions of the turbulent Ekman layer were limited to specific parts of the boundary layer, we derive mean velocity profiles covering the entire ABL with due regard of changes in the Reynolds number. We have shown that the theoretical velocity profiles are in excellent agreement with DNS for intermediate Reynolds numbers. 
+
+However, it remains uncertain, if the extrapolation of the above framework towards atmospheric $\RE$ is valid. The substantial separation of scales in the ABL makes direct numerical simulation (DNS) of the entire turbulent flow at geophysical scale impossible. Within the framework of LES, only the larger eddies are resolved, that contain the main share of kinetic energy, while turbulent mixing below the subfilter-scale is parameterized. This technique allows for the simulation of the ABL at very high (atmospheric) $\RE$. 
+
+The accurate representation of mean profiles of velocity, i.e. of first-order statistics of the wind field, is commonly assumed when using LES in a predictive manner  \citep{fedorovich2004convective}. Here, we compare LES outcomes to theoretical solutions to determine the validity of this assumption under different conditions. As LES introduces the grid size as an additional parameter (often understood in relation to a filter scale, cf. \cite{pope2004ten}), we analyse its impact on simulation results. \cite{esau2004simulation} and \cite{jiang2018large} have executed similar LES analyses of neutral Ekman layers, however, they introduce an additional parameter by selecting an arbitrary roughness length $z_0$, whereas we derive the parameter $z_0$ corresponding to a fluid with a kinematic viscosity of $\nu = 1.5\cdot10^{-5}$ over a flat surface.
+
+Here, we examine three different Reynolds numbers $Re_D$: $1600$, $1.5\cdot10^5$, and $10^6$. While the case $Re_D=1600$ is also investigated by DNS (cf. part 1 of this study), $Re_D=1.5 \cdot 10^5$ and $10^6$ correspond to the scale separation found in typical atmospheric boundary layers. For $Re_D=1600$, we compare DNS \citep{ansorge:2024b} and LES results using the exact same forcing and settings. This is the first comparison of this kind for the turbulent Ekman flow. 
+
+
+The content is structured as follows. Section \ref{universal_profile} provides a complete mathematical description of the turbulent Ekman layer's velocity profiles. A description of the simulated cases and the numerical set-up is given in section \ref{setup}, followed by the presentation of results and its comparison to the theoretical profiles in section \ref{results}. We conclude in section \ref{conclusion}.
+
+\section{A Universal Velocity Profile for the Turbulent Ekman Layer}
+\label{universal_profile}
+
+In this chapter, we introduce the velocity profile for the turbulent Ekman layer developed in part I. 
+%Definitions
+We align the coordinate Ox with the surface stress (\cite{ansorge:BM2019}), Oz points normal to the surface and normal to Ox, and Oy in the span-wise direction, normal to Oxz. In proximity to the lower boundary, the boundary layer scales in viscous (inner) units, denoted by the index ``$+$'' ($z^+ = zu_\star/\nu$, $U^+=U/u_\star$, where $U$ is the velocity component in x-direction and $u_\star = \sqrt{\nu \p_z U}$ the friction velocity). From the top perspective, the profiles converge when scaled using outer units, denoted by the index ``$-$'' ($z^-=z/\delta$, $U^-=U/G$, where $\delta=u_\star/f$ is the boundary-layer depth scale, $f$ the Coriolis parameter and $G$ the geostrophic wind speed). 
+At the lower boundary, the x-axis of the inner units aligns with the negative shear stress, while the x-axis of the outer units aligns with the geostrophic wind. The angle between both axes is denoted as $\alpha_\star$, the surface veer of the wind across the boundary layer. 
+%
+Profiles of the velocity components are studied in three different layers reflecting the change of dominant balance when moving away from the surface. These are
+(i) the Ekman layer denoted $(\cdot)_\text{Ek}$ (Sec.~\ref{sec:ekmanlayer}), 
+(ii) the viscous sub-layer, denoted by an index $(\cdot)_\text{visc}$, 
+and (iii) the logarithmic layer denoted by $(\cdot)_\text{log}$
+We match $U_\text{visc}$ and $U_\text{log}$ according to their respective formulations and combine them to $U_\text{inner}$ (Sec.~\ref{sec:innerlayer}).
+Inner and outer profiles are then matched by a weighting transfer function based on the error function. 
+%The span-wise component of the velocity is separated into two layers, namely the inner layer $V_\text{inner}$, and the Ekman layer $V_{EK}$. 
+
+% \subsection{Drag-Law}
+
+The geostrophic drag, i.e. normalized friction $Z\equiv u_\star/G$, and $\alpha_\star$ form the basis of the boundary-layer scaling, and they are estimated using the semi-empirical drag-law introduced by \cite{spalart1989theoretical}, which describes them as functions of only the Reynolds number:
+\begin{subequations}\label{eqn:drag}
+	\begin{align}
+		\frac{G}{u_\star}\cos\phi^\star &= \frac{1}{\kappa}\log Re_\tau + C - A_r, \\
+		\sin\phi^\star &= A_i\frac{u_\star}{G},\\
+		\alpha_\star &= \phi^\star - \frac{C_5}{Re_\tau},\\
+		Re_\tau &= \frac{u_\star^2}{\nu f} \left( = \frac{1}{2} Re_{D}^2 \frac{u_{\star}^2}{G^2}\right),
+	\end{align}
+\end{subequations}
+where we use $\kappa = 0.416$, $A_r = 4.80$, $A_i = -5.57$, $C = 5.4605$, $C_5 = -57.8$ based on the DNS data available (cf. Part I, \cite{ansorge2014global}).
+
+% \subsection{Total profile}
+
+
+\subsection{Ekman layer}
+\label{sec:ekmanlayer}
+The outer layer of the ABL is characterized by a triadic balance between turbulent flux, pressure gradient and the Coriolis force; the vertical change of the Coriolis force causes a pronounced height dependence of the wind direction resulting in the Ekman spiral \citep{ekman:AMA1905}. The classic solution employs Ekman dynamics down to the surface---and thus also in the surface layer, where this is a rather poor representation of turbulent mixing. Here, we model the surface layer by a shifted lower boundary condition for the Ekman spiral determined from DNS:
+\begin{subequations}
+  \begin{align}
+    U_{EK} &= G + Ae^{-\tilde{z}}\cos\tilde{z},\\
+		V_{EK} &= - Ae^{-\tilde{z}}\sin\tilde{z},
+  \end{align}
+\end{subequations}
+where the x-axis is aligned with the geostrophic wind and $A = 8.4u_\star$, $\tilde{z} = (z-z_r)/D_E$, $z_r = 0.12\delta$, and $D_E = 3\delta/4\pi\approx 0.24\delta$. The transition from the logarithmic layer to the Ekman layer is located at $z^{-}=0.28- 2.25 Re_{D}^{-1/2}$ with a transition scale of $\sigma_T=2$ for the stream-wise velocity.
+
+\subsection{Inner and viscous layers}
+\label{sec:innerlayer}
+
+In the viscous sublayer, the shear-aligned velocity $U^{\alpha_\star}$ is described by the law of the wall $U^{\alpha_\star+} = z^+$ and the span-wise velocity $V^{\alpha_\star}$ is zero by choice of the reference frame (the index $\alpha_\star$ indicates the alignment with the direction of the shear stress). Around $z^+=5$, the velocity begins to deviate from linearity, and the buffer layer forms the transition from the viscous to the  logarithmic layer. From the surface up to the buffer layer, the stream-wise velocity is described by
+\begin{subequations}
+  \begin{align}
+    U_\text{buffer}^{\alpha_\star+} = \frac{z^+}{1+c_1(z^+)^2} + (c_2z^+-a_\text{match})\frac{1+\tanh[0.2(z^+-22)]}{2}+c_3e^{-c_4(z^+-22)^2}.
+    \label{eqn:ubuffer}
+  \end{align}
+With $c_1 = 0.00185$, $c_2 = 0.195$, $c_3 = 0.4$, $c_4 = 0.35$. The coefficient $a_{match}=3.5727$ is chosen to match the u-profile in the logarithmic layer above at $z^+=40$, such that 
+\begin{align}
+  U_\text{inner}^{\alpha_\star+} = \begin{cases}
+	  U_\text{buffer}^{\alpha_\star+}, & z^+ \le 40.\\
+		\kappa^{-1}\log z^+ + C &   z^+>40.
+	\end{cases}
+  \label{eqn:log-law}
+\end{align}
+\end{subequations}
+with the von-Kármán constant $\kappa=0.416$, and $C=5.4605$ as in the estimation of the geostrophic drag in Eq.~(\ref{eqn:drag}). 
+
+For the span-wise velocity, the boundary conditions and Ekman dynamics imply that 
+\begin{subequations}
+\begin{align}
+V^{\alpha_\star}_\text{visc} \delta^+\sim G f_V(z^+),
+\end{align} where $f_V$ is a universal, non-dimensional function (cf. Part I). Above the viscous 
+layer, scaling arguments are scarce, but there is evidence for a logarithmic scaling of also the 
+span-wise velocity component. We  hence use  
+\begin{align}
+  V^{\alpha_\star}_\text{inner} = \left\{ \begin{matrix}
+      V^{\alpha_\star}_\text{visc} &=& \dfrac{G}{\delta^+}v_{ref}(w_vz^+-1+exp[-w_vz^+])  & z^+ \le 10\\ 
+      V_\text{log}^{\alpha_\star}        &=& \dfrac{G}{\delta^+}(a_{log} + b_{log}\log(z^+) + c_{log}z^+) & z^+>10. 
+  \end{matrix}\right.
+\end{align}
+\end{subequations}
+with $v_\text{ref} = 18.85$ and $w_v = 0.2353$ leads to excellent agreement with the DNS data. The coefficients $a_\text{log}, b_\text{log}$, and $c_\text{log}$ are determined by (i)-(ii) a smooth transition to $V_\text{visc}$ at $z^+=10$, and (iii) the condition $V_\text{log}(z^-=0.3) = V_\text{EK}(z^-=0.3) =: v_{03}$ (cf. Part I). For the Reynolds-number dependency of the Ekman-layer profiles, $V_\text{Ek}(z^-=0.3)$ depends on $Re$, such that the coefficients exhibit a weak dependence on $Re$. 
+
+\subsection{Transition from inner to outer profiles, synopsis}
+
+A smooth transition between consecutive layers is achieved using a transfer function:
+\begin{align}\label{eqn:error}
+  w_{*} = \frac{1}{2}\left(\textrm{erf}\left[\sigma_T\log\left(\frac{z}{z_{T}}\right)\right]+1\right),
+\end{align}
+where $erf$ is the error function, $\sigma_T$ is a transition scale that defines the width of the transition and $z_{T}$ is the height of the transition, where the upper and the lower layer equally contribute to the velocity ($w_{*}(z_{T})=0.5$). The inner profiles $U_\text{inner}$ and $V_\text{inner}$ are blended to the Ekman profile using eq.~(\ref{eqn:blend}) with $\sigma_T = 2$ and $z_T^- = 0.28- 2.25\sqrt{1/Re_D}$.
+
+\begin{subequations}\label{eqn:blend}
+  \begin{align}
+    U &= (1-w_{outer})U_{inner} + w_{outer}U_{EK},\\
+	  V &= (1-w_{outer})V_{inner} + w_{outer}V_{EK}.
+	\end{align}
+\end{subequations}
+
+\begin{figure}
+  \centerline{
+	\includegraphics[width=\textwidth]{figures/alt_single_theor_Ekman_profiles_2024.png}}
+  \caption{a) Theoretical shear-aligned velocity profile ($U^+$,$-V^+$) of the turbulent Ekman flow for $Re_D = 2000$ (\sampleline{}) and $Re_D = 4000$ (\sampleline{dashed}) and the different layers (colors). b) Hodograph of the geostrophy-aligned velocity components}
+  \label{single_ekman}. 
+\end{figure}
+
+The velocity profiles are given for two Reynolds numbers in Fig. \ref{single_ekman}. 
+In the viscous sublayer, the shear-aligned component $U^+$ increases linearly with height up 
+$z^+\approx5$. In between $5 \lesssim z^+ \lesssim 30$, we find the buffer layer with a transition from the linear law-of-the-wall to the logarithmic law. Above $z^+\approx30$, the logarithmic layer begins. Then, $U^+$ increases logarithmically up to the Ekman layer and reaches its supergeostrophic maximum. Above, it decreases to its free-stream geostrophic value. The depth of the logarithmic layer increases with $\RE$. The spanwise component $V^+$ remains close to zero up to the middle of the logarithmic layer, where the transition to the Ekman layer takes place ($z^-\approx0.28-2.25\sqrt{1/Re_D}$). The profiles of $V^+$ of all Reynolds numbers have a similar shape but are shifted in $z^+$. The similar $V^+$ and the growth of $U^+$ leads to a smaller angle $\alpha_\star$ between surface shear stress and geostrophic wind for higher $\RE$, which is visible in the hodograph.
+
+\section{Case description and numerical set-up}
+\label{setup}
+
+\subsection{Settings}
+
+\begin{table*}
+	\centering
+	\caption{Parameters of the simulated cases. $f$, $\nu$, and $G$ are input parameters and define the Reynolds numbers $Re_D$ and $Re_\tau$, while $u_\star$, $\alpha_\star$, and $\delta = u_\star/f$ are resulting properties of the flow}
+	\begin{adjustbox}{width=\textwidth}
+    \begin{tabular}{l|ccccc|ccc}
+          \toprule
+	  Name & $Re_D$ & $Re_\tau$ & $f$ [s$^{-1}$] & $\nu$ [m$^2$s$^{-1}$] & $G$ [ms$^{-1}$] & $u_\star$ [ms$^{-1}$] & $\alpha_\star$ [$^\circ$]& $\delta$ [m] \\
+          \midrule
+	  Re1 & $1.6\times10^3$ & $3.0\times10^3$ &  &  & 0.0438 & 0.00211 & 16.8 & 21.1 \\
+	  Re2 & $1.5\times10^5$ & $7.3\times10^6$ & $10^{-4}$ & $1.5\times10^{-5}$ & 4.108 & 0.1048 & 8.5 & 1048\\
+	  Re3 & $1\times10^6$ & $2.2\times10^8$ &  &  & 27.39 & 0.5785 & 7.0 & 5785 \\
+          \bottomrule
+	  \end{tabular}
+  \end{adjustbox}
+	\label{simulation_parameters}
+\end{table*}
+An incompressible, turbulent Ekman flow over a hydrodynamically smooth surface is simulated using the Parallel Large Eddy Simulation model (PALM, \citealp{maronga2020overview}). We study three different Reynolds numbers Re$_D = 1600;1.5\times 10^5;10^6$, hereafter Re1, Re2, and Re3, respectively (Tab.~\ref{simulation_parameters}).
+%
+The domain is rotating around the z-axis with an angular velocity corresponding to the Coriolis parameter $f=10^{-4}s^{-1}$ (the y-component of the Coriolis acceleration was set to zero). The stratification of the flow is truly neutral, i.e., the potential temperature is constant across the whole domain. A constant boundary layer height on the order of $\delta=u_\star/f$ forms due to the balance between shear production and rotational suppression of turbulence. At the upper boundary, the flow is non-turbulent. Hence, a no-penetration boundary condition is used for the vertical velocity component while the horizontal components are prescribed according to geostrophic balance--a Dirichlet-type boundary condition. Below the first grid point, a constant-flux layer is assumed and Monin--Obukhov similarity theory (MOST) is used to calculate the surface momentum fluxes. The Navier-Stokes equations are integrated using a 3$^\text{rd}$-order low-storage Runge--Kutta method. For scalar advection a 5$^\text{th}$-order Wicker--Skamarock scheme is employed. The Poisson equation is solved using a direct fast Fourier transform (FFT). In LES, the turbulent transport on the subgrid scale (SGS) needs to be modeled by an SGS closure model. We use two kinds of SGS closures to assess their impact on the LES solution: a 1.5-order closure after \cite{deardorff1980stratocumulus} and a dynamic closure after \cite{heinz2008realizability}. For most of the simulations, the 1.5-order closure is used, since the dynamic closure needs more computational resources, but the simulations with $\Delta^-=200^{-1}$ are repeated using the dynamic closure.  
+
+\begin{table*}
+	\centering
+	\caption{Simulations and grid parameters: ReX stands for one of the Reynolds numbers Re1, Re2, and Re3. $\Delta$ is the grid cell size, $\delta=u_\star/f$ is the boundary layer height, $n_i$ is the number of grid cells in the direction $O_i$, $L_x$ and $L_z$ are the domain sizes in the horizontal and vertical direction, respectively}
+	  \begin{tabular}{lccccccc}
+          \toprule 
+	    Name & $\Delta^-$ & $n_x$ & $n_y$ & $n_z$ & $L_x/\delta$ & $L_z/\delta$  \\ 
+          \midrule
+  	  ReX\_50 & 1/50 & 144 & 144 & 128 & 2.88 & 5.0 \\
+  	  ReX\_100 & 1/100 & 288 & 288 & 216 & 2.88 & 4.5 \\
+	    ReX\_150 & 1/150 & 432 & 432 & 288 & 2.88 & 3.7 \\
+  	  ReX\_200 & 1/200 & 576 & 576 & 384 & 2.88 & 4.1 \\
+  	  ReX\_dyn & 1/200 & 576 & 576 & 384 & 2.88 & 4.1 \\
+           \bottomrule
+		\end{tabular}
+	\label{simulation_parameters2}
+\end{table*}
+
+To study the effect of resolution on the simulations, four different grid resolutions are chosen for each Reynolds number case. The grid cell size $\Delta$ is around $\delta/50$, $\delta/100$, $\delta/150$, and $\delta/200$, one coarse, two medium, and one fine resolution, respectively (see table \ref{simulation_parameters2}). In total, 15 simulations are carried out. The grid spacing inside the boundary layer is isotropic up to $z = 1.3\delta$. Aloft, the grid spacing along Oz is stretched by 3\% per grid point until a maximum spacing of $(\Delta z )_\mathrm{max} = 6\Delta x$ is reached. The number of vertical grid points is chosen such that $L_z \ge 3 \delta$. Different domain heights are caused by numerical requirements of the FFT-solver. In the upper third of the domain, Rayleigh damping is active to avoid wave reflections from the top boundary.
+
+The flow is initialized with wind speed profiles based on a one-dimensional model with a Reynolds-average based turbulence parametrization. At the beginning of the simulation, random perturbations are imposed on the velocity field to trigger turbulence. The resulting imbalance between pressure force and Coriolis force results in an inertial oscillation of the period $T_{io}=2\pi/f$, where a part of the flow's mean kinetic energy oscillates between U- and V-component. The oscillation decays over time and would eventually vanish for large time. In order to obtain profiles in statistical equilibrium of the flow, we use a spin-up time of 1.5 $T_{io}$ and perform a horizontal domain average over 2 $T_{io}$.
+
+In part I of this publication, the DNS of $Re_D\leq1\,600$ is carried out for a horizontal domain size of $(0.54\Lambda_{Ro})^2$ - $(1.08\Lambda_{Ro})^2$, where $\Lambda_{Ro}=G/f$ is the Rossby radius. For these Reynolds numbers, $Z\approx 0.05$, such that $L_x \approx 10 \delta$. However, $Z$ decreases logarithmically with increasing Reynolds number and it is $Z\approx 0.02$ for $Re_D=10^6$. A domain size of half the Rossby radius would then extend to $L_x\approx 25\delta$. Such a large domain would imply immense computational cost. \cite{spalart2008direct} used a horizontal domain of $L_x = 2\delta$, arguing that this length allows the resolution of the largest outer-layer eddies according to \cite{csanady1967resistance}. During a sensitivity test of the domain size we observed that simulations with domain sizes $L\geq 4\delta$ often tend to accumulate turbulence kinetic energy in the upper half of the boundary layer. The TKE increases over several inertial oscillations with energy mostly on the scale of the domain size. Such a development was not observed in the DNS. We could successfully avoid such a behavior by using a domain of size $L \approx 3\delta$ in combination with a shifted periodic boundary condition in y-direction, as described by \cite{munters2016shifted}. Although for the Ekman flow the direction of the mean flow is only aligned with the x-direction of the grid near the surface, a shift of the boundary condition by $L/3$ significantly helped to suppress the accumulation of TKE in the upper half of the boundary layer.
+
+\subsection{Viscosity and roughness length}
+
+In LES, one postulates that a sufficient part of the largest eddies is resolved so as to represent the dominant non-linear effects of turbulent mixing \citep{pope2004ten}. Below these resolved scales, turbulence is modeled as a more or less isotropically acting diffusive agent by a closure model (dynamic, Deardorff, see above). Thus, molecular friction is not considered directly, but only by virtue of a turbulence model linking the resolved and dissipative scales. In their seminal works on the spectral energy transfer in homogeneous isotropic turbulence, \cite{kolmogorov1941dissipation} and \cite{obukhov1941distribution} showed that the energy transfer rate across the spectrum is in fact constant provided that both dissipation and production terms can be neglected. This implies that the transfer rate across the cut-off scale in LES does not depend on the magnitude of the viscous scale, presupposed that (i) the cut-off scale of the LES is well within the inertial range and (ii) the LES turbulence is approximately isotropic and homogeneous at the smallest resolved scales. Consequently, SGS-models of LES do not necessarily require explicit information about the actual viscosity of the fluid or other viscous parameters.
+
+In LES at low $\RE$ or very high resolution the subgrid eddy viscosity may fall far below the molecular viscosity of air. In the context of PALM's Deardorff closure, it is $K_m = c_0 \Delta \sqrt{e}$, where $c_0 = 0.1$ \citep{deardorff1980stratocumulus}, $\Delta$ is the grid size and $e$ is the SGS-TKE, calculated by a prognostic equation. Hence, very low $e$ as well as fine resolution can lead to $K_m<\nu$. When this is the case, $\nu$ cannot be ignored anymore, and we let $K_m = c_0 \Delta \sqrt{e} + \nu$. Hence, assuming absent stratification, the governing equation of for momentum in our version of PALM is
+\begin{align}\label{gov_palm}
+  \frac{\partial u_i}{\partial t} = - \frac{\partial u_i u_j}{\partial x_j} -\epsilon_{ijk}f_ju_k + \epsilon_{i3j} f_3 u_{g,j} - \frac{1}{\rho_0}\frac{\partial\pi^*}{\partial x_i} + \frac{\partial}{\partial x_j}\left( K_m\left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i} \right)\right),
+\end{align}
+where $u_i$ is the filtered velocity, $\epsilon_{ijk}$ the Levi-Civita symbol, $f_i$ the Coriolis acceleration, $u_{g,i}$ the geostrophic wind, $\rho_0$ the density of dry air, and $\pi^*$ the modified perturbation pressure. In the limit of either well-resolved simulations or low $\RE$ (or both), $K_m \rightarrow \nu$, so the last term on the right hand side of eq. (\ref{gov_palm}) becomes $\nu\frac{\partial^2u_i}{\partial x_j^2}$, which complies with the Navier-Stokes equations for an incompressible fluid underlying our reference solution from DNS.
+
+\label{low-bound}
+
+In contrast to the interior closure of the LES, where the direct effect of $\nu$ is of small relevance compared to the eddy viscosity---at least for high $\RE$--- this is not true for the viscid effects at the bottom boundary:  The assumption of a constant flux layer between the first grid point and the bottom (on the Arakawa-C staggered grid) leads to the following estimations of friction velocity and surface stresses: 
+\begin{align}\label{most}
+  u_\star = \frac{\kappa(U^2+V^2)^{0.5}}{\ln\left(z/z_0\right)},\\
+  -\overline{u''w''}_0 = \frac{\kappa Uu_\star}{\ln\left(z/z_0\right)}, 
+\end{align}
+where double dashes refer to the unresolved, i.e. SGS-parameterized, fluctuations. In these expressions, viscosity enters indirectly by virtue of the roughness length $z_0$ when considering the law of the wall for a smooth surface:
+\begin{align}
+  u^+ = \frac{1}{\kappa}\ln(z^+) + C^+ = \frac{1}{\kappa}\ln\left(\frac{z^+}{z_0^+}\right).
+\end{align}
+%This leads to the expression
+%\begin{align}
+%	z_0^+ = z_0\frac{u_\star}{\nu} = \exp\left(-\kappa C^+\right),
+%\end{align}
+For aerodynamically smooth flow, it is $z_0^+ = 0.1031$ based on Eq.~\ref{eqn:log-law}. (This is known to be the minimal roughness length of a turbulent boundary layer; see e.g. \citealp{kraus2008grundlagen}.) Hence,
+\begin{align}
+	z_0 = z_0^+\frac{\nu}{u_\star}\approx 0.1\frac{\nu}{u_\star}
+\end{align}
+depends on the viscosity $\nu$ of the fluid. In other words, given fixed surface properties, a choice for $z_0$ implies a particular value for the viscosity $\nu$.
+
+When using MOST for the surface fluxes it is assumed that the height of the first grid point lies inside of the logarithmic layer. Again, the limit of low $\RE$ and high resolution requires adaptations to this boundary condition. In the case of very fine resolution, the first grid point might fall into the buffer layer or even the viscous layer of the flow, so the equations of MOST are no longer adequate to calculate the local stress. To avoid that, we follow the recommendation of \cite{kawai2012wall} and use the horizontal velocity from a higher layer $z_{sl}$ to compute the mean stress in the constant flux layer. Further, we adopt the boundary condition suggested by \cite{maronga2020improved} and use domain averaged velocities for the estimation $u_\star$:
+\begin{align}\label{us_mean}
+  u_\star \approx u_{*,mean} = \frac{\kappa<u_h(z_{sl})>}{\ln(z_{sl}/z_0)},
+\end{align}
+where $u_h= \sqrt{u^2+v^2}$ and angle brackets refer to the horizontal average over the entire domain. The mean stress is then used as a boundary condition at the first grid point ($z=z_1$). It is distributed locally to the unresolved stresses in x- and y-direction via
+\begin{align}
+  \overline{u''w''}_0(x,y,z_1) = -u_{*,mean}^2 \frac{u(x,y,z_1)}{\sqrt{<u>^2(z_1)+<v>^2(z_1)}},
+\end{align}
+and accordingly for $\overline{v''w''}_0$. This way, the domain average of the stress components yield the total stress of eq. \ref{us_mean} ($u_{*,mean}^2 = \sqrt{<\overline{u''w''}_0>^2+<\overline{v''w''}_0>^2}$). For the reference height we use the grid level closest to $z_{sl}^- \approx 0.1$. This alleviates two problems: First, $z_{sl}$ is within log-layer. Second, the flow at $z=z_{sl}$ is better resolved than closer to the surface.
+
+\section{Results and Discussion}
+\label{results}
+
+In this chapter, we compare the results from the LES to the theoretical bulk parameters (\ref{bulk}) and velocity profiles (\ref{vel_profiles}) and discuss the dynamics of the turbulent flow in LES.
+
+\subsection{Geostrophic drag and surface wind veer}
+\label{bulk}
+
+\begin{table*}
+	\centering
+	\caption{LES results: $\Delta^+$ is the grid cell size in wall units, $u_\star$ the friction veloctiy, $\alpha_\star$ the angle between geostrophic wind and negative surface shear stress, $\kappa_{LES}$ the Kármán-measure of the logarithmic layer (estimated by linear regression), $C^+$ the intercept (see eq. \ref{eqn:log-law}), and $\delta_{95}$ the height estimated by a linear interpolation of the shear stress reduction to 95\% of its surface value}
+		\begin{tabular}{lcccccc}
+		  Name & $\Delta^+$ & $u_\star/u_{\star,th}$ & $\alpha_{\star,th}-\alpha_\star$ & $\kappa_{LES}$ & $C^+$ & $\delta_{95}/\delta$ \\
+			\hline
+Re1\_50	&	59	&	1.021	&	1.5°	&	-	&	-	&	0.71	\\
+Re1\_100	&	30	&	1.008	&	1.1°	&	0.52	&	8.3	&	0.66	\\
+Re1\_150	&	20	&	1.004	&	1.0°	&	0.48	&	7.0	&	0.64	\\
+Re1\_200	&	15	&	1.003	&	0.7°	&	0.46	&	6.5	&	0.62	\\
+Re1\_dyn	&	15	&	1.002	&	0.9°	&	0.43	&	5.7	&	0.58	\\
+\hline													
+Re2\_50	&	$1.5\times10^5$	&	1.008	&	1.1°	&	-	&	-	&	0.77	\\
+Re2\_100	&	$7.3\times10^4$	&	1.001	&	0.5°	&	0.53	&	12.2	&	0.66	\\
+Re2\_150	&	$4.9\times10^4$	&	1.000	&	0.2°	&	0.47	&	8.9	&	0.60	\\
+Re2\_200	&	$3.7\times10^4$	&	1.000	&	0.1°	&	0.44	&	6.8	&	0.59	\\
+Re2\_dyn	&	$3.7\times10^4$	&	1.000	&	0.0°	&	0.42	&	5.6	&	0.55	\\
+\hline													
+Re3\_50	&	$4.5\times10^6$	&	1.007	&	0.7°	&	-	&	-	&	0.76	\\
+Re3\_100	&	$2.2\times10^6$	&	1.001	&	0.5°	&	0.53	&	14.3	&	0.65	\\
+Re3\_150	&	$1.5\times10^6$	&	1.000	&	0.3°	&	0.47	&	10.3	&	0.60	\\
+Re3\_200	&	$1.1\times10^6$	&	1.001	&	0.1°	&	0.44	&	7.7	&	0.59	\\
+Re3\_dyn	&	$1.1\times10^6$	&	1.000	&	0.2°	&	0.43	&	6.7	&	0.56	\\
+			\hline
+		\end{tabular}
+	\label{simulation_results}
+\end{table*}
+
+% z0
+The geostrophic drag $Z=u_\star/G$ quantifies the conversion of mean-flow kinetic energy ($G^2$) to turbulence ($u_{\star}^2$). The ratio of $u_{\star}$ resulting from the simulations to the theoretical value $u_{\star,th}$ are shown in Tab. \ref{simulation_results}. All values are close to one, while the strongest deviations are observed for the simulations with the coarsest resolutions. A slight dependence on the resolution can be observed for Re1, as $u_\star$ steadily approaches $u_{\star,th}$ with increasing resolution. For Re2 and Re3, all but the coarsest resolution nearly exactly match the theoretical value. The choice of $z_0$ and the geostrophic wind $G$ determine the magnitude of $u_\star$ in a non-trivial way. From a top perspective, the horizontal velocity increases from its geostrophic value to the supergeostrophic maximum and then decreases with decreasing height. The horizontal mean velocity at the grid point closest to $z^-=0.1$ is used to calculate $u_\star$ according to Eq.~(\ref{us_mean}). It is remarkable that the choice of $z_0^+=0.1031$ leads to a value of $u_{\star}$ very close to the prediction by semi-empirical considerations (cf. \cite{spalart1989theoretical}).
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figures/d3y_3Re_hodograph}
+  \caption{Geostrophy aligned hodographs of the LES in comparison to the theoretical and laminar hodographs. A $\times$ indicates the first grid point of the LES. At the points marked with $+$, the velocity is used to determine $u_\star$}
+  \label{3Re_hodograph}
+\end{figure}
+
+%alpha
+The surface veering $\alpha_\star$ is key to quantify the Ekman pumping and of central relevance for larger-scale applications. For the LES, we use the first derivatives of the velocity components calculated by 3$^\text{rd}$-order forward finite differences to estimate $\alpha_\star$:
+\begin{align}
+  \alpha_\star = \arctan\left(\left.\left\langle \frac{\partial v}{\partial z}\right\rangle_0\right/\left\langle \frac{\partial u}{\partial z}\right\rangle_0\right)-\arctan\left(\frac{V_G}{U_G}\right).
+\end{align}
+Nearly all LES yield an $\alpha_\star$ smaller than the theoretical value $\alpha_{\star,\text{th}}$ (cf. Tab.~\ref{simulation_results}), where we observe a slight increase of $\alpha_\star$ with resolution; The finest resolution of Re2 and Re3 generally align closely with the theoretical direction while for Re1\_200 the offset is 0.9°. The hodograph (Fig.~\ref{3Re_hodograph}) illustrates that this is not caused by poor quality of the simulation since all of the simulations of Re1 closely follow the theoretical hodograph; in fact, the turning angle at the respective height is actually slightly overestimated. Rather, the offset is due to the veering of the wind vector continuing in the lower part of the boundary layer which is not present in the LES. Hence, for the low-$\RE$ case, the general observation of a higher $\alpha_\star$ with finer resolution is also caused by the approach of the final $\alpha_\star$ with decreasing height of the first grid point. In general, the finer resolved simulations show veering angles that are very close to the theoretical prediction.
+
+\subsection{Logarithmic layer stream-wise velocity}
+\label{vel_profiles}
+
+\begin{figure}[ht]
+  \centerline{
+	  \includegraphics[width=\textwidth]{figures/d3y_3Re_profiles_outer.png}
+	}
+  \caption{Shear-aligned velocity profiles in outer scaling. Solid lines: u-component, dashed lines: v-component. The lowest grid point is marked by a cross ($\times$) colored according to the corresponding resolution.}
+  \label{velocity_outer}
+\end{figure}
+
+% profiles
+Velocity profiles from LES and our theoretical framework agree well for the different $\RE$ in Fig.\,\ref{velocity_outer}: Most prominently, the rotation across the Ekman layer agrees and a logarithmic layer for the U-component is present. The lowest points of the LES of the higher $\RE$ fall into the logarithmic layer. For Re1, the lowest grid point falls into the buffer layer, which is visible as the curved course of the U-component below the logarithmic layer in the theoretical profile. The best resolved simulation with Deardorff-closure even seems to follow the course of the upper part of the buffer layer, but with a resolution of $\Delta^+=15$ this is a coincidence caused by a well-known S-shape of velocity profiles close to rigid wall \citep{brasseur2010designing}. This log-layer mismatch arises from a competition between the scales $u_\star$ and $z$ and other velocity and length scales introduced by the discretization of the dynamical system \citep{mason1992stochastic,brasseur2010designing}. In other words, at the lower boundary, the relevant eddies are too small to be resolved by the grid and their contribution to the flow has to be modeled. Also the vertical component is restricted by the wall's impermeability, known as blocking effect-- both effects illustrate a violation of isotropy near the wall and thus counter the SGS-closure assumptions.
+
+\begin{figure}[ht]
+  \centerline{
+	  \includegraphics[width=\textwidth]{figures/d3y_3Re_kappa}
+  }
+  \caption{K\'arm\'an measure $\kappa$ in the logarithmic region and above for different Reynolds numbers and resolutions}
+  \label{fig:3Re_kappa}
+\end{figure}
+
+% kappa
+The goodness-of-fit in the loga\-rith\-mic layer (Eq.\,\ref{eqn:log-law}) is assessed through the von-K\'ar\-m\'an mea\-sure (Fig.\,\ref{fig:3Re_kappa})
+\begin{align}
+  \kappa(z)=(z^+\partial U^+/\partial z^+)^{-1}\simeq const.,
+\end{align}
+which is estimated here by linear regression of the mean velocity in x-direction against the logarithm of height between the seventh grid point and the $z^-=0.1$ for Re1 and $z^-=0.12$ for Re2 and Re3. The seventh grid point is chosen as lower boundary for the logarithmic layer as, in PALM, the mean velocity profile follows MOST aloft \citep{maronga2020improved}. The number of values for each regression is 6, 12, and 18 for ReX\_100, ReX\_150 and ReX\_200, respectively.  In case Re1, the viscous sublayer occupies about $0.5\%$ of the boundary layer, but this share drops to $~10^{-5}-10^{-7}$ for cases Re2 and Re3 respectively. Above the viscous sublayer, the theoretical profile shows a near-constant value for $\kappa$ up to $z^-\approx0.1$ for the case Re1 and up to $z^-\approx0.12$ for the cases Re2 and Re3. We do not compute $\kappa$ for ReX\_50 since there are only six grid points below $z^-\approx 0.12$, and no constant K\'arm\'an measure $\kappa(z)$ can be observed. The resulting best estimates for $\kappa_{LES}$ are shown in Tab.\,\ref{simulation_results}, where the coefficient of determination ('r-squared') is above 0.99 for all cases. 
+
+For finer resolution, $\kappa_{LES}$ decreases with increasing Re for the range of scale separation investigated here. ReX\_100 yields a value around $0.53$ (which is outside the range agreed on by atmospheric observation and laboratory measurements), the finer resolution yields values around $0.46$ for Re1\_200 and around $0.44$ for Re2\_200 and Re3\_200, which is in excellent agreement with DNS data and laboratory measurements. The dynamic subgrid closure yields lower values for $\kappa_{LES}$: in Re1\_dyn we even see $\kappa_{LES}=0.39$, while Re2\_dyn and Re3\_dyn yield $0.42$ and $0.43$, respectively. Close to the bottom, the K\'arm\'an measure is heavily influenced by the proximity of the wall and rather a function of the vertical index than of the physical distance from the wall. In accordance with \cite{maronga2014monin} and \cite{maronga2017formulation}, the kinks in the K\'arm\'an measure diminish around the seventh grid point for all simulations. Above, the curve smoothens and approaches the expected value of $\kappa$.  
+
+\begin{figure}[ht]
+  \centerline{\includegraphics[width=\textwidth]{figures/d3y_2pc_ww_3Re_0.079.png}}
+  \caption{Two-point correlation of w-component in y-direction at $z^-\approx 0.08$. The horizontal line at $B_{ww}=0.3$ is indicative of the average size of turbulent structures in the flow.}
+  \label{fig:2pc_008}
+\end{figure}
+
+In order to estimate the quality of the flow resolution, the horizontally averaged two-point correlation can be utilized. For an LES with an isotropic grid and periodic horizontal boundaries, the span-wise two-point correlation of the vertical velocity component, $B_{ww}(y^*)$, indicates how well the flow is resolved \citep{wurps2020grid}. The two-point correlation is defined as 
+\begin{align}
+  B_{xx}\left(x^*\right) = \langle u\left(x-x^*\right)u\left(x\right)\rangle/\sigma_u^2,
+\end{align}
+(other components and directions accordingly). We define $\sigma$, the average size of a structure in the flow, as the separation at which the two-point correlation drops to 0.3, i.e. $B_{ww}(\sigma^\star) = 0.3$. Fig.\,\ref{fig:2pc_008} shows the two-point correlations at a height $z^-\approx 0.08$, right inside the logarithmic layer. The number of cells by which the corresponding structure is resolved is then $\sigma/\Delta$. All cases show a similar behaviour, irrespective of the Reynolds number: the average size of the structure decreases with finer resolution. and it approaches a limit. The structure size of cases ReX\_150 and ReX\_200 agrees well, indicating convergence. Furthermore, the number of cells by which the structures are resolved exceeds four from the resolution of ReX\_150 on. This corresponds to the resolution from which on a logarithmic layer with a constant $\kappa$ can be seen. It also fits to the rule of thumb given in \cite{wurps2020grid}, that in a sufficiently resolved part of an LES, the average structures of the w-component in y-direction should be resolved by at least 4 cells. The dynamic closure shows structures that are slightly smaller than the structures of $ReX\_200$, which is caused by a tendency to lower eddy-viscosities and, hence, a weaker coupling of neighboring grid cells.
+
+\begin{figure}[ht]
+  \centerline{\includegraphics[width=\textwidth]{figures/d3y_2pc_ww_3Re_4.png}}
+  \caption{Two-point correlation of w-component in y-direction at the 8th grid point above the surface}
+  \label{fig:2pc_4}
+\end{figure}
+
+In vicinity of the surface, the two-point statistics crucially depend on how the surface-interaction is modelled \citep{maronga2014monin}, which may cause strong sensitivity on the resolution. Indeed, the two-point correlations $B_{ww}(y^*)$ evaluated at the 8th grid point above the bottom (Fig.~\ref{fig:2pc_4}) appear rather universal. This is in spite of different physical heights corresponding to this grid point in the simulations ($z^-=0.16, 0.08, 0.053, 0.04, 0.04$ for $ReX\_50$, $ReX\_100$, $ReX\_150$, $ReX\_200$, $ReX\_dyn$, respectively). For $Re1$, the curves almost collapse perfectly while for $Re2$ and $Re3$ we see slightly larger structures for $ReX\_50$ and slightly smaller structures for $ReX\_dyn$. This means that even 8 points above the lower boundary the smallest size of the turbulent structures rather depends on the grid cell size than on the actual height above the ground. According to the above findings and \cite{maronga2014monin}, the flow should start to be well resolved from here on (above the seventh grid point). And indeed, the number of resolving cells is very close to 4 for $Re1$ and between 3 and 4 for $Re2$ and $Re3$, which is close to the recommended 4 cells.
+
+%
+\subsection{Logarithmic layer span-wise velocity}
+
+\begin{figure}[ht]
+  \centerline{\includegraphics[width=\textwidth]{figures/d3y_3Re_v_outer_lin.png}}
+  \caption{Span-wise velocity component in outer scaling}
+  \label{fig:3Re_v_lin}
+\end{figure}
+
+The span-wise velocity component in the lower part of the boundary layer is shown in Fig.~\ref{fig:3Re_v_lin}. The orientation of the grid is chosen so that the stress at the bottom points into the x-direction; therefore, the v-component should be very small at the first grid point ($V(z=\Delta/2)\ll u_\star$). Particularly for the higher $\RE$, $-V^+$ is in the vicinity of $u_\star$ in the coarse simulations but approaches zero with higher resolution, indicating insufficient turning of the wind vector and a lower-than-expected $\alpha$.
+
+In the lowest part of $Re1$ ($z^-\lesssim 0.05$), a portion of the viscous layer is visible, where the velocity is slightly underestimated by the LES. Above, the simulations Re1\_200 and Re1\_dyn align closely with the theoretical curve. Lower resolution results in an overestimation of velocity in the logarithmic layer, which is consistent with a lack of large eddies and thus too little mixing, reduced turbulence intensity and increased velocity gradients. Around $z^-=0.25$, while blending into the Ekman layer, the curves cross each other, and aloft this point, the coarse simulations underestimate the velocity.
+
+For the higher $Re$, all simulations overestimate the velocity in the logarithmic layer, while finer resolutions lead to lower velocity and better agreement with the theoretical curve. Again, we observe a crossing of the curves between $z^-=0.2$ and $z^-=0.25$. The rapid increase and steeper profile in the coarser simulations may be due to the layers being coupled via fewer cells, resulting in less effective vertical momentum redistribution.
+
+\subsection{Ekman layer}
+
+Above the logarithmic layer the Ekman layer follows, characterized by a change of wind direction. While some studies, such as \cite{jiang2018large}, speculate about the existence of a second logarithmic layer, we did not find evidence of it, neither in the theoretical formulation nor in our simulations. The trajectory of the wind velocity vector is depicted by hodographs, as shown in Fig. \ref{3Re_hodograph}. The hodograph of Re1\_X is followed quite closely by all resolutions. Hence, all simulations of the low-$\RE$ case---even Re1\_50---are resolved sufficiently to closely capture the course of the wind vector in the Ekman layer. The higher $\RE$ behave differently in the sense that the hodographs lie inside of the theoretical hodograph. An increased resolution ensures that at least the lowest grid point approaches the hodograph while the course of the hodograph's upper right part still does not reach the theoretical curve. 
+
+In Fig. \ref{3Re_hodograph}, the cross indicates the lowest grid point, and the plus sign indicates the height from which the velocity for the boundary condition is taken from. To avoid using a velocity from the first layer of the simulation, where the turbulent flow is poorly resolved, we selected the horizontal velocity near $z^-=0.1$. At this height, the mean velocity has already veered away from the direction of the surface stress by around one-third of $\alpha$. However, the veering does not appear to affect the resulting bulk stress $u_\star$ at the bottom: all but the coarsest resolutions yield a $u_\star$ very close to the theoretical reference.
+
+\begin{figure}[ht]
+  \centerline{
+	\includegraphics[width=\textwidth]{figures/d3y_3Re_Ekman_lin.png}
+}
+  \caption{Shear-aligned velocity deficit in outer scaling. Solid lines: U-component, dashed lines: V-component}
+  \label{fig:3Re_Ekman}
+\end{figure}
+
+The shear-aligned velocity deficit $U^--U^-_G$ (v-component accordingly) agrees well with the expected DNS-based profiles (see Fig. \ref{fig:3Re_Ekman}). The largest deviations occur in the coarsest LES near the super-geostrophic maximum of the U-component. Finer resolution leads to excellent agreement, which also holds for the higher $\RE$. The super-geostrophic maximum is a consequence of vertical redistribution of momentum across the ABL; less redistribution leads to a less pronounced maximum. At the same time, of course, one would expect an increased level of turbulence to cause a flatter hodograph. However, surface veering is primarily influenced by the interplay of surface-layer turbulence and the prescribed roughness while the profile in the Ekman layer is resolved.
+
+For higher Reynolds numbers ($Re2$ and $Re3$), the LES does not reach the maximum velocity in x-direction, and the approach of the geostrophic wind in the upper boundary layer occurs at lower heights than predicted by theory. This discrepancy is even more pronounced for the V-component, where the maximum value is at a significantly lower height than in the theoretical curve. In general, finer resolution leads to a lower location of the maximum. This lower maximum might also explain the too high velocities observed in the logarithmic layer for the higher $Re$.
+
+
+\section{Conclusions}
+\label{conclusion}
+
+The truly neutral Ekman boundary layer---absent of capping inversions, non-statio\-narity, and surface heterogeneity---is studied as a prototype representation of the ABL. For the first time, an LES of the Ekman layer is \emph{a posteriori} validated against a DNS for an identical configuration. Despite the common assumption that viscosity as a parameter drops out in LES as a consequence of the turbulence closure, we considered a range of scale separations ($\RE$) and found that for an exact representation of the surface turning and wall friction as well as the wind-turning profile, viscous effects need consideration. We derive an analytical relation demonstrating that --- given fixed surface properties --- the specification of $z_0$ implicitly defines a viscosity. The LES suffer from the dilemma, that in Ekman flow, some aspects of crucial importance happen on relatively small scales, such as the rotation-surface interaction which is confined to the inner layer.
+
+With the wind-profile formulation developed in Part 1 of this work, we establish a reference based on first principles for intermediate $\RE$, and a quasi-reference for geophysical $\RE$. While we acknowledge that both the LES and the wind-profile model suffer from assumptions for high $\RE$, their quantitative agreement across a wide range of scale separations hints towards consistency. The grid convergence of LES towards the theoretical profiles underpins the inviscid scaling hypotheses in the development of the theory underlying part 1 of this paper. This approach raises our confidence in the LES to a new level for the direct comparison with a resolving simulation. Furthermore, it allows us to extend the insight from DNS to atmospheric scale where an approach through DNS is clearly infeasible for computational constraints. 
+
+
+We simulated three different Reynolds numbers while DNS data is available for the lowest $\RE$ only. For this lowest $\RE$, viscous forces significantly contribute to the balance of forces on the LES grid, and we adapted the LES code to consider the molecular fluid viscosity in addition to the modeled eddy-viscosity. We did not introduce a roughness length $z_0$ at the lower boundary as additional parameter but deduced $z_0$ according to the law of the wall and the shear velocity expected according to the semi-empirical law by \cite{spalart1989theoretical}. The interplay of geostrophic wind, shear velocity, and roughness length in the simulation showed remarkable consistency, which supports the value of the adapted boundary condition at the bottom \citep{maronga2017formulation}. The dependence of the LES solution on the grid cell size was investigated through a comparison of four different resolutions. The setups of all $\RE$ use similar grid sizes in terms of the outer scale ($\Delta^-=\Delta/\delta=const.$) but different grid sizes in terms of the inner scale ($\Delta^+=\delta^+\cdot const. = Re_\tau\cdot const.$). This means that from an inner scale perspective the high Reynolds numbers were much less well resolved.
+
+The convergence towards the theoretical profile expressed itself in different major aspects of the flow. To reach the expected total rotation $\alpha_\star$, a sufficient resolution was necessary. Furthermore, a sufficient vertical resolution was needed to simulate a logarithmic layer with a constant K\'arm\'an measure in some vertical extent.
+
+A resolution of 150 grid levels below $\delta$ resolves well the boundary layer across all $\RE$, in agreement with the findings of \cite{wurps2020grid}. Their study demonstrated successful resolution of the neutral simulation with more than 100 grid levels within the boundary layer $\delta_{95}$. The ratio $\delta_{95}/\delta$ is approximately $2/3$ (gradually decreasing with Reynolds number). Therefore, having 150 grid levels within $\delta$ roughly corresponds to around 100 grid levels within $\delta_{95}$.
+
+In summary, we synthesize some technical recommendations for the correct simulation of Ekman layer dynamics on a process level:
+\begin{itemize}
+\item The roughness parameter ($z_0$) essentially defines a Reynolds number of the LES Problem.
+\item $V|_{z=\Delta/2} \ll u_\star$ for an accurate matching of the hodograph and proper quantification of $\alpha_\star$.
+\item There should exist a logarithmic layer, or explicit consideration of viscous interaction with the surface; otherwise the assumptions of the surface closure (MOST / dynamic wall model) will fail.
+\item The parameters $\alpha_\star$ and $u_\star$ characterizing the bulk Ekman dynamics (across the vertical extent of the boundary layer) are matched by the LES if---in a three-dimensionally isotropic grid---more than 150 grid points are used in the vertical direction.
+\item For very high resolution or relatively small Reynolds number, the viscous friction needs to be taken into account as the modeled eddy viscosity may locally drop to zero.
+\end{itemize}
+
+When these considerations are taken into account, LES becomes possible at uncommonly low Reynolds number and  high resolution, which allows a quantitative comparison to state-of-the art DNS. Most importantly, we observe a clear $\RE$-dependency in the LES results, matching the predictions of the theoretical framework, illustrating that, also in  LES, the choice of $z_0$ implicitly defines a $\RE$.  
+
+Some resolution and best-practice constraints developed in this work are strong, in some cases even prohibitive. They result from the externality of the flow, i.e. the presence of non-turbulent fluid aloft which leads to a duality of scales (cf. section \ref{universal_profile}): both the inner and outer dynamics need to be visible to the resolved LES scales, at least to some extent. Despite these relatively strong constraints, we appreciate the capability of LES which, for example in case Re3, can appropriately match both $u_\star$, $\alpha_\star$ and the hodograph with the first grid point located at about $10^6$ wall units. This means, there is a gap in resolution in comparison to a true DNS of five to six orders of magnitude per direction; illustrating that a DNS at this scale would be prohibitive and will remain so for a foreseeable time. From this inner, or small-scale perspective, a requirement of few hundred grid points across the boundary layers is not a lot.
+
+The theoretical formulation of mean velocity profiles within the turbulent Ekman layer can serve as benchmark for model frameworks such as LES. These reference profiles offer a deeper analysis beyond the conventional assessment of the logarithmic increase in wind speed within the Prandtl layer. Comparing simulation results to the expected bulk parameters $u_\star$ and $\alpha_\star$ and to the hodograph and conducting a detailed evaluation of the wind speed profiles can yield valuable insights into the correct interplay among the model's grid resolution, turbulence closure, and boundary conditions. In the future, expanding the theoretical profiles to include additional aspects, such as temperature stratification, could potentially provide an even more valuable reference.
+
+\section{Acknowledgements}
+
+The simulations were performed at the HPC Cluster EDDY, located at the University of Oldenburg (Germany) and funded by the Federal Ministry for Economic Affairs and Energy (Bundesministeriums für Wirtschaft und Energie) under grant number 0324005. The DNS were generated on the HPC systems \texttt{juwels} at J\"ulich Supercomputing Centre under the (grants \texttt{stadit}, \texttt{hku24)} and \texttt{hawk} at H\"ochstleistungs\-rechen\-zentrum Stuttgart (Bundesprojekt \texttt{trainABL}, \#44187). CA acknowledges funding by the European Commission through ERC Starting Grant \#851374. We are thankful to the refubium team of FU Berlin for making available the DNS data used in this publication through their repository. 
+
+\bibliographystyle{spbasic_updated}
+\bibliography{papers.bib,ansorge.bib}
+
+\end{document}
+

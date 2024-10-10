@@ -23,13 +23,13 @@ plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
 print_table=False
-plot_outer_log=True
+plot_outer_log=False
 plot_convergence=False
 plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 test_inner_streamwise=False
-plot_profile_comparison=False
+plot_profile_comparison=True
 plot_vandriest=False
 plot_total_rot=False
 
@@ -77,27 +77,49 @@ def etling_profile(yp,ret,et_al,gamma_p=0.1):
     kappa=sc.KAPPA
     off_A=sc.C 
 
-    et_al = et_al * D2R 
+    et_al = et_al *D2R 
     
     ny,yp,ym=build_grid(ret,thick=3)
     i_01 =mp.geti(yp,gamma_p*ret)
-    zp = gamma_p*ret
+    yprandtl = gamma_p*ret
     surface_factor=np.exp(kappa*off_A) 
-    z0 = zp / (surface_factor*gamma_p*ret)
-    et_us = etling_us(z0,zp,et_al) 
+    z0 = yprandtl / (surface_factor*gamma_p*ret)
+    et_us = etling_us(z0,yprandtl,et_al)
+    iprandtl = mp.geti(yp,yprandtl)
+    print(iprandtl)
+
+    etling_pr_up=np.zeros(ny) 
+    etling_pr_vp=np.zeros(ny)
+    etling_ek_up=np.zeros(ny)
+    etling_ek_vp=np.zeros(ny)
+
+    print('ETLING PROFILE FOR RE_tau={}: us={}, al={}'.format(ret,et_us,et_al*D2R))
 
     d_ek_m = np.sqrt(2*kappa*gamma_p)
     d_ek_p = d_ek_m * ret
 
     # profiles
-    z_tilde = (yp - gamma_p*reTau ) / d_ek_p
+    z_tilde = (yp - gamma_p*ret ) / d_ek_p 
     z_arg=z_tilde[1:]+np.pi/4-et_al
     damp = np.exp(-z_tilde[1:])
-    etling_pr_up=1./sc.KAPPA*np.log(yp[1:]*surface_factor)*np.cos(et_al) 
-    etling_pr_vp=1./sc.KAPPA*np.log(yp[1:]*surface_factor)*np.sin(et_al)
-    etling_ek_up=(1-damp*np.sqrt(2)*np.sin(et_al)*np.cos(z_arg))/et_us
-    etling_ek_vp=damp*np.sqrt(2)*np.sin(et_al)*np.sin(z_arg)/et_us
-    
+    etling_pr_up[1:]=1./sc.KAPPA*np.log(yp[1:]*surface_factor)*np.cos(et_al) 
+    etling_pr_vp[1:]=1./sc.KAPPA*np.log(yp[1:]*surface_factor)*np.sin(et_al)
+    etling_ek_up[1:]=(1-damp*np.sqrt(2)*np.sin(et_al)*np.cos(z_arg))/et_us
+    etling_ek_vp[1:]=damp*np.sqrt(2)*np.sin(et_al)*np.sin(z_arg)/et_us
+
+    # fig=plt.figure(figsize=(5,3))
+    # ax=fig.add_axes([0.1,0.1,0.8,0.8])
+    # ax.plot(yp,etling_pr_up[:],label='prandtl',lw=3)
+    # ax.plot(yp[1:],etling_ek_up[1:],label='Ekman',  lw=3)
+
+    etling_ek_up[:iprandtl] = etling_pr_up[:iprandtl] 
+    etling_ek_vp[:iprandtl] = etling_pr_vp[:iprandtl]
+    # ax.plot(yp,etling_ek_up,label='combined u',ls='--',lw=2)
+    # ax.plot(yp,etling_ek_vp,label='combined v',ls='--',lw=2)
+    # lg=plt.legend(loc='best')
+    # ax.set_xscale('log')
+    # plt.show() 
+    # plt.close('all')
     return etling_ek_up,etling_ek_vp 
 
 sc=EkmanUniversalClass() # yp_ref,up_ref,wp_ref,deltap_ref,us_ref,al_ref*D2R-geo_rotate,plot=False)
@@ -1785,26 +1807,23 @@ if plot_profile_comparison:
         reTau = (re*us)**2/2.
         print(re,reTau,us,al/np.pi*180)
         ny,yp,ym=build_grid(reTau,thick=3)
-        i_gamma=mp.geti(yp,gamma_p*reTau)
-        print('I01:',i_gamma,yp[i_gamma],reTau)
-
-        ym[0] = 0.1*ym[1] 
         
         al=al/np.pi*180
         eek_u,eek_v = etling_profile(yp,reTau,al,gamma_p=gamma_p)
         up,vp=sc.profile_plus(yp,re)
         sc_dct=np.arctan2(up,vp)/np.pi*180-90 
         et_dct=np.arctan2(eek_u,eek_v)/np.pi*180 -90
-        et_dct[:i_gamma] = et_dct[i_gamma]
         et_dct[0] = et_dct[1]
         sc_dct[0] = 0. 
-        ax.plot(ym[1:],et_dct/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
-        ax.plot(ym,(-sc_dct+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
-        axm.plot(yp,np.sqrt(up*up+vp*vp),ls='--',c=ReD_col[re])
-        eek_u[:i_gamma] = 1/sc.KAPPA *np.log(yp[:i_gamma]*np.exp(sc.KAPPA*sc.C))*np.cos(al*D2R)
-        eek_v[:i_gamma] = 1/sc.KAPPA *np.log(yp[:i_gamma]*np.exp(sc.KAPPA*sc.C))*np.sin(al*D2R)
+        ax.plot(ym[1:],et_dct[1:]/et_dct[1] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
+        ax.plot(ym[1:],(-sc_dct[1:]+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
+        i30=mp.geti(yp,30)
+        print('I30:',i30)
+        axm.plot(ym[i30:],np.sqrt(up*up+vp*vp)[i30:]*us,ls='--',c=ReD_col[re])
+        axm.plot(ym[:i30],np.sqrt(up*up+vp*vp)[:i30]*us,ls='--',c=ReD_col[re],alpha=0.5)
         m=np.sqrt(eek_u**2+eek_v**2)
-        axm.plot(yp[1:],m,ls='-',c=ReD_col[re],label=r'$Re_D={}; u_\star={}G$'.format(re,int(us*1000)/1000.))
+        print(ym.shape,yp.shape,m.shape)
+        axm.plot(ym[1:],m[1:]/m[-1],ls='-',c=ReD_col[re],label=r'$Re_D={}; u_\star={}G$'.format(re,int(us*1000)/1000.))
     lg=plt.legend()
     lg.get_frame().set_linewidth(0.0)
     ax.set_xlabel(r'$z^-$')
@@ -1823,12 +1842,14 @@ if plot_profile_comparison:
     axm.set_xlim(1e-4,2)
     axm.set_xlabel(r'$z^-=y/\delta$')
     axm.set_ylabel(r'$|\mathbf{U}(z)|$')
-    axm.set_ylim(0,1.10) 
+    axm.set_ylim(0,1.1) 
     lg=plt.legend()  
     figm.suptitle('Matching at $z_{prandtl}=0.10\delta$',fontsize=10)
     figm.savefig('etling_magnitude_0.pdf',format='pdf') 
         
-    
+    plt.close('all')
+
+
     fig= plt.figure(figsize=(5,3))
     figm=plt.figure(figsize=(5,3))
     ax= fig.add_axes([0.12,0.15,.85,0.78])
@@ -1840,27 +1861,24 @@ if plot_profile_comparison:
         reTau = (re*us)**2/2.
         print(re,reTau,us,al/np.pi*180)
         ny,yp,ym=build_grid(reTau,thick=3)
-        i_gamma=mp.geti(yp,gamma_p*reTau)
-        print('I01:',i_gamma,yp[i_gamma],reTau)
 
-        ym[0] = 0.1*ym[1] 
         
         al=al/np.pi*180
         eek_u,eek_v = etling_profile(yp,reTau,al,gamma_p=gamma_p)
         up,vp=sc.profile_plus(yp,re)
         sc_dct=np.arctan2(up,vp)/np.pi*180-90 
         et_dct=np.arctan2(eek_u,eek_v)/np.pi*180 -90
-        et_dct[:i_gamma] = et_dct[i_gamma]
         et_dct[0] = et_dct[1]
         sc_dct[0] = 0. 
-        ax.plot(ym[1:],et_dct/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
-        ax.plot(ym,(-sc_dct+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
-        axm.plot(yp,np.sqrt(up*up+vp*vp)  ,ls='--',c=ReD_col[re])
-        eek_u[:i_gamma] = 1/sc.KAPPA *np.log(yp[1:i_gamma+1]*np.exp(sc.KAPPA*sc.C))*np.cos(al*D2R)
-        eek_v[:i_gamma] = 1/sc.KAPPA *np.log(yp[1:i_gamma+1]*np.exp(sc.KAPPA*sc.C))*np.sin(al*D2R)
+        ax.plot(ym[1:],et_dct[1:]/et_dct[0] ,ls='-',label=r'$Re_D={},\alpha_0={}^\circ$'.format(re,int(al*10)/10.),c=ReD_col[re]) 
+        ax.plot(ym[1:],(-sc_dct[1:]+sc_dct[-1])/sc_dct[-1] ,ls='--',c=ReD_col[re])
+        i30=mp.geti(yp,i30)
+        print('I30:',i30,ym[i30])
+        axm.plot(ym[i30:],np.sqrt(up*up+vp*vp)[i30:]*us  ,ls='--',c=ReD_col[re])
+        axm.plot(ym[:i30],np.sqrt(up*up+vp*vp)[:i30]*us  ,ls='--',c=ReD_col[re],alpha=0.5)
         m=np.sqrt(eek_u**2+eek_v**2)
-        #m=m/m[-1]
-        axm.plot(yp[1:],m,ls='-',c=ReD_col[re])
+        m=m/m[-1]
+        axm.plot(ym[1:],m[1:],ls='-',c=ReD_col[re])
     lg=plt.legend()
     lg.get_frame().set_linewidth(0.0)
     ax.set_xlabel(r'$z^-$')
