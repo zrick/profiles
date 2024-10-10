@@ -29,9 +29,10 @@ plot_re1600=False
 plot_les_comp=False
 plot_applications=False
 test_inner_streamwise=False
-plot_profile_comparison=True
+plot_profile_comparison=False
 plot_vandriest=False
 plot_total_rot=False
+plot_shear_vs_rotation=True
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -1782,17 +1783,107 @@ if test_inner_streamwise:
     plt.savefig('innertest.pdf',format='pdf')
     plt.close('all')
 
+ReD_col={500: 'blue',
+         1000:'orange',
+         1600:'red',
+         10000:'gray',
+         40000:'black' }
 
-    
+if plot_shear_vs_rotation: 
+
+    ReD_arr = [ 500,1000,1600, 10000, 40000]
+    fig=plt.figure(figsize=(5,3))
+    fig2=plt.figure(figsize=(5,3))
+    ax=fig.add_axes([0.15,0.15,0.83,0.80]) 
+    ax2=fig2.add_axes([0.15,0.15,0.83,0.80]) 
+
+
+    for re in ReD_arr: 
+
+        us,al=sc.ustar_alpha(re)
+        al=al/np.pi*180
+        reTau = (re*us)**2/2. 
+        ny,yp,ym=build_grid(reTau,thick=3)
+
+        up,vp=sc.profile_plus(yp,re)
+        um,vm=up/us,vp/us
+        up_z=np.gradient(up,yp,edge_order=2)
+        vp_z=np.gradient(vp,yp,edge_order=2)
+
+        alpha = np.arctan2(vp,up)
+        alpha_shear = np.arctan2(-vp_z,-up_z)
+        if re == 500:
+            ax.plot(ym,alpha,label='Re={} (DD)'.format(re),c=ReD_col[re],ls='--',alpha=0.5,lw=3)
+            ax.plot(ym,alpha_shear-alpha,label='stress vs. DD',c=ReD_col[re],ls='-')
+        else:
+            ax.plot(ym,alpha,label='Re={}'.format(re),c=ReD_col[re],ls='--',alpha=0.5,lw=3)
+            ax.plot(ym,alpha_shear-alpha,c=ReD_col[re],ls='-')
+
+        if re in files.keys():
+            f_nc = Dataset(files[re],'r')
+            u_geo=f_nc.variables['rU'][-1,-1]
+            w_geo=f_nc.variables['rW'][-1,-1]
+            al_geo = np.arctan2(w_geo,u_geo)
+            print(al_geo,al/180*np.pi)
+            u_flx = np.mean(f_nc.variables['Rxy'][:,:],axis=0)
+            w_flx = np.mean(f_nc.variables['Ryz'][:,:],axis=0) 
+            y_dat=f_nc.variables['y']
+            us_dat=np.mean(f_nc.variables['FrictionVelocity'][:])
+            ym_dat =y_dat/us_dat 
+            print(w_flx.shape,u_flx.shape)
+            print(f_nc.variables)
+            u_y=np.gradient(np.mean(f_nc.variables['rU'], axis=0),y_dat,edge_order=2)
+            w_y=np.gradient(np.mean(f_nc.variables['rW'], axis=0),y_dat,edge_order=2)
+
+            alpha_flux_dns = np.arctan2(w_flx,u_flx)
+            alpha_flux = alpha_flux_dns -al_geo+al/180*np.pi
+            alpha_flux =( (alpha_flux+np.pi) % (2*np.pi) ) - np.pi
+            alpha_shear_dns =  ( np.arctan2(w_y,u_y)-np.pi ) 
+            alpha_diff= ( alpha_shear_dns - alpha_flux_dns + 3*np.pi ) % (2*np.pi) - np.pi
+            if re == 500: 
+                ax.plot(ym_dat,alpha_flux,c=ReD_col[re],ls=':',lw=3,label='- (Flux Vector)')
+                ax2.plot(ym_dat[1:],alpha_diff[1:],c=ReD_col[re],label='Re={}'.format(re),ls='-')
+                #ax2.plot(ym_dat[1:],alpha_flux[1:],     c=ReD_col[re],label='Re={}'.format(re),ls='--')
+                #ax2.plot(ym_dat[1:],alpha_shear_dns[1:],     c=ReD_col[re],label='Re={}'.format(re),ls=':')
+            else:
+                ax.plot(ym_dat,alpha_flux,c=ReD_col[re],ls=':',lw=3)
+                ax2.plot(ym_dat[1:],alpha_diff[1:],label='Re_{}'.format(re),c=ReD_col[re],ls='-')
+                #ax2.plot(ym_dat[1:],alpha_flux[1:],     c=ReD_col[re],ls='--')
+                #ax2.plot(ym_dat[1:],alpha_shear_dns[1:],     c=ReD_col[re],ls=':')
+
+    ax.plot(ym,ym*0,c='black',lw=0.5,ls='-')
+    lg=fig.legend(loc='lower right',bbox_to_anchor=(0.63,0.15,0.35,0.6))
+    ax.set_xlim(0,1.2)
+    ax.set_xlabel(r'$z^-$')
+    ax.set_yticks([-np.pi,-np.pi/2,0,np.pi/2,np.pi])
+    ax.set_yticklabels([r'$-\pi$',r'$-\pi/2$',r'$0$',r'$\pi/2$',r'$\pi$'])
+    ax.set_ylim(-np.pi,np.pi/2)
+    ax.set_ylabel(r'Direction $[rad]$')
+    fig.savefig('stress_rotation.pdf',format='pdf')
+
+    ax2.plot(ym_dat,0*ym_dat,c='black',ls='-',lw=0.5)
+    ax2.set_xlim(0,1.5)
+    ax2.set_yticks([-np.pi/2,-np.pi/4,-np.pi/8,0,np.pi/8,np.pi/4,3/8*np.pi,np.pi/2]) 
+    ax2.set_yticklabels([r'$-\frac{\pi}{2}$',
+                         r'$-\frac{\pi}{4}$',
+                         r'$-\frac{\pi}{8}$',
+                         r'$0$',
+                         r'$\frac{\pi}{8}$',
+                         r'$\frac{\pi}{4}$',
+                         r'$\frac{3\pi}{8}$',
+                         r'$\frac{\pi}{2}$'])
+    ax2.set_ylim(-np.pi/4,np.pi/4)
+    ax2.set_xlabel(r'$z^-$')
+    ax2.set_ylabel(r'Misalignment $[$rad$]$')
+    lg2=fig2.legend(loc='lower right',bbox_to_anchor=(0.63,0.15,0.35,0.35))
+    fig2.savefig('misalignment.pdf',format='pdf')
+    plt.close('all')
+
 if plot_profile_comparison:
     # comparison for etling profile
     
     ReD_arr=[500, 1000, 1600,10000,40000] 
-    ReD_col={500: 'blue',
-             1000:'orange',
-             1600:'red',
-             10000:'gray',
-             40000:'black' }
+  
     
 
     

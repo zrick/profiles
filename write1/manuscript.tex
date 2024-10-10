@@ -1229,19 +1229,26 @@ For the higher layers of the ABL, the Ekman spiral is the simplest model availab
 %ETLING MODEL 
 A two-layer model consolidating both the logartihmic and Ekman layer can be obtained following the arguments by \cite{etling:2008}, cf. \cite{emeis:2018}. Given a surface veering and a matching height (extent of the logarithmic layer), a formulation for the velocity profile across both the logarithmic and the outer layer is obtained. A comparison using the surface veering based on our model and a matching height of $z_\text{prandtl}=0.05\delta$, which gives better results than the matching height of $0.1\delta$ suggested by \cite{etling:2008}, is shown in Fig.~\ref{fig:etling}. 
 % 
-The overall shape of velocity magnitude is matched apart from the viscous and buffer layer (cf. Fig.~\ref{fig:etling}b) that is neglected by the two-layer model. However, quantitative departures on the order of 10-20\% occur across the inner layer: it turns out that the non-rotating profile, of the two-layer model in the logarithmic region yields too low overall velocity as the spanwise component contributes to the velocity across the inner layer. 
+The overall shape of velocity magnitude is matched apart from the viscous and buffer layer (cf. Fig.~\ref{fig:etling}b) that is neglected by the two-layer model. However, quantitative departures on the order of 10\% occur across the inner layer: it turns out that the non-rotating profile, of the two-layer model in the logarithmic region yields too low overall velocity as the spanwise component contributes to the velocity across the inner layer. 
 % 
 Deviations also occur with respect to wind direction; despite the rather low matching height, a substantial fraction of the rotation occurs within the lower part of the ABL and about 20\% of the wind veer is not captured by the two-layer model. 
 % 
 As the overall veer is given, the non-captured veer close to the surface is then compensated across the logarithmic layer. In the upper part of the boundary layer, both profiles match well. 
 % 
-
-
 \begin{figure}
+  \textbf{(a)\hspace{0.48\textwidth}(b)}\\
   \includegraphics[width=0.5\textwidth]{../plot/etling_direction_1.pdf} 
   \includegraphics[width=0.5\textwidth]{../plot/etling_magnitude_1.pdf}
   \caption{Comparison of the DNS data (dashed lines) with the two-layer model proposed by Etling (solid lines) for different Reynolds number. Left panel shows the relative wind veer, right panel shows the velocity magnitude. The etling model is calibrated by the surface veer from the DNS and roughness parameter for the Etling model is chosen according to the correction factor $\exp{\kappa A}$ such that the total veer and velocity magnitude agree. DNS profile in the buffer layer, defined here as $z^+<30$ are shown as opaque dashed lines as the two-layer model does not consider viscous effects.}
   \label{fig:etling} 
+\end{figure}
+
+\begin{figure}
+  \textbf{(a)\hspace{0.48\textwidth}(b)}\\
+  \includegraphics[width=0.5\textwidth]{../plot/stress_rotation.pdf}
+  \includegraphics[width=0.5\textwidth]{../plot/misalignment.pdf} 
+  \caption{} 
+  \label{fig:alignment}
 \end{figure}
 outlined in 
 \textbf{Compare} Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
