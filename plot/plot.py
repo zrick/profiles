@@ -18,7 +18,7 @@ D2R = np.pi / 180.
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
 plot_ekman_ideal=False 
-plot_summary=False
+plot_summary=True
 plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
@@ -32,7 +32,7 @@ test_inner_streamwise=False
 plot_profile_comparison=False
 plot_vandriest=False
 plot_total_rot=False
-plot_shear_vs_rotation=True
+plot_shear_vs_rotation=False
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -1204,8 +1204,8 @@ if plot_summary :
         ax3.plot(umr_loc,wmr_loc,alpha=alpha_loc,c='black') #c=c_loc)
     
         i_loc = mp.geti(wmr_loc,np.amax(wmr_loc))
-        if re_loc < 10001:
-            ax3.text(umr_loc[i_loc],wmr_loc[i_loc],'Re='+str(re_loc),c='black')#c_loc)
+        if re_loc in [500, 1600,5000,30000,1000000]:
+            ax3.text(umr_loc[i_loc]*0+0.8,wmr_loc[i_loc],'Re='+str(re_loc),c='black',alpha=alpha_loc)#c_loc)
             yp01 = 0.08 *us_loc**2 / nu_loc
 
         ax2.plot(yp_loc[1:]*sqdp, up_loc[1:], c='blue',lw=2,ls='-',alpha=alpha_loc)

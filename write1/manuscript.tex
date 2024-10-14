@@ -1241,8 +1241,25 @@ Deviations also occur with respect to wind direction; despite the rather low mat
 % 
 As the overall veer is given, the non-captured veer close to the surface is then compensated across the logarithmic layer. In the upper part of the boundary layer, both profiles match well. 
 % 
-
-
+\par
+% 
+The interpretation of flux and gradient profiles in terms of the K-theory (cf. Sec.~\ref{sec:scaling}, Fig.~\ref{fig:stresses}) suggests a certain universality in the inner layer, while a global collapse, i.e. across the boundary layer, is not 
+obtained. 
+% 
+While the K-Profiles concern the total stress, a consistent formulation of the turning would also require its partitioning to the individual components, i.e. 
+the orientation of the stress vector $(\overline{u'w'}, \overline{v'w'})$ in the horizontal plane. If K-theory shall be used, this stress vector needs to be anti-parallel to the corresponding stress vector $(\partial_z U, \partial_z V)$. 
+% 
+Fig.~\ref{fig:alignment} shows the direction of the velocity, gradient and stress 
+vectors across the boundary layer. It turns out that the negative stress vector with respect to the wind direction and the flux vectors (absolute) have an approximately similar direction. 
+%
+It appears that both rotate by about $270^\circ$ ($3\pi/2$) across the boundary layer. 
+%
+Apart from the lower part of the Ekman layer ($0.2<z^-<0.7$), where there is a slight dependence on $Re$, the direction of stress appears to be universal, which is a consequence of the Ekman profile introduced in Sec.~\ref{sec:ekman}. 
+%
+However, this implies the a misalignment between the flux and the stress on the order of the wind turning, and indeed Fig.~\ref{fig:alignment}b shows a misalignment up to $90^\circ$. This is in accordance with the expectation by \cite[][\S 7.18]{Townsend:1976} and prevents the transfer of Energy from the mean flow to turbulence at these heights, thus preventing a boundary-layer growth. 
+% 
+While the behavior in the inner layer seems to depend on $Re$, there emerges universality in the misalignment across the outer layer, suggesting that a universal consideration of misalignment in the context of K-theory is possible for formulations of higher-order quantities. 
+%
 \begin{figure}
   \textbf{(a)\hspace{0.48\textwidth}(b)}\\
   \includegraphics[width=0.5\textwidth]{../plot/stress_rotation.pdf}
@@ -1250,35 +1267,65 @@ As the overall veer is given, the non-captured veer close to the surface is then
   \caption{Panel \textbf{(a)} shows the wind direction (DD) as thick dashed lines and the direction of stress relative to DD as thin solid lines, both according to our profile model. The direction of the negative flux vector $(\overline{u'w'},\overline{v'w'})$ based on DNS data is shown as a dotted line. In panel \textbf{(b)}, we plot the misalignment, i.e. the angle, between the flux vector and the shear vector, where the shear vector is defined accordingly as $(\p_z U, \p_z V)$.} 
   \label{fig:alignment}
 \end{figure}
-outlined in 
-\textbf{Compare} Gryning (2007); highlight explicit knowledge on veering-profile $\rightarrow$ directional sheer;
 
-\textbf{Remember} of interpretation in the context of eddy viscosity (Fig.~\ref{fig:stresses}) 
-Consider Townsend ``Turbulent Shear Flow''  Chapter 7.18: p. 319 
-%
+
+% \textbf{Compare} Gryning (2007); highlight explicit knowledge on veering-profile % $\rightarrow$ directional sheer;
+%% \textbf{Remember} of interpretation in the context of eddy viscosity (Fig.~\ref{fig:stresses}) 
+% Consider Townsend ``Turbulent Shear Flow''  Chapter 7.18: p. 319 
+% Implications for \textbf{K-theory} (we now can consider that shear and stress are not necessarily perfectly aligned).
+% $\rightarrow$ can we do something to infer a K-profile from these theoretical considerations? 
 \begin{figure}
   \phantom{AAA}\textbf{(a)\hspace{0.3\textwidth}(b)\hspace{0.3\textwidth}(c)}\\
   \includegraphics[width=\textwidth]{../plot/ekman_profiles.pdf}
   \caption{ \textbf{(a)} Velocity deficity, \textbf{(b)} velocity profile in shear-aligned hodographs and \textbf{(c)} hodograph in geostrophy-aligned coordinates.
     Thick, solid lines show theory, dashed lines data from DNS. }
-  \label{fig:hodograph} 
+  \label{fig:summary} 
 \end{figure} 
 
 %
 \par%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-Implications for \textbf{K-theory} (we now can consider that shear and stress are not necessarily perfectly aligned).
-$\rightarrow$ can we do something to infer a K-profile from these theoretical considerations? 
+
 %
-\begin{figure}
-  \includegraphics[width=\textwidth]{../plot/mag_dir.pdf} 
-  \caption{Total velocity and veering (in degrees) vs inner and outer height.
-    Dashed lines show DNS data, thick lines are from semi-empirical theory.} 
-\end{figure} 
+%\begin{figure}
+%  \includegraphics[width=\textwidth]{../plot/mag_dir.pdf} 
+%  \caption{Total velocity and veering (in degrees) vs inner and outer height.
+%    Dashed lines show DNS data, thick lines are from semi-empirical theory.} 
+%\end{figure} 
 %
 \section{Conclusions}
 %
-Applications:
+\subsection{Summary}
+We investigate the wind veer in Ekman flow. Based on scaling considerations and direct numerical simulation spanning on decade in external separation from $Re_\Lambda=1.25 \times 10^5$ to $Re_\Lambda=1.28\times 10^6$, we derive a universal formulation for the both horizontal components of the velocity profile in a stationary, smooth Ekman layer.  
+% 
+This formulation is consistent with the DNS data and also yields reasonable results 
+at geophysical scale separation; the logarithmic law of the mean velocity is recovered with the well-known limits and deviations towards the surface and Ekman layer. 
+%
+The classic formulation of the Ekman layer, employing the surface boundary condition, is replaced by a modified solution that can be obtained by Ekman's system of governing equations, but using different boundary conditions that are more appropriate of the actual situation encountered in the planetary boundary layer. 
+% 
+The three parameters that characterize this boundary condition are estimated based on DNS data. 
+% 
+\par
+% 
+To quantify the spanwise velocity component consistently across the boundary layer, 
+we derive a universal scaling of the spanwise velocity component in a shear-aligned reference frame. For the \emph{inner layer}, we find the mixed scaling  
+\[V^{\alpha_\star}/G = \frac{1}{\delta^+} f(z^+),\]
+that is, the spanwise velocity normalized by the outer velocity scale is a universal function of the inner height and Friction Reynolds number $Re_\tau = \delta^+$. 
+% 
+This scaling is derived here based on scaling considerations, and it is in excellent agreement with the DNS data available.   
+% 
+In the outer layer, the spanwise velocity follows outer scaling, consistently with the Ekman model mentioned above (Sec.~\ref{sec:ekman}).
+% 
+\par
+%
+The velocity profiles are shown in inner and outer scaling as well as in ho\-do\-graph- view in Fig.~\ref{fig:summary}. The shear-aligned velocity deficit is shown in outer scaling highlighting the universality in the outer layer. 
+% 
+In the inner layer, the logarithmic profile is (blue, panel \textbf{(b)}) is ecnountered across a widening region for increasing Reynolds number. 
+% 
+In this simple inner scaling, the spanwise velocity (which follows a mixed scaling) 
+does not collapse but seems to depend on $Re$ (the collapse is seen in Fig.~\ref{fig:inner_w}). 
+
+\subsection{Applications \& Outlook} 
 \begin{itemize}
 \item reference-shear for neutral profile approaches(systematic!) $\rightarrow$ wind engineering! 
 \item initial condition for LES/DNS to eliminate/minimize inertial oscillation in Benchmark simulations
