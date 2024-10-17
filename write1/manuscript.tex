@@ -1295,7 +1295,6 @@ While the behavior in the inner layer seems to depend on $Re$, there emerges uni
 %
 \section{Conclusions}
 %
-\subsection{Summary}
 We investigate the wind veer in Ekman flow. Based on scaling considerations and direct numerical simulation spanning on decade in external separation from $Re_\Lambda=1.25 \times 10^5$ to $Re_\Lambda=1.28\times 10^6$, we derive a universal formulation for the both horizontal components of the velocity profile in a stationary, smooth Ekman layer.  
 % 
 This formulation is consistent with the DNS data and also yields reasonable results 
@@ -1320,20 +1319,32 @@ In the outer layer, the spanwise velocity follows outer scaling, consistently wi
 %
 The velocity profiles are shown in inner and outer scaling as well as in ho\-do\-graph- view in Fig.~\ref{fig:summary}. The shear-aligned velocity deficit is shown in outer scaling highlighting the universality in the outer layer. 
 % 
-In the inner layer, the logarithmic profile is (blue, panel \textbf{(b)}) is ecnountered across a widening region for increasing Reynolds number. 
+In the inner layer, the logarithmic profile (blue, panel \textbf{(b)}) is ecnountered across a widening region for increasing Reynolds number. 
 % 
 In this simple inner scaling, the spanwise velocity (which follows a mixed scaling) 
-does not collapse but seems to depend on $Re$ (the collapse is seen in Fig.~\ref{fig:inner_w}). 
+does not collapse but seems to depend on $Re$ (the collapse is seen in Fig.~\ref{fig:inner_w}).  
+% 
+While, at a fixed height, the spanwise velocity scales approximately as $Re_\tau^{-1}$, the fraction 
+of turning that is encountered within the inner layer of the flow amounts to about 1/3 of the total wind veer 
+(Fig.~\ref{fig:etling}a).
+% 
+The hodographs show the well-known Ekman shape with the laminar profile as an outer limit and 'flatter' 
+hodographs, corresponding to less turning, for increasing Reynolds number. 
+% 
+Importantly, our results suggest that there is no lower limit of the turning. 
+% 
+This implies that, despite its very large scale separation and huge Reynolds number, the ABL cannot be 
+in the 'limit' of high Reynolds number from the perspective of wind veer.  
 
-\subsection{Applications \& Outlook} 
-\begin{itemize}
-\item reference-shear for neutral profile approaches(systematic!) $\rightarrow$ wind engineering! 
-\item initial condition for LES/DNS to eliminate/minimize inertial oscillation in Benchmark simulations
-\item
-\end{itemize} 
 
-\bibliographystyle{spbasic_updated} 
-\bibliography{ansorge}
+
+%\subsection{Applications \& Outlook} 
+%\begin{itemize}
+%\item reference-shear for neutral profile approaches(systematic!) $\rightarrow$ wind engineering! 
+%\item initial condition for LES/DNS to eliminate/minimize inertial oscillation in Benchmark simulations
+%\item
+%\end{itemize} 
+
 
 \appendix
 
@@ -1454,6 +1465,36 @@ for large $\RE$.
 \end{subequations}
 
 
+\vspace{1em}
+\noindent\textbf{Acknowledgements} This study is funded by the European Commission's 7$^{th}$ Framework Programme through 
+the ERC 2019 Starting Grant trainABL (ID 851374). Simulations were carried out on the German supercomputing systems 
+\texttt{hawk} at H\"ocstleistungsrechenzentrum Stuttgart (Bundesprojekt 44187) and \texttt{juwels} at Gauss Centre for supercomputing, 
+For\-schungs\-zen\-trum J\"ulich (Projects \texttt{hku24} and \texttt{stadit}). 
+We extend our thanks to Sally Issa for valuable feedback on the manuscript. 
+
+
+
+\section*{Declarations} 
+
+\noindent\textbf{Author Contributions} CA conceived the study, acquired funding, performed the simulation, analysed and plotted the data for this work. CA and HW interpreted the data and compiled the manuscript. 
+\vspace{1em} 
+
+\noindent\textbf{Funding} CA is funded by ERC Starting Grant \emph{trainABL} (ID 851374). Open Access funding for this publication through the DEAL agreement. 
+\vspace{1em}
+
+\noindent\textbf{Data Availability} The data is available in long-term repositories and indexed by DOIs as cited in the list of references. Further analysis tools and processed data can be made available upon direct request. \vspace{1em}
+
+\noindent\textbf{Conflict of Interest} The Authors declare no competing interest.
+\vspace{1em}
+
+\noindent\textbf{Open Access} This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made.  To view a copy of this licence, visit \href{http://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/}.
+
+
+\bibliographystyle{spbasic_updated}  
+\bibliography{ansorge}
+
+
+\end{document}
 \appendix
 \section{Old Stuff}
 \todo{OLD FROM HERE} 
