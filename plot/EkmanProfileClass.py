@@ -267,6 +267,7 @@ class EkmanUniversalClass:
         u[i_mtc:]  = log_law[i_mtc:] 
             
         # outer-layer deficit
+        trans_scale=2.0
         ctr=0.28- 2.25*np.sqrt(1./re)
         wgt_o=self.erf_transition(trans_scale,ctr,ym[1:]) #(sp.special.erf(trans_scale*np.log(ym[1:]/ctr))+1)/2 #starts at index 1! 
         u[1:] -= ( wgt_o*(log_law[1:]-ous[1:]) )

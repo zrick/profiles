@@ -18,7 +18,7 @@ D2R = np.pi / 180.
 use_data=False   # if true -- the netcdf files from DNS are needed 
 plot_ustar_alpha=False
 plot_ekman_ideal=False 
-plot_summary=True
+plot_summary=False
 plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
@@ -32,7 +32,7 @@ test_inner_streamwise=False
 plot_profile_comparison=False
 plot_vandriest=False
 plot_total_rot=False
-plot_shear_vs_rotation=False
+plot_shear_vs_rotation=True
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -641,9 +641,9 @@ if plot_profiles:
     plt.show()
     plt.close('all') 
 
-    fig1=plt.figure(figsize=(12,4.5))
-    ax1=fig1.add_axes([0.06,0.11,0.43,0.87])
-    ax2=fig1.add_axes([0.56,0.11,0.43,0.87])
+    fig1=plt.figure(figsize=(9,3.25))
+    ax1=fig1.add_axes([0.08,0.13,0.41,0.85])
+    ax2=fig1.add_axes([0.56,0.13,0.43,0.85])
 
     fig2=plt.figure(figsize=(5,4))
     ax3=fig2.add_axes([0.1,0.1,0.85,0.85]) 
@@ -656,7 +656,7 @@ if plot_profiles:
     vlog=sc.profile_log(ylog) 
     ax1.plot(ylog,sc.profile_log(ylog),lw=3,ls='-',c='black',alpha=0.5,
              label=r'$\kappa^{-1} log z^+ + C$')
-    ax1.plot([50,50],[0,21],ls='--',lw=0.5,c='black') 
+    # ax1.plot([50,50],[0,21],ls='--',lw=0.5,c='black') 
     for re in [500,750,1000,1300,1600]:
         c=colors[re]
         nu=2./re**2
@@ -680,8 +680,8 @@ if plot_profiles:
         ax2.plot(ym[1:],um[1:]-um[-1],ls='-',c=c,lw=2)
         ax2.plot(ym[1:],vm[1:]-vm[-1],ls='--',c=c,lw=2)
         ax2.plot([0,1.5],[0,0],ls='--',lw=0.5,c='black')
-        ax2.plot([0.3,0.3],[-7,1.1],ls='--',lw=0.5,c='black')
-        ax2.plot([0.15,0.15],[-7,1.1],ls='--',lw=0.5,c='black')
+        #ax2.plot([0.3,0.3],[-7,1.1],ls='--',lw=0.5,c='black')
+        #ax2.plot([0.15,0.15],[-7,1.1],ls='--',lw=0.5,c='black')
 
         i01 = mp.geti(ym,0.15)
         i50 = mp.geti(yp,50)
@@ -708,7 +708,7 @@ if plot_profiles:
     ax1.set_xscale('log')
     ax1.set_xlim(1,2e3) 
     ax1.set_xlabel(r'$z^+$')
-    ax1.set_ylabel(r'$U_{\alpha+}, V^{\alpha+}$')
+    ax1.set_ylabel(r'$U^{\alpha+}, V^{\alpha+}$')
     ax1.set_ylim(0,21)
 
     lg1=ax1.legend(loc='best')
@@ -1791,7 +1791,7 @@ ReD_col={500: 'blue',
 
 if plot_shear_vs_rotation: 
 
-    ReD_arr = [ 500,1000,1600, 10000, 40000]
+    ReD_arr = [ 500, 1000, 1600 , 40000]
     fig=plt.figure(figsize=(5,3))
     fig2=plt.figure(figsize=(5,3))
     ax=fig.add_axes([0.15,0.15,0.83,0.80]) 
@@ -1915,8 +1915,6 @@ if plot_profile_comparison:
         m=np.sqrt(eek_u**2+eek_v**2)
         print(ym.shape,yp.shape,m.shape)
         axm.plot(ym[1:],m[1:]/m[-1],ls='-',c=ReD_col[re],label=r'$Re_D={}; u_\star={}G$'.format(re,int(us*1000)/1000.))
-    lg=plt.legend()
-    lg.get_frame().set_linewidth(0.0)
     ax.set_xlabel(r'$z^-$')
     ax.set_ylabel(r'relative veer $\alpha/\alpha_0 [1]$')
     ax.set_xscale('log')
@@ -1926,17 +1924,20 @@ if plot_profile_comparison:
     ax.annotate('Error',(0.21,0.5),color='gray',rotation=90 )
     ax.annotate('DNS data',(0.040,0.36),  rotation=-30 )
     ax.annotate('2-layer model',(0.3,0.35),rotation=-70 ) 
+    lg=ax.legend()
+    lg.get_frame().set_linewidth(0.0)
     fig.suptitle('Matching at $z_{prandtl}=0.10\delta$',fontsize=10)
-    fig.savefig('etling_direction_0.pdf',format='pdf')
+    fig.savefig('etling_direction_0.png',format='png')
 
     axm.set_xscale('log')
-    axm.set_xlim(1e-4,2)
+    axm.set_xlim(1e-3,2)
     axm.set_xlabel(r'$z^-=y/\delta$')
     axm.set_ylabel(r'$|\mathbf{U}(z)|$')
     axm.set_ylim(0,1.1) 
-    lg=plt.legend()  
+    lgm=axm.legend()
+    lgm.get_frame().set_linewidth(0.0)
     figm.suptitle('Matching at $z_{prandtl}=0.10\delta$',fontsize=10)
-    figm.savefig('etling_magnitude_0.pdf',format='pdf') 
+    figm.savefig('etling_magnitude_0.png',format='png') 
         
     plt.close('all')
 
