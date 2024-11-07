@@ -366,7 +366,10 @@ The turbulence scale separation in a wall-bounded flow is commonly characterized
 where $\delta=u_\star/f$ and we use a superscript $'+'$ to denote normalization by inner turbulence
 scales ($u_\star, \nu$).
 %
-Another common measure of scale separation is the Reynolds number $\RE_D = G D /\nu $  defined by the laminar Ekman layer thickness $D=\sqrt{2\nu/f}$.
+Another common measure of scale separation is the Reynolds number 
+\begin{equation}
+  \RE_D = \frac{G D}{\nu} 
+\end{equation}  defined by the laminar Ekman layer thickness $D=\sqrt{2\nu/f}$.
 %
 \par
 %
@@ -1373,7 +1376,7 @@ changes in $\RE$ impact on the vertical partitioning of rotation.
 
 \appendix
 
-\section{Laminar Ekman solution with consideration of inner layer}
+\section*{Appendix A: Laminar Ekman solution with consideration of inner layer}
 \label{app:ekman_solution}
 The following Ekman system is obtained by averaging the Navier--Stokes equations horizontally and over time and neglecting the turbulent transport terms (turbulence can then be considered via the eddy-viscosity concept through variations in the viscosity $\nu$):
 \begin{subequations}
@@ -1398,7 +1401,7 @@ where the constants $U_\infty$, $V_\infty$ set the top boundary condition and $A
 The most common boundary condition for a surface Ekman layer is $A=U_{\infty}=G$, $B=0$, and $V_{\infty}=0$.
 %
 The lower boundary condition, however, neglects the existence of the surface layer, and it appears reasonable to define
-$A=c G$ where $c<1$ is a constant that icorporates the increased shear in the surface layer.
+$A=c G$ where $c<1$ is a constant that incorporates the increased shear in the surface layer.
 %
 Given a 'matching height' $z_{match}$ and normalized matching height $\xi=\gamma z_\text{match}$ in the upper part of the inner layer, we can match the Ekman profile
 to the inner layer by letting
@@ -1445,7 +1448,8 @@ the eddy viscosity and an offset in $\xi$, here we let $B=0$.
 %% \end{eqnarray}
 %% \end{subequations} 
 
-\section{Matching the spanwise velocity profiles in the inner layer}
+\section*{Appendix B: Matching the spanwise velocity profiles in the inner layer}
+
 \label{app:log-coefficients}
 The spanwise profile in vicinity of the surface is given by
 $V/G=f_{V,\mathrm{visc}}\delta ^+$ with
