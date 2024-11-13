@@ -98,7 +98,7 @@
 %
 \section{Introduction}
 
-The Coriolis force bends the path of motion on a rotating sphere and establishes geostrophic equilibrium when in balance with a pressure gradient force. Wind veer away from the wind direction in geostrophic equilibrium is
+The Coriolis force bends the apparent path of motion on a rotating sphere and establishes geostrophic equilibrium when in balance with a pressure gradient force. Wind veer away from the wind direction in geostrophic equilibrium is
 (i) due to direct frictional effects in the very vicinity of the surface and
 (ii) due to turbulence which exerts indirect frictional effects; these effects
 cause a slow-down of the mean wind reducing the Coriolis force thus turning the wind
@@ -147,7 +147,7 @@ and numerical modelling \citep{spalart:PF2008, spalart:PF2009, ansorge:BM2014, a
 \par
 %
 Attempts were also undertaken to obtain profiles of the wind speed: 
-One approach is to match the inner and outer layer at a reference height as usggested by
+One approach is to match the inner and outer layer at a reference height as suggested by
 \cite{etling:2002, emeis:2018}  (Sec. 21.10; Eq. 21.48); they choose the Prandtl-layer height $z_\text{Prandtl}$ to match
 the wind speed profiles, which, however, requires external prescription of $\alpha(z_\text{prandtl})$, the veering at that height. 
 A one-dimensional profile with constant veering is given by \citet[Sec. 3; Eq. 3.1-3.19]{emeis:m2007}. 
@@ -870,7 +870,7 @@ boundary layer; we use our DNS data to arrive at best estimates for them.
 However, we have seen in Section \ref{sec:scaling} that a characteristic value for the eddy diffusivity
 is not easily obtained for its strong dependence on the Reynolds number and distance from the surface.
 %
-We therefore resort to the physical manifestation of the eddy diffuysivity in an Ekman layer, and use the
+We therefore resort to the physical manifestation of the eddy diffusivity in an Ekman layer, and use the
 boundary layer depth $\delta_\mathrm{ek} = 0.66 \delta \times 2\pi$.
 %
 For the relation $\delta_\mathrm{ek}=\sqrt{2\nu_\mathrm{ek}/f}$, this yields
@@ -1173,15 +1173,15 @@ the outer layer.
 % 
 However, the requirement of smooth derivatives would over-constrain the velocity profiles and is hence not applied. 
 % 
-This can, in particular for low or extremely high $\RE$ cause discontinuity in the derivatives of the velocity profiles around the transition from the inner to the outer layer. 
+This can, in particular for low or extremely high $\RE$, cause discontinuity in the derivatives of the velocity profiles around the transition from the inner to the outer layer. 
 % 
 To avoid such artificial discontinuity, the profiles are blended by an error-function transition using a blending 
-height $z_{blend}^-=0.28-2.25\sqrt{1./Re_\tau}$ and a transition thickness 
+height $z_{blend}^-=0.28-2.25\sqrt{1/Re_\tau}$ and a transition thickness 
 $z_\text{trans}=2$, 
 such that the weighting function $\omega(z^-)$ becomes 
-\[
-  \omega(z^-) = \frac12 \left[\text{erf}\left(z_\text{trans}\log\frac{z^-}{z_{\text{blend}}^{-}}\right) +1\right].
-\]
+\begin{align}
+  \omega(z^-) = \frac12 \left[\text{erf}\left(z_\text{trans}\log\frac{z^-}{z_{\text{blend}}^{-}}\right) +1\right],
+\end{align}
 hence 
  $u_\text{total} = (1-\omega) \times u_\text{inner} + \omega \times u_\text{outer}$ and similar for $v$. 
 
@@ -1197,10 +1197,10 @@ The resulting velocity profiles across the entire boundary layer are shown in in
 % 
 The logarithmic scaling of the streamwise component is encountered as straight blue lines in panels \textbf{(a)} and \textbf{(b)} where 
 the extent of the logarithmic range increases with $\RE$ towards lower values of $z^-$ and higher values of $z^+$ depending on the scaling. 
-Importantly, the logarithmic region is widening for increasing Reynolds number -- irespective of the scaling. 
+Importantly, the logarithmic region is widening for increasing Reynolds number -- irrespective of the scaling. 
 % 
 In this simple inner scaling, the spanwise velocity (which follows a mixed scaling) 
-Does not collapse but seems to depend on $Re$ (the collapse is seen in Fig.~\ref{fig:inner_w}).
+does not collapse but seems to depend on $Re$ (the collapse is seen in Fig.~\ref{fig:inner_w}).
 % 
 However, the velocity deficit in outer units becomes approximately universal, also across the inner layer; 
 this reflects the compensation of reduced turning ($\alpha$) by increased drag ($u_\star$), 
@@ -1259,7 +1259,7 @@ where an exponential damping of Prandtl's mixing length is considered near the w
 \end{align}
 the spanwise component is zero as no rotational effects are considered. 
 %
-Comparing our proposed formulation for the stream-wise velocity in the inner layer to  \citeauthor{vandriest:JOT1956}'s formulation yields later convergence of the velocity onto the logarithmic profile while, over all, it serves as an excellent model of the streamwise velocity cmponent (Fig.~\ref{fig:vanDriest}):
+Comparing our proposed formulation for the stream-wise velocity in the inner layer to  \citeauthor{vandriest:JOT1956}'s formulation yields later convergence of the velocity onto the logarithmic profile while, over all, it serves as an excellent model of the streamwise velocity component (Fig.~\ref{fig:vanDriest}):
 % 
 Notable deviations (on the order of few percent) only occur in the region $10 < z^+ < 30$,  where the velocity transitions from the linear to the logarithmic profile. 
 %
@@ -1280,7 +1280,7 @@ We, however, find that a modified version of the Ekman spiral explicitly taking 
   \caption{Comparison of the DNS data (dashed lines) with the two-layer model proposed by Etling (solid lines) for different Reynolds number. Left panel shows the relative wind veer, right panel shows the velocity magnitude. The Etling model is calibrated by the surface veer from the DNS and the roughness parameter is chosen according to the correction factor $\exp{\kappa A}$ such that the total veer and velocity magnitude agree. Profiles in the buffer layer, defined here as $z^+<30$ are shown as opaque dashed lines as the two-layer model does not consider viscous effects.}
   \label{fig:etling} 
 \end{figure}
-A two-layer model consolidating both the logartihmic and Ekman layer can be obtained following the arguments by \cite{etling:2008}, cf. \cite{emeis:2018}. Given a surface veering and a matching height (extent of the logarithmic layer), a formulation for the velocity profile across both the logarithmic and the outer layer is obtained. A comparison using the surface veering based on our model and a matching height of $z_\text{prandtl}=0.05\delta$, which gives better results than the matching height of $0.1\delta$ suggested by \cite{etling:2008}, is shown in Fig.~\ref{fig:etling}. 
+A two-layer model consolidating both the logarithmic and Ekman layer can be obtained following the arguments by \cite{etling:2008}, cf. \cite{emeis:2018}. Given a surface veering and a matching height (extent of the logarithmic layer), a formulation for the velocity profile across both the logarithmic and the outer layer is obtained. A comparison using the surface veering based on our model and a matching height of $z_\text{prandtl}=0.05\delta$, which gives better results than the matching height of $0.1\delta$ suggested by \cite{etling:2008}, is shown in Fig.~\ref{fig:etling}. 
 % 
 The overall shape of velocity magnitude is matched apart from the viscous and buffer layer (cf. Fig.~\ref{fig:etling}b) that is neglected by the two-layer model. However, quantitative departures on the order of 10\% occur across the inner layer: it turns out that the non-rotating profile, of the two-layer model in the logarithmic region yields too low overall velocity as the spanwise component contributes to the velocity across the inner layer. 
 % 
