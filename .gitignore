@@ -10,5 +10,6 @@ plot/__pycache__/
 *.nc
 *.fdb_latexmk
 *.fls
+*.synctex.gz
 palm_hawk
 write2/*.pdf

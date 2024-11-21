@@ -92,6 +92,9 @@
   This implies a mixed scaling for the turbulent stress and eddy viscosity across the inner layer
   and convergence to a universal scaling as function of the outer height across the outer layer
   for increasing scale separation vide Reynolds numbers. 
+  % 
+  The extrapolation to these scaling to atmospheric scale separation is confirmed via large-eddy simulation 
+  in part II of this manuscript. 
 \end{abstract}
 ~\\[1em] 
 \textbf{Keywords} Direct Numerical Simulation $\cdot$ Scale Separation $\cdot$ Ekman Layer $\cdot$ Surface Layer $\cdot$ Hodograph 
@@ -580,7 +583,7 @@ an integral relation.
 \begin{figure}
   \begin{flushleft}
     \textbf{a)}\hspace{0.47\textwidth} \textbf{b)}\\
-    \includegraphics[width=\textwidth]{../plot/uv_innerouter.pdf}\\
+    \includegraphics[width=\textwidth]{Fig1.eps}\\ %uv_innerouter.eps}\\
     \caption{
       \textbf{a)} Shear-aligned velocity profiles in inner units; circles mark the
       height $z^-=0.15$;
@@ -592,9 +595,9 @@ an integral relation.
 
 \begin{figure}
   \textbf{a)}\hspace{0.47\textwidth} \textbf{b)}\\
-  \includegraphics[width=\textwidth]{../plot/stresses.pdf}
+  \includegraphics[width=\textwidth]{Fig2ab.eps}\\  %stresses.eps}
   \textbf{c)}\hspace{0.47\textwidth} \textbf{d)}\\    
-  \includegraphics[width=\textwidth]{../plot/eddy_viscosity.pdf}\\
+  \includegraphics[width=\textwidth]{Fig2cd.eps}\\ %-eddy_viscosity.eps}\\
   \caption{
     \textbf{a-b)} Profiles of
     the turbulent stress $S_\mathrm{turb}^+$ (dashed), 
@@ -693,11 +696,11 @@ across the outer layer.
 %
 \begin{figure}
   \centerline{
-    \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_10.pdf}
-    \includegraphics[trim=1152 0 0 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_50.pdf}
-    \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{../plot/PLANES/tke_xz_400.pdf}}
+    \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{Fig3a.png}
+    \includegraphics[trim=1152 0 0 0, clip, width=0.33\textwidth]{Fig3b.png}
+    \includegraphics[trim=0 0 1152 0, clip, width=0.33\textwidth]{Fig3c.png}}
   \centerline{
-    \includegraphics[trim=1152 0 0 0, clip, width=\textwidth]{../plot/PLANES/tke_xy_1.pdf}}
+    \includegraphics[trim=1152 0 0 0, clip, width=\textwidth]{Fig3d.png}}
   \caption{Horizontal slices of turbulence kinetic energy in the
     Buffer layer (i=10),
     logarithmic Layer (i=100), and
@@ -738,7 +741,7 @@ overlap and inner regions of the flow.
 \subsection{Drag-law}
 \label{sec:drag-law}
 \begin{figure}
-  \centerline{\includegraphics[width=0.7\textwidth]{../plot/ustar_alpha.pdf}}
+  \centerline{\includegraphics[width=0.7\textwidth]{Fig4.eps}} % ustar_alpha.eps}}
   \caption{Variation of geostrophic drag, $Z_\star$, and surface veering, $\alpha_\star$, with Reynolds number according to
     the theory by Spalart et al. (1989) and as estimated from DNS data
     \label{fig:drag_law}}
@@ -857,7 +860,7 @@ boundary layer; we use our DNS data to arrive at best estimates for them.
   \begin{flushleft}
     \textbf{\ \ a)}\hspace{0.45\textwidth}\textbf{\ \ b)}\\
   \end{flushleft} 
-  \includegraphics[width=\textwidth]{../plot/ekman_ideal.pdf}
+  \includegraphics[width=\textwidth]{Fig5.eps} %ekman_ideal.eps}
   \caption{\label{fig:ekman_ideal}
     \textbf{a)} Generalized Ekman-profile of the geostrophic-aligned component $U_\mathrm{ek}$.
     \textbf{b)} Hodograph for the geostrophic-aligned and pressure-gradient aligned components $U_\mathrm{ek}$ and $V_\mathrm{ek}$.
@@ -932,7 +935,8 @@ non-turbulent flow very well.
   \begin{flushleft}
     \textbf{\ \ a)}\hspace{0.45\textwidth}\textbf{\ \ b)}\\
   \end{flushleft} 
-  \includegraphics[width=0.5\textwidth]{../plot/outer_layer_u.pdf}\includegraphics[width=0.5\textwidth]{../plot/outer_layer_w.pdf}
+  \includegraphics[width=0.5\textwidth]{Fig6a.eps} %outer_layer_u.eps}
+  \includegraphics[width=0.5\textwidth]{Fig6b.eps} %outer_layer_w.eps}
   \caption{
     \label{fig:profiles_outer}
     Shear-aligned velocity deficit for the streamwise (panel \textbf{(a)}) and spanwise (panel \textbf{(b)})
@@ -1010,7 +1014,7 @@ For this logarithmic law, $a_\mathrm{match}=3.569861$ for a matching at $z^+=40$
   \begin{flushleft}
     \textbf{\ \ a)}\hspace{0.45\textwidth} \textbf{\ \ b)} 
   \end{flushleft} 
-  \includegraphics[width=\textwidth]{../plot/u_profile.pdf}
+  \includegraphics[width=\textwidth]{Fig7.eps} % u_profile.eps}
   \caption{Shear-aligned profiles of velocity components $U^{\alpha_\star+}$ in inner (left) and outer (right) units.
     \label{fig:u_profiles}} 
 \end{figure} 
@@ -1107,7 +1111,7 @@ We find excellent agreement with the DNS data for $500\le\RE_D\le1600$ below $z^
   \begin{flushleft}
     \textbf{\ \ a)}\hspace{0.45\textwidth}\textbf{\ \ b)}\\
   \end{flushleft} 
-  \includegraphics[width=1.0\textwidth]{../plot/w_profile.pdf}
+  \includegraphics[width=1.0\textwidth]{Fig8.eps} %w_profile.eps}
   \caption{Profiles of shear-aligned span-wise velocity $(V^\alpha)^+$ versus inner height. 
     Dashed lines show DNS data, thick, opaque lines are from the semi-emprical theory developed above.
     Panel \textbf{(a)} shows standard inner normalization, panel \textbf{(b)} the inviscid normalization yielding
@@ -1157,7 +1161,7 @@ values of $v_{10}$ and $d_{10}$).
 %
 %
 \begin{figure}
-  \centerline{\includegraphics[width=0.5\textwidth]{../plot/c_log.pdf}}
+  \centerline{\includegraphics[width=0.5\textwidth]{Fig9.eps}} %c_log.eps}}
   \caption{Coefficients $a_\text{log}$, $b_\text{log}$ and $c_\text{log}$ 
     (cf. Eq.~\ref{eqn:abc_log}) 
     as a function of 
@@ -1190,7 +1194,7 @@ hence
 %
 \begin{figure}
   \phantom{AAA}\textbf{(a)\hspace{0.3\textwidth}(b)\hspace{0.3\textwidth}(c)}\\
-  \includegraphics[width=\textwidth]{../plot/ekman_profiles.pdf}
+  \includegraphics[width=\textwidth]{Fig10.eps}  %ekman_profiles.eps 
   \caption{ \textbf{(a)} Velocity deficit, \textbf{(b)} velocity profile in shear-aligned hodographs and \textbf{(c)} hodograph in geostrophy-aligned coordinates.
    In panels \textbf{(a)} and \textbf{(b)}, blue lines correspond to the streamwise component and red to the spanwise. }
   \label{fig:summary} 
@@ -1247,7 +1251,7 @@ For the range of Reynolds number relevant to geophysical problems ($10^4\lesssim
 \subsection{Comparison with other theories}
 %%% VAN DRIEST SCALING
 \begin{figure}
-  \centerline{\includegraphics[width=0.66\textwidth]{../plot/vanDriest_profile.png}}
+  \centerline{\includegraphics[width=0.66\textwidth]{Fig11.eps}} %vanDriest_profile.eps}}
   \caption{Near-wall velocity profile according to the 
     van-Driest scaling (blue, solid) in comparison with 
     the present model (red, dashed), 
@@ -1277,8 +1281,8 @@ We, however, find that a modified version of the Ekman spiral explicitly taking 
 %ETLING MODEL 
 \begin{figure}
   \textbf{(a)\hspace{0.48\textwidth}(b)}\\[-0.15em]
-  \includegraphics[width=0.5\textwidth]{../plot/etling_direction_0.png} 
-  \includegraphics[width=0.5\textwidth]{../plot/etling_magnitude_0.png}
+  \includegraphics[width=0.5\textwidth]{Fig12a.eps} %etling_direction.eps} 
+  \includegraphics[width=0.5\textwidth]{Fig12b.eps} %etling_magnitude.eps}
   \caption{Comparison of the DNS data (dashed lines) with the two-layer model proposed by Etling (solid lines) for different Reynolds number. Left panel shows the relative wind veer, right panel shows the velocity magnitude. The Etling model is calibrated by the surface veer from the DNS and the roughness parameter is chosen according to the correction factor $\exp{\kappa A}$ such that the total veer and velocity magnitude agree. Profiles in the buffer layer, defined here as $z^+<30$ are shown as opaque dashed lines as the two-layer model does not consider viscous effects.}
   \label{fig:etling} 
 \end{figure}
@@ -1309,8 +1313,8 @@ While the behavior in the inner layer seems to depend on $Re$, there emerges uni
 %
 \begin{figure}
   \textbf{(a)\hspace{0.48\textwidth}(b)}\\[-0.15em]
-  \includegraphics[width=0.5\textwidth]{../plot/stress_rotation.pdf}
-  \includegraphics[width=0.5\textwidth]{../plot/misalignment.pdf} 
+  \includegraphics[width=0.5\textwidth]{Fig13a.eps} %stress_rotation.eps}
+  \includegraphics[width=0.5\textwidth]{Fig13b.eps} %misalignment.eps} 
   \caption{Panel \textbf{(a)} shows the wind direction (DD) as thick dashed lines and the direction of stress relative to DD as thin solid lines, both according to our profile model. The direction of the negative flux vector $(\overline{u'w'},\overline{v'w'})$ based on DNS data is shown as a dotted line. In panel \textbf{(b)}, we plot the misalignment, i.e. the angle, between the flux vector and the shear vector, where the shear vector is defined accordingly as $(\p_z U, \p_z V)$.} 
   \label{fig:alignment}
 \end{figure}
@@ -1327,7 +1331,7 @@ While the behavior in the inner layer seems to depend on $Re$, there emerges uni
 
 %
 %\begin{figure}
-%  \includegraphics[width=\textwidth]{../plot/mag_dir.pdf} 
+%  \includegraphics[width=\textwidth]{mag_dir.eps} 
 %  \caption{Total velocity and veering (in degrees) vs inner and outer height.
 %    Dashed lines show DNS data, thick lines are from semi-empirical theory.} 
 %\end{figure} 
@@ -1499,8 +1503,7 @@ for large $\RE$.
 
 
 \vspace{1em}
-\noindent\textbf{Acknowledgements} This study is funded by the European Commission's 7$^{th}$ Framework Programme through 
-the ERC 2019 Starting Grant trainABL (ID 851374). Simulations were carried out on the German supercomputing systems 
+\noindent\textbf{Acknowledgements} Simulations were carried out on the German supercomputing systems 
 \texttt{hawk} at H\"ocstleistungsrechenzentrum Stuttgart (Bundesprojekt 44187) and \texttt{juwels} at Gauss Centre for supercomputing, 
 For\-schungs\-zen\-trum J\"ulich (Projects \texttt{hku24} and \texttt{stadit}). 
 We extend our thanks to Sally Issa for valuable feedback on the manuscript. 
@@ -1512,7 +1515,9 @@ We extend our thanks to Sally Issa for valuable feedback on the manuscript.
 \noindent\textbf{Author contributions} CA conceived the study, acquired funding, performed the simulation, analysed and plotted the data for this work. CA and HW interpreted the data and compiled the manuscript. 
 \vspace{1em} 
 
-\noindent\textbf{Funding} CA is funded by ERC Starting Grant \emph{trainABL} (ID 851374). Open Access funding for this publication through the DEAL agreement. 
+\noindent\textbf{Funding} CA is funded by the European Commission's 7$^{th}$ Framework Programme through 
+the ERC 2019 Starting Grant trainABL (ID 851374). HW is funded by the Ministry for Science and Culture of 
+Lower Saxony (project \emph{Zukunftskonzept Windenergieforschung}). Open Access funding for this publication through the DEAL agreement. 
 \vspace{1em}
 
 \noindent\textbf{Data availability} The data is available in long-term repositories and indexed by DOIs as cited in the list of references. Further analysis tools and processed data can be made available upon direct request. \vspace{1em}
@@ -1524,7 +1529,311 @@ We extend our thanks to Sally Issa for valuable feedback on the manuscript.
 
 
 \bibliographystyle{spbasic_updated}  
-\bibliography{ansorge}
+% \bibliography{ansorge}
+\begin{thebibliography}{57}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI~\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI~\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Ansorge(2019)}]{ansorge:BM2019}
+Ansorge C (2019) Scale {{Dependence}} of {{Atmosphere}}--{{Surface Coupling
+  Through Similarity Theory}}. Boundary-Layer Meteorol 170(1):1--27,
+  \doi{10.1007/s10546-018-0386-y}
+
+\bibitem[{Ansorge(2024{\natexlab{a}})}]{ansorge:2024c}
+Ansorge C (2024{\natexlab{a}}) Direct numerical simulation of turbulent
+  {{Ekman}} flow ({{Re}}=0500): {{DOI}} 10.17169/refubium-42505.
+  \doi{10.17169/refubium-42505}
+
+\bibitem[{Ansorge(2024{\natexlab{b}})}]{ansorge:2024a}
+Ansorge C (2024{\natexlab{b}}) Direct numerical simulation of turbulent
+  {{Ekman}} flow ({{Re}}=1000): {{DOI}} 10.17169/refubium-42507.
+  \doi{10.17169/refubium-42507}
+
+\bibitem[{Ansorge(2024{\natexlab{c}})}]{ansorge:2024}
+Ansorge C (2024{\natexlab{c}}) Direct numerical simulation of turbulent
+  {{Ekman}} flow ({{Re}}=1300): {{DOI}} 10.17169/refubium-42508.
+  \doi{10.17169/refubium-42508}
+
+\bibitem[{Ansorge(2024{\natexlab{d}})}]{ansorge:2024b}
+Ansorge C (2024{\natexlab{d}}) Direct numerical simulation of turbulent
+  {{Ekman}} flow ({{Re}}=1600); {{DOI}} 10.17169/refubium-42509.
+  \doi{10.17169/refubium-42509}
+
+\bibitem[{Ansorge and Mellado(2014)}]{ansorge:BM2014}
+Ansorge C, Mellado JP (2014) Global {{Intermittency}} and {{Collapsing
+  Turbulence}} in the {{Stratified Planetary Boundary Layer}}. Boundary-Layer
+  Meteorol 153(1):89--116, \doi{10.1007/s10546-014-9941-3}
+
+\bibitem[{Ansorge and Mellado(2016)}]{ansorge:JFM2016}
+Ansorge C, Mellado JP (2016) Analyses of external and global intermittency in
+  the logarithmic layer of {{Ekman}} flow. J Fluid Mech 805:611--635,
+  \doi{10.1017/jfm.2016.534}
+
+\bibitem[{Baars and Marusic(2020)}]{baars:JFM2020a}
+Baars WJ, Marusic I (2020) Data-driven decomposition of the streamwise
+  turbulence kinetic energy in boundary layers. {{Part}} 2. {{Integrated}}
+  energy and. J Fluid Mech 882:A26, \doi{10.1017/jfm.2019.835}
+
+\bibitem[{Barenblatt(1993)}]{barenblatt:JFM1993}
+Barenblatt GI (1993) Scaling laws for fully developed turbulent shear flows.
+  {{Part}} 1. {{Basic}} hypotheses and analysis. J Fluid Mech 248:513--520,
+  \doi{10.1017/S0022112093000874}
+
+\bibitem[{Barenblatt and Goldenfeld(1995)}]{barenblatt:PF1995}
+Barenblatt GI, Goldenfeld N (1995) Does fully developed turbulence exist?
+  {{Reynolds}} number independence versus asymptotic covariance. Phys Fluids
+  7(12):3078--3082, \doi{10/bw2sqs}
+
+\bibitem[{Blackadar and Tennekes(1968)}]{blackadar:JAS1968}
+Blackadar AK, Tennekes H (1968) Asymptotic {{Similarity}} in {{Neutral
+  Barotropic Planetary Boundary Layers}}. Journal of the Atmospheric Sciences
+  25:1015--1020, \doi{10.1175/1520-0469(1968)025<1015:ASINBP>2.0.CO;2}
+
+\bibitem[{Brown et~al.(2005)Brown, Beljaars, Hersbach, Hollingsworth, Miller,
+  and Vasiljevic}]{brown:QJR2005}
+Brown AR, Beljaars ACM, Hersbach H, Hollingsworth A, Miller M, Vasiljevic D
+  (2005) Wind turning across the marine atmospheric boundary layer. Quarterly
+  Journal of the Royal Meteorological Society 131(607):1233--1250,
+  \doi{10/dw2bxz}
+
+\bibitem[{Calaf et~al.(2010)Calaf, Meneveau, and Meyers}]{calaf:PF2010}
+Calaf M, Meneveau C, Meyers J (2010) Large eddy simulation study of fully
+  developed wind-turbine array boundary layers. Phys Fluids 22(1):015,110,
+  \doi{10/b7gc6v}
+
+\bibitem[{Coleman et~al.(1992)Coleman, Ferziger, and Spalart}]{coleman:JFM1992}
+Coleman GN, Ferziger JH, Spalart PR (1992) Direct {{Simulation}} of the
+  {{Stably Stratified Turbulent Ekman Layer}}. Journal of Fluid Mechanics
+  244:677--712, \doi{10.1017/S0022112092003264}
+
+\bibitem[{{da Silva} et~al.(2014){da Silva}, Hunt, Eames, and
+  Westerweel}]{dasilva:ARF2014}
+{da Silva} CB, Hunt JC, Eames I, Westerweel J (2014) Interfacial {{Layers
+  Between Regions}} of {{Different Turbulence Intensity}}. Annu Rev Fluid Mech
+  46(1):567--590, \doi{10.1146/annurev-fluid-010313-141357}
+
+\bibitem[{Dimotakis(2005)}]{dimotakis:ARF2005}
+Dimotakis PE (2005) {{TURBULENT MIXING}}. Annual Review of Fluid Mechanics
+  37(1):329--356, \doi{10.1146/annurev.fluid.36.050802.122015}
+
+\bibitem[{Ekman(1905)}]{ekman:AMA1905}
+Ekman VW (1905) On the influence of the earth's rotation on ocean currents. Ark
+  Mat Astron Fys, Vol 2 (1905), pp 1-53 2:1--53
+
+\bibitem[{Ellison(1955)}]{ellison:QJR1955}
+Ellison TH (1955) The {{Ekman}} spiral. Q J Roy Met Soc 81(350):637--638,
+  \doi{10.1002/qj.49708135025}
+
+\bibitem[{Emeis(2018)}]{emeis:2018}
+Emeis S (2018) Wind {{Energy Meteorology}}, 2nd edn. Atmospheric {{Physics}}
+  for {{Wind Power Generation}}, Springer, Heidelberg
+
+\bibitem[{Emeis et~al.(2007)Emeis, {Baumann-Stanzer}, Piringer, Kallistratova,
+  Kouznetsov, and Yushkov}]{emeis:m2007}
+Emeis S, {Baumann-Stanzer} K, Piringer M, Kallistratova M, Kouznetsov R,
+  Yushkov V (2007) Wind and turbulence in the urban boundary layer analysis
+  from acoustic remote sensing data and fit to analytical relations. metz
+  16(4):393--406, \doi{10.1127/0941-2948/2007/0217}
+
+\bibitem[{Esau(2004)}]{esau:EFM2004}
+Esau I (2004) Simulation of {{Ekman Boundary Layers}} by {{Large Eddy Model}}
+  with {{Dynamic Mixed Subfilter Closure}}. Environmental Fluid Mechanics
+  4(3):273--303, \doi{10/b8f3kh}
+
+\bibitem[{Etling(2002)}]{etling:2002}
+Etling D (2002) Theoretische {{Meteorologie}}, 2nd edn. Eine
+  {{Einf{\"u}hrung}}, Springer-Verlag, Berlin, Heidelberg
+
+\bibitem[{Etling(2008)}]{etling:2008}
+Etling D (2008) {Theoretische Meteorologie: eine Einf{\"u}hrung}, 3rd edn.
+  Springer, Berlin Heidelberg
+
+\bibitem[{Foken(2002)}]{foken:m2002}
+Foken T (2002) Some aspects of the viscous sublayer. metz 11(4):267--272,
+  \doi{10.1127/0941-2948/2002/0011-0267}
+
+\bibitem[{Foken et~al.(1978)Foken, Kitajgorodskij, and Kuznecov}]{foken:BM1978}
+Foken {\relax Th}, Kitajgorodskij SA, Kuznecov OA (1978) On the dynamics of the
+  molecular temperature boundary layer above the sea. Boundary-Layer Meteorol
+  15(3):289--300, \doi{10.1007/BF02652602}
+
+\bibitem[{Ghannam and {Bou-Zeid}(2021)}]{ghannam:QJR2021}
+Ghannam K, {Bou-Zeid} E (2021) Baroclinicity and directional shear explain
+  departures from the logarithmic wind profile. Quarterly Journal of the Royal
+  Meteorological Society 147:434--464, \doi{10/gnj6z2}
+
+\bibitem[{Gryning et~al.(2007)Gryning, Batchvarova, Br{\"u}mmer, J{\o}rgensen,
+  and Larsen}]{gryning:BM2007}
+Gryning SE, Batchvarova E, Br{\"u}mmer B, J{\o}rgensen H, Larsen S (2007) On
+  the extension of the wind profile over homogeneous terrain beyond the surface
+  boundary layer. Boundary-Layer Meteorol 124(2):251--268,
+  \doi{10.1007/s10546-007-9166-9}
+
+\bibitem[{H{\"o}gstr{\"o}m(1988)}]{hogstrom:BM1988}
+H{\"o}gstr{\"o}m U (1988) Non-dimensional wind and temperature profiles in the
+  atmospheric surface layer: {{A}} re-evaluation. Boundary-Layer Meteorology
+  42:55--78, \doi{10.1007/BF00119875}
+
+\bibitem[{H{\"o}gstr{\"o}m(1996)}]{hogstrom:BM1996}
+H{\"o}gstr{\"o}m U (1996) Review of some basic characteristics of the
+  atmospheric surface layer. Boundary-Layer Meteorology 78(3-4):215--246,
+  \doi{10.1007/BF00120937}
+
+\bibitem[{Jacobs and Van~Boxel(1988)}]{jacobs:AFM1988}
+Jacobs AF, Van~Boxel JH (1988) Changes of the displacement height and roughness
+  length of maize during a growing season. Agricultural Forest Meteorol
+  42(1):53--62, \doi{10.1016/0168-1923(88)90066-4}
+
+\bibitem[{Jiang et~al.(2018)Jiang, Wang, and Sullivan}]{jiang:JAS2018}
+Jiang Q, Wang S, Sullivan P (2018) Large-{{Eddy Simulation Study}} of {{Log
+  Laws}} in a {{Neutral Ekman Boundary Layer}}. Journal of the Atmospheric
+  Sciences 75(6):1873--1889, \doi{10.1175/JAS-D-17-0153.1}
+
+\bibitem[{Jim{\'e}nez(2012)}]{jimenez:ARF2012}
+Jim{\'e}nez J (2012) Cascades in {{Wall-Bounded Turbulence}}. Ann Rev Fluid
+  Mech 44(Volume 44, 2012):27--45, \doi{10.1146/annurev-fluid-120710-101039}
+
+\bibitem[{Kelly and Gryning(2010)}]{kelly:BM2010}
+Kelly M, Gryning SE (2010) Long-{{Term Mean Wind Profiles Based}} on
+  {{Similarity Theory}}. Boundary-Layer Meteorol 136(3):377--390,
+  \doi{10.1007/s10546-010-9509-9}
+
+\bibitem[{Kelly and Troen(2016)}]{kelly:WE2016}
+Kelly M, Troen I (2016) Probabilistic stability and `tall' wind profiles:
+  Theory and method for use in wind resource assessment. Wind Energy
+  19(2):227--241, \doi{10.1002/we.1829}
+
+\bibitem[{Klein et~al.(2021)Klein, Maier, and Schmidt}]{klein:PAM2021a}
+Klein M, Maier RE, Schmidt H (2021) Stochastic modeling of transient neutral
+  and stably-stratified {{Ekman}} boundary layers. P A M M 21(1):e202100,146,
+  \doi{10.1002/pamm.202100146}
+
+\bibitem[{Li et~al.(2018)Li, Gentine, Mellado, and McColl}]{li:JAS2018}
+Li Q, Gentine P, Mellado JP, McColl KA (2018) Implications of {{Nonlocal
+  Transport}} and {{Conditionally Averaged Statistics}} on {{Monin}}--{{Obukhov
+  Similarity Theory}} and {{Townsend}}'s {{Attached Eddy Hypothesis}}. J Atmos
+  Sci 75(10):3403--3431, \doi{10.1175/JAS-D-17-0301.1}
+
+\bibitem[{Lindvall and Svensson(2019)}]{lindvall:QJR2019}
+Lindvall J, Svensson G (2019) Wind turning in the atmospheric boundary layer
+  over land. Q J Roy Met Soc 145(724):3074--3088, \doi{10.1002/qj.3605}
+
+\bibitem[{Mellado and Ansorge(2012)}]{mellado:ZaM2012}
+Mellado J, Ansorge C (2012) Factorization of the {{Fourier}} transform of the
+  pressure-{{Poisson}} equation using finite differences in colocated grids. Z
+  angew Math Mech 92(5):380--392, \doi{10.1002/zamm.201100078}
+
+\bibitem[{Mellado et~al.(2016)Mellado, {van Heerwaarden}, and
+  Garcia}]{mellado:BM2016}
+Mellado JP, {van Heerwaarden} CC, Garcia JR (2016) Near-{{Surface Effects}} of
+  {{Free Atmosphere Stratification}} in {{Free Convection}}. Boundary-Layer
+  Meteorol 159(1):69--95, \doi{10.1007/s10546-015-0105-x}
+
+\bibitem[{Mirocha et~al.(2018)Mirocha, Churchfield, {Mu{\~n}oz-Esparza}, Rai,
+  Feng, Kosovi{\'c}, Haupt, Brown, Ennis, Draxl, Sanz~Rodrigo, Shaw, Berg,
+  Moriarty, Linn, Kotamarthi, Balakrishnan, Cline, Robinson, and
+  Ananthan}]{mirocha:WES2018}
+Mirocha JD, Churchfield MJ, {Mu{\~n}oz-Esparza} D, Rai RK, Feng Y, Kosovi{\'c}
+  B, Haupt SE, Brown B, Ennis BL, Draxl C, Sanz~Rodrigo J, Shaw WJ, Berg LK,
+  Moriarty PJ, Linn RR, Kotamarthi VR, Balakrishnan R, Cline JW, Robinson MC,
+  Ananthan S (2018) Large-eddy simulation sensitivities to variations of
+  configuration and forcing parameters in canonical boundary-layer flows for
+  wind energy applications. Wind Energy Science 3(2):589--613, \doi{10/gn3nh4}
+
+\bibitem[{Moin and Mahesh(1998)}]{moin:ARF1998}
+Moin P, Mahesh K (1998) Direct numerical simulation: {{A}} tool in turbulence
+  research. Annual Review of Fluid Mechanics 30:539--578,
+  \doi{10.1146/annurev.fluid.30.1.539}
+
+\bibitem[{Momen and {Bou-Zeid}(2016)}]{momen:JAS2016}
+Momen M, {Bou-Zeid} E (2016) Large-{{Eddy Simulations}} and {{Damped-Oscillator
+  Models}} of the {{Unsteady Ekman Boundary Layer}}*. Journal of the
+  Atmospheric Sciences 73(1):25--40, \doi{10.1175/JAS-D-15-0038.1}
+
+\bibitem[{Momen et~al.(2018)Momen, {Bou-Zeid}, Parlange, and
+  Giometto}]{momen:JAS2018}
+Momen M, {Bou-Zeid} E, Parlange MB, Giometto M (2018) Modulation of {{Mean
+  Wind}} and {{Turbulence}} in the {{Atmospheric Boundary Layer}} by
+  {{Baroclinicity}}. Journal of the Atmospheric Sciences 75(11):3797--3821,
+  \doi{10/gfmn67}
+
+\bibitem[{Monin(1970)}]{monin:ARF1970}
+Monin AS (1970) The {{Atmospheric Boundary Layer}}. Annual Review of Fluid
+  Mechanics 2:225--250, \doi{10.1146/annurev.fl.02.010170.001301}
+
+\bibitem[{Monin and Yaglom(1975)}]{monin:1975}
+Monin AS, Yaglom AM (1975) Statistical {{Fluid Mechanics}}, {{Vol}}. {{II}},
+  Dover {{Publications}} on {{Physics}}, vol~II. Dover Publications, Inc.,
+  Mineola
+
+\bibitem[{Optis et~al.(2014)Optis, Monahan, and Bosveld}]{optis:BM2014}
+Optis M, Monahan A, Bosveld FC (2014) Moving {{Beyond Monin-Obukhov Similarity
+  Theory}} in {{Modelling Wind-Speed Profiles}} in the {{Lower Atmospheric
+  Boundary Layer}} under {{Stable Stratification}}. Boundary-Layer Meteorology
+  153(3):497--514, \doi{10.1007/s10546-014-9953-z}
+
+\bibitem[{Rossby and Montgomery(1935)}]{rossby:PIP1935}
+Rossby CG, Montgomery RB (1935) The layer of frictional influence in wind and
+  ocean currents. Papers in Physical Oceanography and Meteorology III(3):1--101
+
+\bibitem[{Sakagami et~al.(2020)Sakagami, Haas, and Passos}]{sakagami:BM2020}
+Sakagami Y, Haas R, Passos JC (2020) Generalized {{Non-dimensional Wind}} and
+  {{Temperature Gradients}} in the {{Surface Layer}}. Boundary-Layer Meteorol
+  175(3):441--451, \doi{10.1007/s10546-020-00510-3}
+
+\bibitem[{Spalart(1989)}]{spalart:JFM1989}
+Spalart PR (1989) Theoretical and numerical study of a three-dimensional
+  turbulent boundary layer. J Fluid Mech 205(-1):319,
+  \doi{10.1017/S0022112089002053}
+
+\bibitem[{Spalart et~al.(2008)Spalart, Coleman, and Johnstone}]{spalart:PF2008}
+Spalart PR, Coleman GN, Johnstone R (2008) Direct numerical simulation of the
+  {{Ekman}} layer: {{A}} step in {{Reynolds}} number, and cautious support for
+  a log law with a shifted origin. Phys Fluids 20(10):101,507,
+  \doi{10.1063/1.3005858}
+
+\bibitem[{Spalart et~al.(2009)Spalart, Coleman, and Johnstone}]{spalart:PF2009}
+Spalart PR, Coleman GN, Johnstone R (2009) Retraction: ``{{Direct}} numerical
+  simulation of the {{Ekman}} layer: {{A}} step in {{Reynolds}} number, and
+  cautious support for a log law with a shifted origin'' [{{Phys}}. {{Fluids}}
+  20, 101507 (2008)]. Phys Fluids 21(10):109,901, \doi{10.1063/1.3247176}
+
+\bibitem[{Stoll et~al.(2020)Stoll, Gibbs, Salesky, Anderson, and
+  Calaf}]{stoll:BM2020}
+Stoll R, Gibbs JA, Salesky ST, Anderson W, Calaf M (2020) Large-{{Eddy
+  Simulation}} of the {{Atmospheric Boundary Layer}}. Boundary-Layer Meteorol
+  177(2-3):541--581, \doi{10/gmbmzw}
+
+\bibitem[{Svensson and Holtslag(2009)}]{svensson:BM2009}
+Svensson G, Holtslag AAM (2009) Analysis of {{Model Results}} for the
+  {{Turning}} of the {{Wind}} and {{Related Momentum Fluxes}} in the {{Stable
+  Boundary Layer}}. Boundary-Layer Meteorol 132(2):261--277, \doi{10/bwknmt}
+
+\bibitem[{Tennekes(1973)}]{tennekes:JAS1973}
+Tennekes H (1973) A {{Model}} for the {{Dynamics}} of the {{Inversion Above}} a
+  {{Convective Boundary Layer}}. Journal of the Atmospheric Sciences
+
+\bibitem[{Townsend(1976)}]{Townsend:1976}
+Townsend AA (1976) The Structure of Turbulent Shear Flow, 2nd edn. Cambridge
+  University Press
+
+\bibitem[{Van~Driest(1956)}]{vandriest:JOT1956}
+Van~Driest ER (1956) On {{Turbulent Flow Near}} a {{Wall}}. Journal of the
+  Aeronautical Sciences 23(11):1007--1011, \doi{10.2514/8.3713}
+
+\bibitem[{Zikanov et~al.(2003)Zikanov, Slinn, and Dhanak}]{zikanov:JFM2003}
+Zikanov O, Slinn DN, Dhanak MR (2003) Large-eddy simulations of the
+  wind-induced turbulent {{Ekman}} layer. J Fluid Mech 495:343--368,
+  \doi{10/ccbpbw}
+
+\end{thebibliography}
+
 
 
 \end{document}
