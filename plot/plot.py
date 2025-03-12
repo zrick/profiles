@@ -16,7 +16,7 @@ from EkmanProfileClass import Complex, EkmanUniversalClass, build_grid
 D2R = np.pi / 180. 
 
 use_data=False   # if true -- the netcdf files from DNS are needed 
-plot_ustar_alpha=False
+plot_ustar_alpha=True
 plot_ekman_ideal=False 
 plot_summary=False
 plot_evisc=False
@@ -1286,9 +1286,9 @@ if plot_ustar_alpha:
     print('TOTAL ERROR (us,alpha): {},{}'.format(err_us,err_al))
     fig=plt.figure(figsize=(6,3))
     ax=fig.add_axes([0.12,0.15,0.85,0.83])
-    ax.plot(re_arr,1./us_arr,label=r'$G/u_\star$',c='blue')
+    ax.plot(re_arr,1./us_arr,label=r'$Z_\star=G/u_\star$',c='blue')
     us_est=3.9*np.log(re_arr)-8
-    ax.plot(re_arr,us_est,ls=':',lw=1,c='black',label=r'$u_\star=4\log(Re)-8$') 
+    ax.plot(re_arr,us_est,ls=':',lw=1,c='black',label=r'$Z_\star=4\log(Re)-8$') 
     ax.plot(re_arr,al_arr/D2R,label=r'$\alpha$',c='red')
     lg=plt.legend(loc='center right')
     ax.set_xlim(4e2,1.5e6)
