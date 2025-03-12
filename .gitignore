@@ -13,3 +13,4 @@ plot/__pycache__/
 *.synctex.gz
 palm_hawk
 write2/*.pdf
+*eps-converted-to.pdf
