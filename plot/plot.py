@@ -16,9 +16,9 @@ from EkmanProfileClass import Complex, EkmanUniversalClass, build_grid
 D2R = np.pi / 180. 
 
 use_data=False   # if true -- the netcdf files from DNS are needed 
-plot_ustar_alpha=True
+plot_ustar_alpha=False
 plot_ekman_ideal=False 
-plot_summary=False
+plot_summary=True
 plot_evisc=False
 plot_profiles=False
 plot_visc_outer=False
@@ -32,7 +32,7 @@ test_inner_streamwise=False
 plot_profile_comparison=False
 plot_vandriest=False
 plot_total_rot=False
-plot_shear_vs_rotation=True
+plot_shear_vs_rotation=False
 
 colors = {400 : 'gray',
           500 : 'pink',
@@ -58,6 +58,8 @@ files = { 400: base+'avg_flw_ri0.0_re400.0_1024x384x1024.nc',
           1301:base+'avg_flw_ri0.0_re1300.0_co0_2560x640x5120.nc',
           1600:base+'avg_flw_ri0.0_re1600.0_co0_3840x960x7680.nc' } 
 
+
+print(Dataset(files[1600]).variables['y'][[10,100,400]])
 
 def etling_us(z0,zp,al):
     # universal parameter lz = lambda_z * 1/sqrt(2)
