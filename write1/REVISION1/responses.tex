@@ -10,7 +10,8 @@
 \usepackage{hyperref}
 \usepackage{doi}
 \usepackage{pdfpages}
- 
+
+\renewcommand{\familydefault}{\sfdefault}
 \onehalfspacing
 
 \newcommand{\revpoint}[3] 
@@ -22,23 +23,44 @@
 
 \newcommand{\com}[1]{\textcolor{red}{\noindent#1}}
 
+\newcommand{\explainformat}{\noindent In our response below, we repeat your original comment \textcolor{gray}{in gray font}. Next comes \textcolor{blue}{\textit{our response in blue font}}, and we close by the changes to the manuscript in regular font. Comments are separated by horizontal lines for readability.\\[1em]}
 
-\title{Response to Reviewers} 
+\title{Response to the Decision Letter of the Editor and Reviewers\\
+\normalsize -- Wind veer and speed in turbulent Ekman flow part I: scaling analysis and velocity profile model -- }
 \author{Cedrick Ansorge and Hauke Wurps }
 \begin{document}
 \maketitle
-
+\tableofcontents 
+\newpage 
 %-------------------------------------------------------------------------------------%
 
 %######################################################################################%
 % not all comments are included, only where action is needed.
 %######################################################################################%
+\begin{flushright}{Berlin, \today}\\ \end{flushright}
+\section{Response to the Editor} 
+\noindent Dear Professor Anderson, \\[1em]
 
-\section*{Response to Reviewer 1}
+\noindent we thank you very much for the assessment of both parts of this combined manuscript and the commitment of BLM to consider this body of work as a whole. \\[1em]
+
+\noindent Below, we detail our responses including changes incurred to the manuscript. We also provide an annotated manuscript (manuscript\_diff.pdf) to ease the assessment of changes and expedit the further processing of our manuscript. \\[1em]
+
+\noindent As it happens, some changes to this part of the manuscript are required due to Reviewer comments on the second part of the paper. We detail these changes below -- before the responses to the individual reviewers. \\[1em]
+
+\explainformat{}
+
+\noindent Kind Regards, \\
+\noindent Cedrick Ansorge and Hauke Wurps 
+
+\newpage 
+\begin{flushright}{Berlin, \today}\\ \end{flushright}
+\section{Response to Reviewer 1}
 
 Dear Reviewer 1, \\[1em]
 
 \noindent Many thanks for the positive feedback on our manuscript. We have addressed the minor points raised in your review and hope that you agree with the edits. Pleas find the detailed responses below.  \\[1em]
+
+\explainformat{}
 
 
 \noindent Kind regards, \\[0.5em]
@@ -49,7 +71,7 @@ Dear Reviewer 1, \\[1em]
 
 \revpoint{The authors analyze wind speed and direction profiles in turbulent Ekman flow using asymptotic theory and DNS data. They found that the streamwise velocity follows classical scaling laws, while outer-layer profiles align with a modified Ekman spiral. They showed that the spanwise component exhibits mixed scaling near the surface and outer scaling farther out. \newline  Overall, the analysis and DNS are conducted rigorously, providing valuable insights and contributing meaningfully to advancements in the field.}{We sincerely thank you for the positive assessment of our manuscript and the appreciation of our work.}{}
 
-\revpoint{In line 47, friction velocity is denoted as $u_* = \sqrt{|\tau_{sfc}/\rho}$. However, in Eq. (1a) (below line 179), $\tau_{sfc}$ is defined as the kinematic shear stress. Please make them consistent. }{Manz thanks for spotting this inconsistency in nomenclature. We have aligned $\tau_\text{sfc}$ with the conventional definition of dynamic shear stress and now include the division bz density in Eq. (1b).}{\begin{subequations}\begin{equation}
+\revpoint{In line 47, friction velocity is denoted as $u_* = \sqrt{|\tau_{sfc}/\rho}$. However, in Eq. (1a) (below line 179), $\tau_{sfc}$ is defined as the kinematic shear stress. Please make them consistent. }{Many thanks for spotting this inconsistency in nomenclature. We have aligned $\tau_\text{sfc}$ with the conventional definition of dynamic shear stress and now include the division bz density in Eq. (1b).}{\begin{subequations}\begin{equation}
     \underline{\tau}_\mathrm{sfc} = \left(\begin{array}{c} \tau_x\\ \tau_y\\\tau_z\end{array}\right) = - \rho\nu \left( \frac{\partial U}{\partial z} \hat{e}_x + \frac{\partial V}{\partial z} \hat{e}_y\right)
   \end{equation}
   and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
@@ -69,7 +91,19 @@ by a superscript $'-'$, i.e. $z^-=z/\delta$.  }
 \includegraphics[width=\textwidth]{Fig4.eps}
 }
 \newpage
-\section*{Response to Reviewer 2}
+\begin{flushright}{Berlin, \today}\\ \end{flushright}
+\section{Response to Reviewer 2}
+Dear Reviewer 2, \\[1em]
+
+\noindent Many thanks for the positive feedback on our manuscript. We have addressed the minor points raised in your review and hope that you agree with the edits. Pleas find the detailed responses below.  \\[1em]
+
+\explainformat{}
+
+
+\noindent Kind regards, \\[0.5em]
+
+\noindent Cedrick Ansorge and Hauke Wurps  \\[0.5em]
+
 \revpoint{The authors perform direct numerical simulations of the Ekman layer at moderate Reynolds number, and use their simulations to examine the vertical mean velocity profiles in rotating, neutrally-stratified flows that serve as a proxy for the neutral atmospheric boundary layer. They compare their DNS results to a model that matches the Ekman model (in the outer layer) with the classical results for the inner layer (viscous layer plus log layer) in wall-bounded turbulent flows. Specifically, they examine the scaling of the spanwise velocity profile, and find that a matching procedure—combining both inner- and outer-scaling—is necessary. The article is generally clear and well-written, and addresses the important problem of how velocity profiles behave in the Ekman layer. Despite being an old problem, it has not been resolved, and there are many subtleties that are often neglected in the literature. I am overall supportive of this manuscript, but below I provide some specific comments which I believe will help improve the clarity of communication in the article. I am recommending that the manuscript is accepted in BLM, pending minor revisions. }{We appreciate your summary of our work and thank you for the time spent on our manuscript. Below, please find the detailed responses to your comments.}{}
 
 \revpoint{L. 12, 76: discussion of span-wise velocity component. Can you explain how you are defining streamwise and spanwise here? Are you assuming the streamwise component is aligned with the geostrophic wind direction far above the surface? }{This is indeed important and we inserted an apposition phrase for clarification}{[\ldots], considered in a wall-stress-aligned reference frame, [\ldots]}
@@ -113,13 +147,13 @@ coloring between percentiles 4 and 96 of the respective image. Lower panel:strea
 
 
 \newpage
-\section*{Response to Reviewer 3 (Prof. Sukanta Basu)}
+\section{Response to Reviewer 3 (Prof. Sukanta Basu)}
 
 Dear Professor Basu, \\[1em]
 
 \noindent we like to extend our sincere thanks for your assessment of our manuscript. We understand your criticism of our somewhat bold claim of universality and have amended the manuscript.\\[1em]
 
-\noindent We ask for your understanding that, as you already anticipated, a complete reconsideration of our results in the framework of your 2023 paper is not carried out at this point. We, however, would be happy to provide processed and unprocessed data if a colleague or potentially member of your working group is interested in carrying these ideas further.\\[1em]
+\noindent We ask for your understanding that, as you already anticipated, a complete reconsideration of our results in the framework of your 2023 paper is not carried out at this point (the detailed reasoning is given below). We, however, would be happy to provide processed and unprocessed data if a colleague or potentially member of your working group is interested in carrying these ideas further.\\[1em]
 
 \noindent As you unveiled your identity and you gave your consent to be mentioned, we also thank for your contribution in the acknowledgments of the revised manuscript. \\[1em] 
 
@@ -154,7 +188,9 @@ from calling the results “universal”. }{We critically reassessed our use of 
   \end{quotation}
   The authors might want to revise their derivations based on our analytical eddy viscosity profile. If that
   is difficult to do, I suggest highlighting the limitations of their current bulk approach. Also, emphasize
-  the limitations of Eq. (10a) as it assumes constant eddy viscosity. }{}{}
+  the limitations of Eq. (10a) as it assumes constant eddy viscosity.}
+  {We agree that eddy viscosity is not constant as a function of height. In fact, we even discuss the height dependency of eddy viscosity in Fig. 2c,d / Sec. 2. At the same time, the revised Ekman model / Eq. (10) makes use of Ekman's assumption of height-constant eddy viscosity. The important point here is that this is only used in the upper part of the boundary layer, where variation of the eddy viscosity is not the dominant mechanism for the wind profile. We find excellent agreement above $z^-\approx 0.5$ (cf. Fig. 6a/b in the manuscript). We are aware that deviations from the idealized Ekman profile below $z^-\approx 0.5$ are due to variations of eddy viscosity. 
+  The key novelty in our approach regarding the Ekman spiral is, however, to apply it only in parts of the outer layer and to acknowledge its inappropriateness for most of what is commonly considered the turbulent boundary layer (about 2/3 of $\delta$). Across this range, where we argue to apply the Ekman model the eddy viscosity is not constant, but its variation appears limited, also in view of our own results presented in Sec. 2. We do hence not see an advantage to incorporate the model using variable eddy viscosity suggested by Basu et al. (2023) but rather understand this as an alternative approach, whichs is now mentioned in the revised manuscript.}{}
 
 \revpoint{Could the authors comment on Fig. 6a in the revised manuscript? The discrepancy between DNS and
   their empirical prediction is large and not explained.
