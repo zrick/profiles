@@ -30,15 +30,13 @@
 \author{Cedrick Ansorge and Hauke Wurps }
 \begin{document}
 \maketitle
-\tableofcontents 
-\newpage 
 %-------------------------------------------------------------------------------------%
 
 %######################################################################################%
 % not all comments are included, only where action is needed.
 %######################################################################################%
 \begin{flushright}{Berlin, \today}\\ \end{flushright}
-\section{Response to the Editor} 
+\section*{Response to the Editor} 
 \noindent Dear Professor Anderson, \\[1em]
 
 \noindent we thank you very much for the assessment of both parts of this combined manuscript and the commitment of BLM to consider this body of work as a whole. \\[1em]
@@ -69,9 +67,9 @@ Dear Reviewer 1, \\[1em]
 %-------------------------------------------------------------------------------------%
 
 
-\revpoint{The authors analyze wind speed and direction profiles in turbulent Ekman flow using asymptotic theory and DNS data. They found that the streamwise velocity follows classical scaling laws, while outer-layer profiles align with a modified Ekman spiral. They showed that the spanwise component exhibits mixed scaling near the surface and outer scaling farther out. \newline  Overall, the analysis and DNS are conducted rigorously, providing valuable insights and contributing meaningfully to advancements in the field.}{We sincerely thank you for the positive assessment of our manuscript and the appreciation of our work.}{}
+\revpoint{1. The authors analyze wind speed and direction profiles in turbulent Ekman flow using asymptotic theory and DNS data. They found that the streamwise velocity follows classical scaling laws, while outer-layer profiles align with a modified Ekman spiral. They showed that the spanwise component exhibits mixed scaling near the surface and outer scaling farther out. \newline  Overall, the analysis and DNS are conducted rigorously, providing valuable insights and contributing meaningfully to advancements in the field.}{We sincerely thank you for the positive assessment of our manuscript and the appreciation of our work.}{}
 
-\revpoint{In line 47, friction velocity is denoted as $u_* = \sqrt{|\tau_{sfc}/\rho}$. However, in Eq. (1a) (below line 179), $\tau_{sfc}$ is defined as the kinematic shear stress. Please make them consistent. }{Many thanks for spotting this inconsistency in nomenclature. We have aligned $\tau_\text{sfc}$ with the conventional definition of dynamic shear stress and now include the division bz density in Eq. (1b).}{\begin{subequations}\begin{equation}
+\revpoint{2. In line 47, friction velocity is denoted as $u_* = \sqrt{|\tau_{sfc}/\rho}$. However, in Eq. (1a) (below line 179), $\tau_{sfc}$ is defined as the kinematic shear stress. Please make them consistent. }{Many thanks for spotting this inconsistency in nomenclature. We have aligned $\tau_\text{sfc}$ with the conventional definition of dynamic shear stress and now include the division bz density in Eq. (1b).}{\begin{subequations}\begin{equation}
     \underline{\tau}_\mathrm{sfc} = \left(\begin{array}{c} \tau_x\\ \tau_y\\\tau_z\end{array}\right) = - \rho\nu \left( \frac{\partial U}{\partial z} \hat{e}_x + \frac{\partial V}{\partial z} \hat{e}_y\right)
   \end{equation}
   and labelled by an upper index $\alpha$ as in $\underline{U}^\alpha$ for the velocity vector, and
@@ -84,10 +82,10 @@ Dear Reviewer 1, \\[1em]
   \end{equation} and let $Z_\star=G/u_\star$;
 \end{subequations}}
 
-\revpoint{Location for the definition of $z^-$. The first appearance of $z^-$ is at line 262, and figure 1b, but it was defined on line 307. It would be better to define it close to where it appears. }{Thank you - we now introduce the outer length scale much earlier in Sec. 2.1 ("Notation and governing equations"). We also think, this is more appropriate.}{The outer normalization (with respect to the boundary-layer depth $\delta$ and velocity $u_\star$) is denoted 
+\revpoint{3. Location for the definition of $z^-$. The first appearance of $z^-$ is at line 262, and figure 1b, but it was defined on line 307. It would be better to define it close to where it appears. }{Thank you - we now introduce the outer length scale much earlier in Sec. 2.1 ("Notation and governing equations"). We also think, this is more appropriate.}{The outer normalization (with respect to the boundary-layer depth $\delta$ and velocity $u_\star$) is denoted 
 by a superscript $'-'$, i.e. $z^-=z/\delta$.  }
 
-\revpoint{Figure 4: Should the legend be $Z_* = 4 log(Re_D) -8$, instead of $u_\star* = ...$"?}{Indeed, there was a typo, please find the revised Figure below.}{
+\revpoint{4. Figure 4: Should the legend be $Z_* = 4 log(Re_D) -8$, instead of $u_\star* = ...$"?}{Indeed, there was a typo, please find the revised Figure below.}{
 \includegraphics[width=\textwidth]{Fig4.eps}
 }
 \newpage
@@ -161,7 +159,7 @@ Dear Professor Basu, \\[1em]
 \hrule
 
 
-\revpoint{This is an excellent paper that should be published in BLM. However, I request the authors to tone
+\revpoint{1. This is an excellent paper that should be published in BLM. However, I request the authors to tone
 down their narrative, including the title. It is an empirical study that tries to fit DNS data using various
 formulations. Some of these formulations have a physical basis, while others are ad-hoc. Please refrain
 from calling the results “universal”. }{We critically reassessed our use of the work 'universal' in the manuscript and indeed agree that in some respect, in particular with respect to the derived velocity-profile formulations the use was somewhat overstating. We removed these occurrences in the introduction, conclusion and some parts of the results. Most importantly, we removed the word from the running title and from the section title. However, in the context of some the classic universal scalings *(logarithmic scaling, viscous scaling), we keep the word -- also in the context of our results.}{A number of changes was carried out throughout the manuscript in response to this point, we kindly ask you to refer to the annotated pdf file for deatils. Primarily we undertook the following modifications \\
@@ -170,7 +168,7 @@ from calling the results “universal”. }{We critically reassessed our use of 
   (3) Conclusions: universal formulation $\rightarrow$ \textbf{closed formulation} } 
 
 
-\revpoint{At the heart of this paper is Eq.~10a. Following Etling's work and others, this equation has been derived in Appendix A1. \newline 
+\revpoint{2. At the heart of this paper is Eq.~10a. Following Etling's work and others, this equation has been derived in Appendix A1. \newline 
   \[
     \frac{1}{G} \left(\begin{array}{c}U_\text{Ek} \\ V_\text{Ek} \end{array}\right) = \left(\begin{array}{c} 1 \\0 \end{array}\right) + e^{-z_\text{Ek}} \left[ a_\text{ek} \left(\begin{array}{c} -\cos z_\text{ek} \\ \sin z_\text{ek} \end{array}\right)+ b_\text{ek}\left(\begin{array}{c}\sin z_\text{ek} \\ \cos z_\text{ek}\end{array}\right)   \right]
   \] \newline  
@@ -188,11 +186,27 @@ from calling the results “universal”. }{We critically reassessed our use of 
   \end{quotation}
   The authors might want to revise their derivations based on our analytical eddy viscosity profile. If that
   is difficult to do, I suggest highlighting the limitations of their current bulk approach. Also, emphasize
-  the limitations of Eq. (10a) as it assumes constant eddy viscosity.}
-  {We agree that eddy viscosity is not constant as a function of height. In fact, we even discuss the height dependency of eddy viscosity in Fig. 2c,d / Sec. 2. At the same time, the revised Ekman model / Eq. (10) makes use of Ekman's assumption of height-constant eddy viscosity. The important point here is that this is only used in the upper part of the boundary layer, where variation of the eddy viscosity is not the dominant mechanism for the wind profile. We find excellent agreement above $z^-\approx 0.5$ (cf. Fig. 6a/b in the manuscript). We are aware that deviations from the idealized Ekman profile below $z^-\approx 0.5$ are due to variations of eddy viscosity. 
-  The key novelty in our approach regarding the Ekman spiral is, however, to apply it only in parts of the outer layer and to acknowledge its inappropriateness for most of what is commonly considered the turbulent boundary layer (about 2/3 of $\delta$). Across this range, where we argue to apply the Ekman model the eddy viscosity is not constant, but its variation appears limited, also in view of our own results presented in Sec. 2. We do hence not see an advantage to incorporate the model using variable eddy viscosity suggested by Basu et al. (2023) but rather understand this as an alternative approach, whichs is now mentioned in the revised manuscript.}{}
+  the limitations of Eq. (10a) as it assumes constant eddy viscosity.}{We agree that eddy viscosity is not constant as a function of height. In fact, we even discuss the height dependency of eddy viscosity in Fig. 2c,d / Sec. 2. At the same time, the revised Ekman model / Eq. (10) makes use of Ekman's assumption of height-constant eddy viscosity. The important point here is that this is only used in the upper part of the boundary layer, where variation of the eddy viscosity is not the dominant mechanism for the wind profile. We find excellent agreement above $z^-\approx 0.5$ (cf. Fig. 6a/b in the manuscript). We are aware that deviations from the idealized Ekman profile below $z^-\approx 0.5$ are due to variations of eddy viscosity. 
+  The key novelty in our approach regarding the Ekman spiral is, however, to apply it only in parts of the outer layer and to acknowledge its inappropriateness for most of what is commonly considered the turbulent boundary layer (about 2/3 of $\delta$). Across this range, where we argue to apply the Ekman model the eddy viscosity is not constant, but its variation appears limited, also in view of our own results presented in Sec. 2. We do hence not see an advantage to incorporate the model using variable eddy viscosity suggested by Basu et al. (2023) but rather understand this as an alternative approach, whichs is now mentioned in the revised manuscript. The corresponding paragraph has been amended accordingly.}{In summary, the outer layer of Ekman flow is characterized by a turning of the wind velocity and the super-geostrophic maximum that is sustained by momentum convergence at the inflection point of the velocity profile.
+  %
+  The super-geostrophic maximum of streamwise velocity and a secondary minimum aloft the bulk-turbulent part of
+  the boundary layer are well-described by a classic Ekman spiral with adapted boundary conditions and a shift
+  in reference height.
+  %
+  While alternative approaches exist that incorporate a variation of the eddy viscosity (Basu, 1923), 
+  we stick here to Ekman's classic assumption of constant eddy viscosity. 
+  As the Ekman spiral is applied only for $z>z_{blend}\approx 0.28$ (cf. Sec.~4.5 below), the assumption of constant eddy viscosity is also weakened in the sense that it is only required for 
+  $z>z_{blend}$. 
+  % 
+  Corresponding profiles are shown in comparison with data from three DNS runs in Fig.~6.
+  The idealized profiles capture the secondary minimum and convergence to the geostrophic equilibrium in the
+  non-turbulent flow very well.
+  %
+  Deviations from the Ekman spiral are found towards the lower end of the corresponding height range, 
+  marked by a dot in the figure; this is consistent with an increasing variation of eddy viscosity when 
+  the more turbulent part of the boundary layer is entered from aloft.}
 
-\revpoint{Could the authors comment on Fig. 6a in the revised manuscript? The discrepancy between DNS and
+\revpoint{3. Could the authors comment on Fig. 6a in the revised manuscript? The discrepancy between DNS and
   their empirical prediction is large and not explained.
-}{}{}
+}{We now discuss the discrepancy in Fig. 6a, see response to previous point.}{}
 \end{document} 

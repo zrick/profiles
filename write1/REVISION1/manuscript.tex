@@ -933,10 +933,19 @@ The super-geostrophic maximum of streamwise velocity and a secondary minimum alo
 the boundary layer are well-described by a classic Ekman spiral with adapted boundary conditions and a shift
 in reference height.
 %
+While alternative approaches exist that incorporate a variation of the eddy viscosity \citep{basu:BM2023}, 
+we stick here to \citeauthor{ekman:AMA1905}'s classic assumption of constant eddy viscosity. 
+As the Ekman spiral is applied only for $z>z_{blend}\approx 0.28$ (cf. Sec.~\ref{sec:matching}
+below), the assumption of constant eddy viscosity is also weakened in the sense that it is only required for 
+$z>z_{blend}$. 
+% 
 Corresponding profiles are shown in comparison with data from three DNS runs in Fig.~\ref{fig:profiles_outer}.
-The idealized profiles capture the secondary minimum and convergence to the geostrophic equlibrium in the
+The idealized profiles capture the secondary minimum and convergence to the geostrophic equilibrium in the
 non-turbulent flow very well.
 %
+Deviations from the Ekman spiral are found towards the lower end of the corresponding height range, 
+marked by a dot in the figure; this is consistent with an increasing variation of eddy viscosity when 
+the more turbulent part of the boundary layer is entered from aloft. 
 
 \begin{figure}
   \begin{flushleft}
@@ -1180,6 +1189,7 @@ values of $v_{10}$ and $d_{10}$).
 \par
 % 
 \subsection{Matching of the inner and outer layer profiles}
+\label{sec:matching}
 % 
 The formulations introduced above are continuous across the transition from the inner to 
 the outer layer. 
